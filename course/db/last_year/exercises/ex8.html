@@ -1,0 +1,100 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=iso-8859-1">
+<meta name="Template"
+content="C:\PROGRAM FILES\MICROSOFT OFFICE\OFFICE\html.dot">
+<meta name="GENERATOR" content="Microsoft FrontPage Express 2.0">
+<title>The Databases Course - Exercise No. 8</title>
+</head>
+
+<body link="#0000FF" vlink="#800080">
+
+<p align="center"><font size="4"><strong>The Databases Course</strong></font></p>
+
+<p align="center"><font size="5"><strong>Exercise No. 8</strong></font></p>
+
+<p align="center"><font size="4">More Design Theory</font></p>
+
+<p align="center">Due on January 15th by midnight</p>
+
+<p align="left">&nbsp;</p>
+
+<ol start="2">
+    <li value="1">Let R = &lt;S,F&gt; , S = {A,B,C,D} and F = {
+        AB <font face="Symbol">о</font> C , A <font
+        face="Symbol">о</font> D , BD <font face="Symbol">о</font>
+        C }. </li>
+</ol>
+
+<blockquote>
+    <ol type="a" start="1">
+        <li>Find a non-redundant cover of F.</li>
+        <li>Give a 3NF, dependency preserving (with respect to F)
+            decomposition of S into only two schemes.</li>
+        <li>What are the projected dependencies for each of your
+            schemes?</li>
+        <li>Does your answer to (b) have a lossless join? If not,
+            how could you modify the database scheme to have a
+            lossless join and still preserve dependencies?</li>
+    </ol>
+</blockquote>
+
+<ol start="2">
+    <li>Let R = &lt;S,F&gt; , S = {A,B,C,D} and F = { A <font
+        face="Symbol">о B , B о </font>C , A <font
+        face="Symbol">о </font>D , D <font face="Symbol">о </font>C
+        }.<br>
+        Let <em>p </em>be the decomposition { AB, AC, BD }.</li>
+</ol>
+
+<blockquote>
+    <ol type="a" start="1">
+        <li>Find the projected dependencies for each of the
+            relation schemes of <em>p</em>.</li>
+        <li>Does <em>p</em> preserve the given dependencies?</li>
+        <li>Does <em>p</em> have a lossless join with respect to
+            the given dependencies?</li>
+    </ol>
+</blockquote>
+
+<ol start="4">
+    <li value="3">You are given a relation scheme S = { A<sub>1</sub>,
+        ..., A<sub>n</sub> } and a set of functional dependencies
+        F. Write an algorithm which computes a simple key of R =
+        &lt;S,F&gt;. Your algorithm should be as simple and as
+        efficient as possible. What is the<sub> </sub>running
+        time of your algorithm?</li>
+</ol>
+
+<ol start="4">
+    <li>The algorithm that was taught in class and checks whether
+        a given decomposition has a lossless join, includes the<sub>
+        </sub>clause &quot;if V<sub>ij</sub> = b<sub>ij</sub> and
+        V<sub>mj</sub> = b<sub>mj</sub> then V<sub>ij</sub> = V<sub>mj</sub>&quot;
+        - that is, copy 'b<sub>ij</sub>' and not only 'a<sub>i</sub>'
+        between lines while trying to build a full line of 'a<sub>i</sub>'.
+        Prove that this clause is necessary, but giving an
+        example scheme and decomposition that demonstrate this
+        point.</li>
+</ol>
+
+<ol type="1" start="5">
+    <li>For each of the following statements, prove that it's
+        true or give a counter example to show that it isn't:</li>
+</ol>
+
+<blockquote>
+    <ol type="a" start="1">
+        <li>X <font face="Symbol">о </font>Y |- X <font
+            face="Symbol">оо </font>Y</li>
+        <li>X <font face="Symbol">оо </font>Y |- X <font
+            face="Symbol">оо (</font>S - XY)</li>
+        <li>X <font face="Symbol">оо </font>Y , Y <font
+            face="Symbol">оо </font>Z |- X <font face="Symbol">оо</font>
+            Z</li>
+    </ol>
+</blockquote>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage Express 2.0">
+<title>The DataBase Course</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<blockquote>
+    <p align="center"><font size="4"><strong>The DataBase Course</strong></font></p>
+    <p align="center"><font size="5"><strong>Solution of Exercise
+    No. 1</strong></font></p>
+    <p align="center"><font size="4">Entity-Relationship, Network
+    and Relational Models</font></p>
+    <blockquote>
+        <p><strong><u></u></strong>&nbsp;</p>
+        <p><strong><u></u></strong>&nbsp;</p>
+    </blockquote>
+    <p><strong><u>Question 1</u></strong></p>
+    <p>Definition of the relations and their attributes (a key is
+    marked with an underline):</p>
+    <p>&quot;Library&quot; - Name<br>
+    &quot;Campus&quot; - Name<br>
+    &quot;Student&quot; - ID Number, Name<br>
+    &quot;Book&quot; - Number, Name (this is a weak entity set,
+    the full key is number + Library.Name)</p>
+    <p>Definition of relationships and their type:</p>
+    <p>Library &quot;Located in&quot; Campus - Many to one<br>
+    Book &quot;Belongs to&quot; Library - Many to one<br>
+    Student &quot;Studies in&quot; Campus - Many to many<br>
+    Book &quot;Borrowed to&quot; Student - Many to one. This
+    relation has attributes: Return date, and 'Through library'
+    which contains the library through which the book was
+    borrowed, or null if the book was borrowed directly from the
+    library that owns the book.<br>
+    Student &quot;May Borrow From&quot; Library - Many to many.
+    This relation has one attribute 'is Member?', which is true
+    if the student is a member of the library, and false if the
+    student is not a member but may borrow books from that
+    library using inter-library loan.</p>
+    <p>Remarks:</p>
+    <p>1. Other combinations of relations, like using a triple
+    relation &quot;Loan&quot; between Student, Book and Library,
+    or using two separate relations to represent the two kinds of
+    &quot;May Borrow From&quot;, and allowed as long as they
+    contain all of the above information.<br>
+    2. Reasonable attributes may be added to relations (Student's
+    phone number, etc.).<br>
+    3. Each entity set must have a key. Book has to be a weak
+    entity set.</p>
+    <p>The Diagram:</p>
+    <p>1. Check the different kinds of relations (many to one,
+    many to many) are described by the proper arrows.<br>
+    2. It is not allowed to duplicate relations (as we do in the
+    trees model).</p>
+    <p><img src="Exercise1_NET.gif" width="640" height="450"></p>
+    <p>&nbsp;</p>
+    <p><strong><u>Question 2</u></strong></p>
+    <p>To change the Entity-Relationship diagram into a network
+    database schema, we'll translate every relation to an entity
+    (with the appropriate attributes and keys). This process will
+    get rid of many to many relations as well.</p>
+    <p>It is important to give proper keys to the newly created
+    entities. Their keys may be composed of more than one
+    attribute. Every reasonable representation of the weak entity
+    set is acceptable; a reasonable representation is one that
+    doesn't lose information.</p>
+    <p>&nbsp;</p>
+    <p><img src="Exercise1_NET.gif" width="627" height="500"></p>
+</blockquote>
+
+<blockquote>
+    <p><strong><u>Question 3</u></strong></p>
+    <p>Because neither tirgool nor class explained exactly how to
+    write the relational database schema, every readable listing
+    of tables and their attributes, so that each entity from the
+    network schema becomes a table with the same attributes, is
+    acceptable.<br>
+    We disregard keys completely here. No points will be taken
+    off for anything that has to do with keys in this question.<br>
+    Two possible ways to write the relational database schema:<br>
+    1. R1 = { Students } S1 = (ID Number, Name)<br>
+    2. Students(ID Number, Name)</p>
+    <p>The translation of this exercise's database the a
+    relational database schema, using the second style:</p>
+    <p>Student (ID Number, Name)<br>
+    Campus (Name)<br>
+    Library (Name)<br>
+    Book (Name, Library)<br>
+    Studies in (Student.ID Number, Campus.Name)<br>
+    Belongs to (Book.Number, Library.Name)<br>
+    Located in (Library.Name, Campus.Name)<br>
+    May Borrow From (Student.ID Number, Library.Name, is Member?)<br>
+    Loaned to (Student.ID Number, Book.Library, Book.Name, Return
+    Date, Through Library)</p>
+</blockquote>
+</body>
+</html>

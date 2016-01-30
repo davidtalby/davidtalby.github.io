@@ -1,0 +1,136 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=iso-8859-1">
+<meta name="Template"
+content="C:\PROGRAM FILES\MICROSOFT OFFICE\OFFICE\html.dot">
+<meta name="GENERATOR" content="Microsoft FrontPage Express 2.0">
+<title>The Databases Course - Exercise No. 10</title>
+</head>
+
+<body link="#0000FF" vlink="#800080">
+
+<p align="center"><font size="4"><strong>The Databases Course</strong></font></p>
+
+<p align="center"><font size="5"><strong>Exercise No. 10</strong></font></p>
+
+<p align="center"><font size="4">Datalog and Concurrency Control</font></p>
+
+<p align="center">Due on February 1st by midnight</p>
+
+<blockquote>
+    <p align="left"><em>This is the only exercise about the two
+    important subjects in the title. In order to encourage you to
+    do it, and to help you improve your final exercises grade,
+    anyone who submits this exercise will get an automatic bonus
+    of four points.</em></p>
+</blockquote>
+
+<ol start="2">
+    <li value="1">Write datalog programs without negation to
+        express the following queries:</li>
+</ol>
+
+<blockquote>
+    <ol type="a" start="1">
+        <li>Given a binary relation child-of(x,y) meaning that x
+            is a child of y, express same-gen(x,y) which is true
+            when x and y are of the same generation (i.e. x and y
+            have a common ancestor which is the same number of
+            generations away from both of them).</li>
+        <li>Given a directed graph G represented as a binary
+            relation G(x,y), compute the vertices of G
+            odd-vertex(v) which have a cycle of odd length
+            passing through them.</li>
+        <li>Given a directed graph G together with colors for its
+            edges represented as a relation G(x,y,col) which
+            means that the edge from vertex x to vertex y has
+            color col, compute all paths 2-col-paths(x,y) such
+            that there is a path from x to y which involves edges
+            from exactly two colors.</li>
+    </ol>
+</blockquote>
+
+<ol start="4">
+    <li value="2">Let Q be a query in relational algebra,<sub> </sub>whose
+        result relation has n attributes. An equivalent datalog
+        program to Q is<sub> </sub>a program (IDB) that computes,
+        among other relations, a relation Q(x<sub>1</sub>, ..., x<sub>n</sub>)
+        such that for any EDB, Q(a<sub>1</sub>, ..., a<sub>n</sub>)
+        is true if and only if Q's result (in algebra) includes
+        the tuple (a<sub>1</sub>, ..., a<sub>n</sub>) for that
+        same EDB (input relations).</li>
+</ol>
+
+<blockquote>
+    <ol type="a" start="1">
+        <li>Prove that any query in relational algebra can be
+            expressed as a datalog program (possibly with
+            negation). You may assume that comparison relations
+            such as =(x,y) and &gt;(x,y) are given.</li>
+        <li>Describe the set of relational algebra queries that
+            can be expressed by datalog programs without
+            negation. Prove your answer.</li>
+    </ol>
+</blockquote>
+
+<ol>
+    <li value="3">A query Q is domain independent if its result
+        does not depend on the domain, i.e. the result is the
+        same for any two supersets of the active domain. In
+        class, we have seen a safety criterion for datalog
+        programs with negation. Prove that safety entails domain
+        independency.</li>
+</ol>
+
+<ol>
+    <li value="4">Assume that LOCK A, UNLOCK A means that A is
+        read and also written. Give a schedule for two
+        transactions and two items, which is unserializable and
+        involves the least number of LOCK, UNLOCK steps.
+        Illustrate that the schedule is unserializable using an
+        example database. Prove that it uses the least number of
+        steps.</li>
+</ol>
+
+<ol type="1" start="5">
+    <li>Consider the following schedule:</li>
+</ol>
+
+<blockquote>
+    <p>T1:LOCK(A), T2:LOCK(B), T1:LOCK(C), T1:UNLOCK(A),
+    T3:LOCK(A), T1:UNLOCK(C), T2:UNLOCK(B), T3:UNLOCK(A),
+    T4:LOCK(A), T4:LOCK(C), T4:UNLOCK(A), T2:LOCK(A),
+    T2:UNLOCK(A), T4: UNLOCK(C).</p>
+</blockquote>
+
+<blockquote>
+    <ol type="a" start="1">
+        <li>Build the schedule graph of this schedule.</li>
+        <li>Give an equivalent serial schedule.</li>
+        <li>Add a single LOCK X, UNLOCK X pair to this schedule
+            that will cause it to be unserializable.</li>
+    </ol>
+</blockquote>
+
+<ol type="1" start="5">
+    <li value="6">In practice, there are read locks which allow
+        only reading an item, and write locks which allow both
+        reading and writing. Many transactions can hold a read
+        lock on an item at once, but write locks are exclusive -
+        if a transaction holds a write lock on an item, then no
+        other transaction can hold any kind of lock on that item.</li>
+</ol>
+
+<blockquote>
+    <ol type="a" start="1">
+        <li>Why might this be preferable over allowing only write
+            locks? Illustrate your answer with an example.</li>
+        <li>Does a transaction which only reads a certain item
+            and doesn't write it really need to take a read lock
+            on the item? Illustrate your answer with an example.</li>
+    </ol>
+</blockquote>
+</body>
+</html>

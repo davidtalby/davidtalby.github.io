@@ -1,0 +1,231 @@
+<html>
+
+<head>
+<meta NAME="GENERATOR" CONTENT="Microsoft FrontPage 3.0">
+<title>Inter-Process Communication in Unix</title>
+</head>
+
+<body LINK="#0000ff" VLINK="#800080" BGCOLOR="#ffffff">
+<strong><font SIZE="5">
+
+<p ALIGN="CENTER">Inter-Process Communication in Unix</p>
+</font>
+
+<p ALIGN="CENTER">Pipes</p>
+
+<ol>
+  </strong>
+  <li>Include Files:<font FACE="Courier New" SIZE="2"><br>
+    #include &lt;unistd.h&gt;<br>
+    #include &lt;sys/types.h&gt;<br>
+    #include &lt;sys/stat.h&gt;<br>
+    #include &lt;sys/time.h&gt;<br>
+    #include &lt;sys/mman.h&gt;<br>
+    #include &lt;sys/un.h&gt;<br>
+    #include &lt;netinet/in.h&gt;<br>
+    #include &lt;netdb.h&gt;<br>
+    #include &lt;socket.h&gt;</li>
+  <li>int pipe(int filedes[2]);<br>
+    </font>Opens two file descriptors: filedes[0] will be open for reading, and filedes[1]
+    will be open for writing. Filedes[0] will read what is written into filedes[1]. This is a
+    mechanism for inter-process communication between a parent process to its child:<br>
+    <font FACE="Courier New" SIZE="2">int n, fd[2];<br>
+    pid_t pid;<br>
+    char line[1024];<br>
+    int main(void)<br>
+    {<br>
+    if (pipe(fd) &lt; 0)<br>
+    { perror(&#147;pipe&#148;); exit(1); }<br>
+    if ((pid = fork()) &lt; 0)<br>
+    { perror(&#147;fork&#148;); exit(1); }<br>
+    else if (pid &gt; 0) {<br>
+    close(fd[0]);<br>
+    write(fd[1], &#147;hello world\n&#148;, 12);<br>
+    while(wait(null) &lt; 0);<br>
+    } else {<br>
+    close(fd[1]);<br>
+    n = read(fd[0], line, 1024);<br>
+    write(STDOUT_FILENO, line, n);<br>
+    }<br>
+    exit(0);<br>
+    }</font><br>
+    In a production code read() and write() should also be checked for errors.</li>
+  <strong><p ALIGN="CENTER">Fifos</p>
+  </strong><font FACE="Courier New" SIZE="2">
+  <li>int mkfifo(const char *pathname, mode_t mode);<br>
+    </font>Creates a file of type fifo, or named pipe. After the file is created, it can be
+    accessed using the usual open(), read(), write(), close(), unlink() and so forth.<br>
+    Opening a fifo for reading will block until someone else has opened the fifo for writing,
+    unless the fifo is opened with the O_NONBLOCK option (in the second argument of the open()
+    system call).</li>
+  <li>Fifos are similar to pipes but can be used between processes without a parent-child
+    relationship. Here is an example of using fifos from the shell. Both prog2 and prog3 need
+    the output from prog1, and we don&#146;t want to use a temporary file. So we write:<br>
+    <font FACE="Courier New" SIZE="2">mkfifo fifo1<br>
+    prog3 &lt; fifo1 &amp;<br>
+    prog1 &lt; input_file | tee fifo1 | prog2</li>
+  </font><p ALIGN="LEFT">&nbsp;</p>
+  <strong><p ALIGN="CENTER">Select</p>
+  </strong><font FACE="Courier New" SIZE="2">
+  <li>int select(int maxfdp1, fd_set *readfds, fd_set *writefds,<br>
+    fd_set *execptfds, struct timeval *tvptr);</font><br>
+    Waits for an I/O event to occur in one of many file descriptors. You can wait until they
+    are ready for reading, ready for writing, or an exception occurred at them. The first
+    argument is the maximum number of file descriptors that are in any of the sets plus 1. The
+    tvptr argument specifies the maximum time to wait (can be 0.0 seconds as well), or can be
+    NULL. If it&#146;s NULL, we wait until one of the descriptors is ready or until we get a
+    signal.<br>
+    The function returns &#150;1 on error, or the number of ready file descriptors (can be 0
+    if we timed out). If the process receives a signal while in select(), the function returns
+    with &#150;1 and sets errno to EINTR. Therefore, many times signals are blocked during
+    select().</li>
+  <font FACE="Courier New" SIZE="2">
+  <li>struct timeval {<br>
+    long tv_sec; /* seconds */<br>
+    long_tv_usec; /* microseconds */<br>
+    }<br>
+    </font>This is the time structure used by select() and many other routines that handle
+    time. Most system clocks are accurate to the level of 10-50 microseconds.<br>
+  </li>
+  <li>FD_ZERO(fd_set *fdset);<br>
+    FD_SET(int fd, fd_set *fdset);<br>
+    FD_CLR(int fd, fd_set *fdset);<br>
+    FD_ISSET(int fd, fd_set *fdset);<br>
+    These functions manupulate the &#147;file descriptor set&#148; data type used for three of
+    the five arguments of the select system call. They allow initializing, adding to, removing
+    from and checking membership of a set.</li>
+  <strong><p ALIGN="CENTER">Memory Mapped Files</p>
+  </strong><font FACE="Courier New" SIZE="2">
+  <li>caddr_t mmap(caddr_t addr, size_t len, int prot, int flag,<br>
+    int filedes, off_t off);<br>
+    </font>Maps a file into memory. &#145;filedes&#146; is the descriptor of the file to map;
+    the file must be open, however closing it later will not un-map it. &#145;addr&#146; is
+    the address in memory to map to &#150; it is recommended to pass 0 as this argument to let
+    the system decide. &#145;off&#146; is the offset in the file from which to map;
+    &#145;len&#146; is the number of bytes to map, starting from that offset. &#145;prot&#146;
+    is the protection mode for the mapped file &#150; it must match the permissions the file
+    was opened with and can be a combination of PROT_READ, PROT_WRITE and PROT_EXEC.<br>
+    The function returns the address in which the mapped file is (caddr_t is usually defined
+    as char*). If &#145;flag&#146; is MAP_SHARED then store operations will modify the mapped
+    file: In other words, writing to this memory will be equivalent to the write() system
+    call. If &#145;flag&#146; is MAP_PRIVATE, store operations will work on a copy of the file
+    and will not really change it. The function returns (caddr_t)(-1) on error.</li>
+  <font FACE="Courier New" SIZE="2">
+  <li>int munmap(caddr_t addr, size_t len);</font><br>
+    Unmaps a file. This also happens automatically when the process terminates.</li>
+  <li>Copying a file using mmap() is much faster than using read() and write(), because there
+    is no need to copy buffers from kernel to user space and back during the copy. In order to
+    do the copying, follow these steps:<br>
+    * Open the source file with open(), then map it with mmap().<br>
+    * Create the destination file with open().<br>
+    * Read the size of the input file using fstat(), then set the size of the destination file
+    to<br>
+    that same size using lseek(fdout, src_size-1, SEEK_SET) and write(fdout, &#147;&#148;, 1).<br>
+    * Map the destination file with mmap(), with the flag argument MAP_SHARED.<br>
+    * Call memcpy(dst, src, src_size) to copy the files by memory-to-memory copy.<br>
+    * Either unmap the files or exit the program.</li>
+  <li>Memory mapped files can also be used to declare shared memory between processes. The
+    special file &#147;/dev/zero&#148; is an infinite stream of zeros when read, and ignores
+    anything written to it. Therefore if a parent process memory-maps this file with
+    MAP_SHARED and initializes this memory, and then forks, the child processes can use the
+    same pointers to write to this shared memory region. The size of the shared memory region
+    to create is the second argument of mmap(), and munmap() can be used to free such memory.</li>
+  <strong><p ALIGN="CENTER">Sockets</p>
+  </strong>
+  <li>Sockets allow client/server computing over a large network such as the Internet. There
+    are two types of them: Server sockets, which listen passively for requests, and client
+    sockets, which initiate the contact with servers. Once a connection is made, both the
+    client and the server receive file descriptors and can use the usual read() and write()
+    system calls. The connection is full-duplex.<br>
+    We will only use the TCP/IP protocol here, since it is the most popular. Servers call
+    socket(), bind() and listen() before they can accept() requests; clients just call
+    socket() and then they can already connect() to a server.</li>
+  <font FACE="Courier New" SIZE="2">
+  <li>int socket(int domain, int type, int protocol);</font><br>
+    Creates an endpoint for communication and returns a descriptor, or &#150;1 on error. The
+    returned descriptor is a &#147;socket descriptor&#148;, not a file descriptor. The domain
+    argument is the family of protocols the socket will use: AF_UNIX (internal), AF_INET
+    (Internet), and others. The socket has an associated type as well: SOCK_STREAM (connection
+    based, fifo and reliable such as TCP), SOCK_DGRAM (datagram based, unordered, unreliable
+    such as UDP), SOCK_RAW (simple bytes), SOCK_SEQPACKET and SOCK_DRM. We will use the TCP
+    protocol, so: socket(PF_INET, SOCK_STREAM, 0).</li>
+  <font FACE="Courier New" SIZE="2">
+  <li>int bind(int sockfd, struct sockaddr *my_addr, int addrlen);</font><br>
+    Gives the socket, sockfd, the local address my_addr. my_addr is addrlen bytes long.
+    Traditionally, this is called &quot;assigning a name to a socket&quot;. The exact contents
+    of struct sockaddr defer between protocols; we use TCP/IP and therefore will use this
+    address:<br>
+    <font FACE="Courier New" SIZE="2">/* Socket address, internet style. */<br>
+    struct sockaddr_in { short sin_family;<br>
+    u_short sin_port; struct in_addr sin_addr; char sin_zero[8];}<br>
+    </font>Where sin_family is AF_INET, sin_port and in_addr contain the IP address and port
+    of the computer to bind to, and sin_zero should just be eight (ignored) zeros. The in_addr
+    field holds an IP address; servers should use sockaddr.in_addr.s_addr = INADDR_ANY.</li>
+  <font FACE="Courier New" SIZE="2">
+  <li>int listen(int s, int backlog);</font><br>
+    For a connection based protocol (when the socket type is either SOCK_STREAM or
+    SOCK_SEQPACKET), this function declares that the socket is ready to receive requests, and
+    also specifies the length of the queue of waiting requests to allocate. The backlog
+    parameter is limited to 5 (this is a historical bug).</li>
+  <p ALIGN="LEFT">&nbsp;</p>
+  <font FACE="Courier New" SIZE="2">
+  <li>int connect(int sockfd, struct sockaddr *serv_addr, int addrlen);</font><br>
+    Connects a socket descriptto a remote address. In a client/server program, clients connect
+    using the server&#146;s address in order to start a communication. After connect, the
+    client can simply use sockfd as a file descriptor in calls to read, write, send and recv.</li>
+  <font FACE="Courier New" SIZE="2">
+  <li>int accept(int sfd, struct sockaddr *addr, int *addrlen);</font><br>
+    Waits until there&#146;s at least one request on the queue for the given socket. Removes a
+    connection request from the queue, and returns a file descriptor for that request. That
+    file descriptor can be used with read, write, send and recv to communicate with the
+    client. The function returns &#150;1 on error; a common error is being interrupted by a
+    signal, in which errno will be set to EINTR.</li>
+  <font FACE="Courier New" SIZE="2">
+  <li>int send(int s, const void *msg, int len, unsigned int flags);<br>
+    int recv(int s, void *buf, int len, unsigned int flags);</font>Send and receive data over
+    a socket; read and write can be used as well, but these functions have extra power. Both
+    functions can have a flag of MSG_OOB to process out-of-band data, and recv can have a flag
+    of MSG_PEEK to peek at incoming messages without removing them from the read queue. Flags
+    can be combined using &#145;or&#146;.<br>
+    The first three arguments are the same as in read() and write(), except that only sockets
+    can be used. The functions return the number of bytes read/written or &#150;1 on error.</li>
+  <font FACE="Courier New" SIZE="2">
+  <li>int getsockname(int s, struct sockaddr *name, int *namelen);</font><br>
+    If &#145;s&#146; is a socket that was bound in the past, this function will write the
+    address it was bound to into the &#145;name&#146; and &#145;namelen&#146; arguments.</li>
+  <font FACE="Courier New" SIZE="2">
+  <li>unsigned long int htonl(unsigned long int hostlong);<br>
+    unsigned short int htons(unsigned short int hostshort);<br>
+    unsigned long int ntohl(unsigned long int netlong);<br>
+    unsigned short int ntohs(unsigned short int netshort);</font><br>
+    Converts integers from the local architecture into network byte order. All integers sent
+    over networks should be in this format, and port numbers given to bind(), connect() and
+    accept() should be in this order as well. In order of appearance, the functions are host
+    to network long (4 bytes), host to network short (2 bytes), network to host long, and
+    network to host short. These functions are part of the XDR standard.</li>
+  <font FACE="Courier New" SIZE="2">
+  <li>struct hostent *gethostbyname(const char *name);<br>
+    struct hostent *gethostbyaddr(const char *addr, int len, int type);</font><br>
+    Retrieve information about a remote computer using either its name
+    (&#147;www.yahoo.com&#148;) or its address (as we have seen, several address types exist).<br>
+    The hostent structure is defined in &lt;netdb.h&gt; as follows:<font FACE="Courier New"
+    SIZE="2">struct hostent {<br>
+    char *h_name; /* official name of host */<br>
+    char **h_aliases; /* alias list */<br>
+    int h_addrtype; /* host address type, AF_INET at present */<br>
+    int h_length /* The length of the address in bytes.<br>
+    char **h_addr_list; /* zero-terminated array of hosts&#146; network <br>
+    addresses in network byte order. */<br>
+    char *h_addr; /* First address in h_addr_list */<br>
+    }</li>
+  </font>
+  <li>When using gethostbyname() or gethostbyaddr(), the variable errno and the function
+    perror() won&#146;t work. The two functions will return NULL on error, but in order to
+    know which error occurred and to print an appropriate error message, replace errno and
+    perror by the following (which do the same):<br>
+    <font FACE="Courier New" SIZE="2">extern int h_errno;<br>
+    void herror(const char *s);</font><br>
+  </li>
+</ol>
+</body>
+</html>

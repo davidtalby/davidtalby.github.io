@@ -1,0 +1,23 @@
+bart, lisa
+===============================================================================
+Bart Simpson, ID 011111111, bart@cs.huji.ac.il
+Lisa Simpson, ID 022222222, lisa@cs.huji.ac.il
+===============================================================================
+
+                            Project X - FSWalker
+                            --------------------
+  
+
+Submitted Files
+---------------
+README - This file.
+Makefile
+FileSystem.java - implements the file system
+<other source files>
+fswalker - shellscript for running the main
+<uml files>
+
+Remarks
+-------
+* We used the following patterns: ...
+* Class X uses Class Y as can be seen in the UML diagram Z...

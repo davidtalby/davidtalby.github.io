@@ -1,0 +1,80 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage Express 2.0">
+<title>The DataBase Course - Exercise No. 6</title>
+</head>
+
+<body>
+
+<p align="center"><font size="4"><strong>The Databases Course</strong></font></p>
+
+<p align="center"><font size="5"><strong>Exercise No. 6</strong></font></p>
+
+<p align="center"><font size="4">SQL embedded in C - Practical</font></p>
+
+<blockquote>
+    <blockquote>
+        <p align="center">Due on February 2nd by midnight</p>
+    </blockquote>
+    <p><strong>The Example Database Schema:</strong> Animals
+    participate in research projects, that may span several years
+    and sites in many countries. Animals may participate in many
+    projects, and may also be moved between sites during the same
+    project. The aid, sid and rid attributes are key attributes.</p>
+    <p>Animal(aid, species, weight, birthyear)<br>
+    Sites(sid, name, country, size, climate)<br>
+    Research(rid, name, subject)<br>
+    Events(aid, sid, rid, year)</p>
+    <p><strong>Write a C program with embedded SQL statements to
+    do the following:</strong></p>
+    <p>The program takes exactly two command line arguments,
+    which are:</p>
+    <blockquote>
+        <p><font size="4" face="Times New Roman"><code>ex3 &lt;animal_id&gt;
+        &lt;n&gt;</code></font></p>
+    </blockquote>
+    <p>The output of the program is a list of animal id's and
+    species, sorted by anscending aid, of all the animals that
+    participated in the first (earliest) <em>n</em> projects that
+    animal_id participated in. For example, running 'ex3 a7 3'
+    should give the id's and species of all the animals that were
+    used in all of the earliest three projects a7 took part of.</p>
+    <p>Recall database tables are usually very large. That is,
+    the input relations and <em>n</em> may be <em>very</em> large.
+    Therefore it is unreasonable to assume that you can store all
+    the first <em>n</em> projects an animals was part of in main
+    memory at the same time. Your program should use only a <em>fixed</em>
+    number of memory cells and cursors. Moreover, your program
+    should not create new database tables or Unix files during
+    its execution.</p>
+    <p>You may <em>not</em> assume that the tables are clean of
+    null value - make sure that you ignore tuples that contain
+    null values. Recall the 'is null' predicate and 'count()'
+    function definition. Also, check for all possible error
+    conditions - once an error is encountered print an
+    appropriate message to <em>stderr</em>, close the connection
+    to Oracle and exit the program with exit code 1.</p>
+    <p>Your program should be <em>extremely</em> well documented
+    - explain every step. You can use the example program from
+    class as a starting point. Good luck!</p>
+    <p><strong>You should submit:</strong></p>
+    <ul>
+        <li>Submit electronically (run ~db/bin/submit to submit <u>ex3.tar</u>)
+            the following files:<br>
+            <u>README</u> - containing only your login on the
+            first line, and your full name and relevant exercise
+            documentation afterwards.<br>
+            <u>Makefile</u> - When running 'gmake', exactly one
+            executable named 'ex3' should be created.<br>
+            <u>ex3.pc</u> - The program's source code.<br>
+            If you have more source files, specify their names in
+            the README file.</li>
+        <li>Submit printouts of everything, except the Makefile,
+            to the course's submission box.</li>
+    </ul>
+</blockquote>
+</body>
+</html>

@@ -1,0 +1,216 @@
+#ifdef RCSID
+static char *RCSid = 
+   "$Header: sample4.pc 1041300.1 93/05/05 16:00:42 jboyce Generic<base> $ sample4.pc ";
+#endif /* RCSID */
+
+/* Copyright (c) 1990 by Oracle Corporation */
+ 
+/* NAME
+     sample4.pc
+   FUNCTION
+     Oracle C Precompiler sample program
+   RETURNS
+ 
+   NOTES
+ 
+   MODIFIED
+    tssmith    03/03/93 - Fixing typedef and TYPE statements 
+    losborne   03/04/92 - Change LONGRAW to LONG RAW 
+    sfaris     12/08/91 - Touch ups 
+    Osborne    12/21/90 - Replacing with new version
+*/
+/**************************************************************
+Sample Program 4:  Datatype Equivalencing
+
+This program features an in-depth example of the use of
+Datatype Equivalencing.  After logging in, it creates a new
+table in the SCOTT account, IMAGE, and simulates placement of
+bitmap images of employees in it.  Later, when an employee
+number is entered, his/her bitmap is selected back out of the
+IMAGE table, and pseudo-displayed on the terminal screen.
+**************************************************************/
+
+#include <stdio.h>
+
+#define NON_EXISTENT -942
+
+typedef char asciz[20];
+typedef char bitmap[8192];
+
+EXEC SQL BEGIN DECLARE SECTION;
+
+    /* User-defined type for null-terminated strings */
+    EXEC SQL TYPE asciz IS STRING(20) REFERENCE;
+    asciz     username;
+    asciz     password;
+
+    int       emp_number;
+    asciz     emp_name;
+    float     salary;
+    float     commission;
+
+   /* User-defined type for 8K image buffer */
+    EXEC SQL TYPE bitmap IS LONG RAW(8192) REFERENCE;
+    bitmap    buffer;
+
+EXEC SQL END DECLARE SECTION;
+
+EXEC SQL INCLUDE sqlca;
+
+void getimage();               /* generates an employee image     */
+void showimage();              /* renders image buffers on screen */
+
+void signoff();                /* handles normal termination      */
+void sqlerror();               /* handles unrecoverable errors    */
+
+main()
+{
+    EXEC SQL BEGIN DECLARE SECTION;
+    int     selection;
+    EXEC SQL END DECLARE SECTION;
+
+    char    reply[10];
+
+    /* Log on to ORACLE. */
+
+    strcpy(username, "SCOTT");
+    strcpy(password, "TIGER");
+
+    EXEC SQL WHENEVER SQLERROR DO sqlerror();
+
+    EXEC SQL CONNECT :username IDENTIFIED BY :password;
+    printf("\nConnected to ORACLE as user: %s\n", username);
+
+    printf("\nProgram is about to drop the IMAGE table - OK [y/N]? ");
+    gets(reply);
+    printf("\n");
+    if (reply[0] != 'y' && reply[0] != 'Y')
+    {
+	printf("\nExiting ...\n");
+	signoff();
+    }
+
+    EXEC SQL WHENEVER SQLERROR CONTINUE;
+
+    EXEC SQL DROP TABLE IMAGE;
+
+    if (sqlca.sqlcode == 0)
+	printf("\nTable IMAGE has been dropped - creating new table.\n");
+    else if (sqlca.sqlcode == NON_EXISTENT)
+	printf("\nTable IMAGE does not exist - creating new table.\n");
+    else sqlerror();
+
+    EXEC SQL WHENEVER SQLERROR DO sqlerror();
+
+    EXEC SQL CREATE TABLE IMAGE (empno NUMBER(4) NOT NULL, bitmap LONG RAW);
+
+    /* Next, fetch all employee numbers from the EMP table, and for each  */
+    /* employee, call getimage() to place an 8k image of them into IMAGE. */
+
+    EXEC SQL DECLARE emp_cur CURSOR FOR
+	SELECT EMPNO, ENAME FROM EMP;
+
+    EXEC SQL OPEN emp_cur;
+
+    printf("\nINSERTing bitmaps into IMAGE for all employees ...\n\n");
+
+    for (;;)
+    {
+
+        EXEC SQL WHENEVER NOT FOUND DO break;
+
+        EXEC SQL FETCH emp_cur INTO :emp_number, :emp_name;
+
+        printf("Employee %-8s% ", emp_name);
+
+	getimage(emp_number, buffer);
+	EXEC SQL INSERT INTO IMAGE VALUES (:emp_number, :buffer);
+
+	printf(" is done!\n");
+    }
+
+    EXEC SQL CLOSE emp_cur;
+    EXEC SQL COMMIT WORK;
+
+    printf("\nDone INSERTing bitmaps.  Next, let's display some.\n");
+
+    while (1)
+    {
+	selection = 0;
+	printf("\nEnter employee number (0 to quit): ");
+	scanf("%d", &selection);
+	printf("\n");
+	if (selection == 0) signoff();
+
+	EXEC SQL WHENEVER NOT FOUND GOTO notfound;
+
+	EXEC SQL SELECT EMP.EMPNO, ENAME, SAL, COMM, BITMAP
+	    INTO :emp_number, :emp_name, :salary, :commission, :buffer
+	    FROM EMP, IMAGE
+	    WHERE EMP.EMPNO = :selection AND EMP.EMPNO = IMAGE.EMPNO;
+
+	showimage(buffer);
+
+	printf("\nEmployee %-.8s", emp_name);
+	printf(" has salary %6.2f", salary);
+	printf(" and commission %6.2f.\n", commission);
+
+	continue;
+
+notfound:
+	printf("\nNot a valid employee number - try again.\n");
+    }
+}  /* ends main */
+
+
+void
+getimage (empnum, buf)
+int       empnum;
+bitmap    buf;
+{
+    int       i;
+
+    /* mimic the acquisition of a real bit-mapped image */
+    for (i = 0; i < 8192; i++)
+    {
+	buf[i] = (char) ((i * empnum) % 256);
+        if ((i % 256) == 0) printf(".");
+    }
+}
+
+
+void
+showimage (buf)
+bitmap    buf;
+{
+    int       i;
+
+    /* mimic the display of a real bit-mapped image */
+    for (i = 0; i < 10; i++)
+	printf("\n\t\t****************************");
+
+    printf("\n");
+}
+
+
+void
+signoff()
+{
+    printf("\nHave a good day.\n");
+
+    EXEC SQL COMMIT WORK RELEASE;
+    exit(0);
+}
+
+
+void
+sqlerror()
+{
+    EXEC SQL WHENEVER SQLERROR CONTINUE;
+
+    printf("\nORACLE error detected:\n");
+    printf("\n% .70s \n", sqlca.sqlerrm.sqlerrmc);
+
+    EXEC SQL ROLLBACK WORK RELEASE;
+    exit(1);
+}

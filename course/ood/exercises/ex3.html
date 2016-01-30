@@ -1,0 +1,694 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>Object Oriented Design Course : Exercise 1</title>
+	<link href="../style.css" type="text/css" rel="stylesheet">
+	<meta name="author" value="David Rabinowitz">
+</head>
+
+<body>
+<!-- large frame -->
+<table cellpadding="0" cellspacing="0" width="100%" border="0"><tr><td style="padding-right:20px;">
+<!-- /large frame -->
+<table id="headerTable" cellpadding="0" cellspacing="0">
+
+<tr>
+<td valign="middle" id="header" nowrap>Object Oriented Design Course</td>
+</tr>
+</table>
+
+<!-- large frame -->
+</td></tr><tr><td style="padding-right:20px;">
+<!-- /large frame -->
+
+<table class="borderedtable" cellpadding="0" cellspacing="0" width="100%" style="margin : 5px;">
+<tr>
+<td class="pagetitle">
+<!--
+******************************************************************************
+Page title
+******************************************************************************
+-->
+Exercise 3 - Zip Synchronizer<br>
+<font size="-1">Design, Code and Unit-Test Using  Design Patterns</font>
+<!--
+******************************************************************************
+End of page title
+******************************************************************************
+-->
+</td>
+</tr>
+<tr>
+<td class="maindata">
+<!--
+******************************************************************************
+Details
+******************************************************************************
+-->
+<table cellsacing="2" cellpadding="2" border="0" bgcolor="white">
+
+<tr valign="bottom">
+<td class="desc">Deadline</td>
+<td>April 5<sup>th</sup>, 2006 at Ross closing time</td>
+</tr>
+
+<tr valign="top">
+<td class="desc">Description</td>
+<td>
+In this exercise you will:
+<ul>
+<li>Design and build a utility to synchronize a set of directories and/or zip 
+files</li>
+<li>Produce a set of UML package, class and sequence diagrams to document your design</li>
+<li>Experience design patterns in actual  Java code</li>
+<li>Write a covering set of unit tests</li>
+<li>Experience maintenance of code, design, unit tests and build file</li>
+<li dir="ltr">
+<p dir="ltr">Experience working with and testing a Swing application</li>
+</ul>
+
+<h4>Overview</h4>
+
+<p>Create a Java Swing application named <code>ixzip</code> which is able to 
+print and extract the contents of ZIP files and directories, and synchronize 
+them.
+The program's usage from the command line is <code>ixzip [views]</code>, where
+<code>views</code> is an optional number between 2 and 9, with a default value 
+of 3. The program opens a window which contains one text box for entering user 
+commands, one &quot;Ok&quot; button for executing the entered command, one label to 
+display messages about the last action performed, and a set of views (whose 
+number is determined by the <code>views </code>command-line argument), which can 
+contain multiple lines of text.</p>
+
+<h4>Viewing Directories and ZIP Files</h4>
+
+<p>The views are numbered 1 to 9 from left to right. The following commands are 
+used to open and display views:</p>
+<ul>
+  <li dir="ltr">
+
+<p dir="ltr"><code><b>open</b> N <b>as</b> [directory or zip file] -</code> This 
+command opens the given zip file or directory, and prints its contents inside 
+view number <code>N</code>. Printing is done exactly as done in <code>xzip</code> 
+from exercise 1. A directory and its files are printed exactly as if they were a 
+zip file with the same name containing the same files.<br>
+On success, the text &quot;<code>opened [directory/zip file name] in view N</code>&quot; 
+should appear in the message bar.</p>
+  </li>
+  <li>
+
+<p dir="ltr"><code><b>close</b> N - </code>This command closes view number <code>
+N</code>, clearing its display, and canceling any previous <code>copy</code> or
+<code>sync</code> commands in which it is mentioned (these two commands will be 
+explained below). When the program starts, all views are closed.<br>
+On success, the text &quot;<code>closed view N</code>&quot; should appear in the message 
+bar.<br>
+Calling <code>close</code> on a view that is already closed is legal. Calling
+<code>open</code> on an already open view is legal, and is equivalent to closing 
+that view and then reopening it. For example, the following two sequences of 
+commands are equivalent:<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp; open 1 as c:\web&nbsp; ;&nbsp; close 1&nbsp; ;&nbsp; 
+open 1 as d:\my.zip<br>
+&nbsp;&nbsp;&nbsp;&nbsp; open 1 as c:\web&nbsp; ;&nbsp; open 1 as d:\my.zip
+</code></p>
+  </li>
+  <li dir="ltr">
+
+<p dir="ltr"><code><b>display &lt;short/long&gt; - </b></code>This command toggles 
+whether views are displayed in short or long format, as defined for the <code>-s</code> 
+and <code>-l</code> command-line arguments of <code>xzip</code> respectively. 
+Executing this command changes the display of all open views to reflect the new 
+setting immidiately. When the program start, short display is active.<br>
+On success, the text &quot;<code>[short/long] display is active</code>&quot; should appear 
+in the message bar.</p>
+  </li>
+</ul>
+
+<p>In case of error, the message bar should contained an informative message 
+describing it. Quitting the program is done by pressing the X button on its 
+window's upper right corner, and this naturally closes all views.</p>
+
+<h4>Copying and Synchronizing Views</h4>
+
+<p dir="ltr">The main function of <code>ixzip</code> is not to display zip files 
+and directories, but rather to make copies and synchronize them. Selecting what 
+will be copied where is done using the <code>copy</code> command<code><b>:</b></code></p>
+<ul>
+  <li>
+
+<p dir="ltr"><code><b>copy X to Y </b>-<b> </b></code>Select all the files and 
+directories (recursively) in view number <code>X</code> to be copied into view 
+number <code>Y</code>. If the same file name already exists in view <code>Y</code>, 
+it will be overwritten. The display of view <code>Y</code> should be immediately 
+modified to reflect how it will appear after the copy operation. Each file or 
+directory that will be copied from a different view should prefix its name with 
+that view number in parentheses.<br>
+On success, the text <code>Marked view X to be copied to view Y</code> should 
+appear in the message bar.</p>
+  </li>
+</ul>
+
+<p>For example, assume that the following views have been opened:</p>
+<table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="100%">
+  <tr>
+    <td width="33%" align="center">
+    <p dir="ltr"><b><code>1</code></b></td>
+    <td width="33%" align="center">
+    <p dir="ltr"><b><code>2</code></b></td>
+    <td width="34%" align="center">
+    <p dir="ltr"><b><code>3</code></b></td>
+  </tr>
+  <tr>
+    <td width="33%">
+    <p dir="ltr"><code>one.txt<br>
+    two.txt<br>
+    others<br>
+&nbsp;&nbsp; three.txt</code></td>
+    <td width="33%" valign="top">
+    <p dir="ltr"><code>one.txt<br>
+    four.txt</code></td>
+    <td width="34%" valign="top">
+    <p dir="ltr"><code>one.txt<br>
+    four.txt<br>
+    others<br>
+&nbsp;&nbsp; five.txt</code></td>
+  </tr>
+</table>
+
+<p dir="ltr">Then after executing the command <code>copy 1 to 2</code>, the 
+display will be as follows:</p>
+<table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="100%">
+  <tr>
+    <td width="33%" align="center">
+    <p dir="ltr"><b><code>1</code></b></td>
+    <td width="33%" align="center">
+    <p dir="ltr"><b><code>2</code></b></td>
+    <td width="34%" align="center">
+    <p dir="ltr"><b><code>3</code></b></td>
+  </tr>
+  <tr>
+    <td width="33%">
+    <p dir="ltr"><code>one.txt<br>
+    two.txt<br>
+    others<br>
+&nbsp;&nbsp; three.txt</code></td>
+    <td width="33%" valign="top">
+    <p dir="ltr"><code>(1) one.txt<br>
+    four.txt<br>
+    (1) two.txt<br>
+    (1) others<br>
+&nbsp;&nbsp; (1) three.txt</code></td>
+    <td width="34%" valign="top">
+    <p dir="ltr"><code>one.txt<br>
+    four.txt<br>
+    others<br>
+&nbsp;&nbsp; five.txt</code></td>
+  </tr>
+</table>
+
+<p>The order of printed files in each view may be different in your program, 
+since the printing order of files within a directory is undefined. Note that the
+<code>copy</code> command only marks files to be copied - actually making the 
+copy is only done via the <code>commit</code> command, as the next section will 
+explain. There are two special rules regarding the <code>copy</code> command:</p>
+<ul>
+  <li dir="ltr">
+
+<p dir="ltr"><code><b>Rule of transitivity</b> - </code>The command <code>copy X 
+to Y</code> marks for copying not only the actual files of view <code>X</code>, 
+but also any other files or directories that are already marked to be copied 
+into it. Other views that are copied from view <code>Y</code> need to be updated 
+according to this rule as well.</p>
+  </li>
+</ul>
+
+<p dir="ltr">For example, after executing the command <code>copy 2 to 3</code> 
+in the previous example, the display will show:</p>
+<table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="100%">
+  <tr>
+    <td width="33%" align="center">
+    <p dir="ltr"><b><code>1</code></b></td>
+    <td width="33%" align="center">
+    <p dir="ltr"><b><code>2</code></b></td>
+    <td width="34%" align="center">
+    <p dir="ltr"><b><code>3</code></b></td>
+  </tr>
+  <tr>
+    <td width="33%">
+    <p dir="ltr"><code>one.txt<br>
+    two.txt<br>
+    others<br>
+&nbsp;&nbsp; three.txt</code></td>
+    <td width="33%" valign="top">
+    <p dir="ltr"><code>(1) one.txt<br>
+    four.txt<br>
+    (1) two.txt<br>
+    (1) others<br>
+&nbsp;&nbsp; (1) three.txt</code></td>
+    <td width="34%" valign="top">
+    <p dir="ltr"><code>(1) one.txt<br>
+    (2) four.txt<br>
+    (1) two.txt<br>
+    others<br>
+&nbsp;&nbsp; five.txt<br>
+&nbsp;&nbsp; (1) three.txt</code></td>
+  </tr>
+</table>
+
+<p dir="ltr">The second part of the rule of transitivity means that the order of
+<code>copy</code> commands doesn't matter: Executing <code>copy A to B</code> 
+and then <code>copy B to C</code> has the same effect as executing <code>copy B 
+to C</code> and then <code>copy A to B</code>. In the above example, the display 
+would look the same if we executed <code>copy 2 to 3</code> first and <code>copy 
+1 to 2</code> afterwards.</p>
+<ul>
+  <li dir="ltr">
+
+<p dir="ltr"><code><b>Rule of cycles</b> - </code>Whenever a <code>copy X to Y</code> 
+command causes a cycle to be created between two or more views, then for every 
+file that exists in more than one of these views, the most up-to-date file (as 
+dictated by its last modification time) should be copied to all these views. If 
+two versions have the exact same last modification time, then the version from 
+the smallest view number should be copied to all these views.</p>
+  </li>
+</ul>
+
+<p dir="ltr">For example, assume that the most up-to-date version of <code>
+one.txt</code> is in the directory or zip file displayed in view 1, that the 
+most recent version of <code>four.txt</code> is in view 2, and that the most 
+recent version of <code>others</code> is in view 3. Then, after executing the 
+command <code>copy 3 to 1</code> on the above table, the display will show the 
+following:</p>
+<table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="100%">
+  <tr>
+    <td width="33%" align="center">
+    <p dir="ltr"><b><code>1</code></b></td>
+    <td width="33%" align="center">
+    <p dir="ltr"><b><code>2</code></b></td>
+    <td width="34%" align="center">
+    <p dir="ltr"><b><code>3</code></b></td>
+  </tr>
+  <tr>
+    <td width="33%">
+    <p dir="ltr"><code>one.txt<br>
+    (2) four.txt<br>
+    two.txt<br>
+    (3) others<br>
+&nbsp;&nbsp; (3) five.txt<br>
+&nbsp;&nbsp; three.txt</code></td>
+    <td width="33%" valign="top">
+    <p dir="ltr"><code>(1) one.txt<br>
+    four.txt<br>
+    (1) two.txt<br>
+    (3) others<br>
+&nbsp;&nbsp; (3) five.txt<br>
+&nbsp;&nbsp; (1) three.txt</code></td>
+    <td width="34%" valign="top">
+    <p dir="ltr"><code>(1) one.txt<br>
+    (2) four.txt<br>
+    (1) two.txt<br>
+    others<br>
+&nbsp;&nbsp; five.txt<br>
+&nbsp;&nbsp; (1) three.txt</code></td>
+  </tr>
+</table>
+
+<p dir="ltr">The rule of cycles preserves the property that the order of <code>
+copy</code> commands executed on a set of views doesn't matter, even when cycles 
+are created. Calling <code>copy X to Y</code> after <code>X</code> is already 
+copied to <code>Y</code> through some cycle (for example, calling <code>copy 1 
+to 3</code> on the above table) is legal, and similarly calling <code>copy X to Y</code> twice is legal. Note that whenever a 
+cycle occurs, the list of files and directories as well as the source view for 
+each file will be the same in all views participating in the cycle. This has the 
+effect of synchronizing all the views in the cycle, and to make this common 
+operation easier for users, the following command is defined:</p>
+<ul>
+  <li>
+
+<p dir="ltr"><code><b>sync X and Y</b> - </code>This command is equivalent to 
+the two commands <code>copy X to Y</code> and then <code>copy Y to X</code>.<br>
+On success, the text <code>Marked views X and Y to be synchronized</code> should 
+appear in the message bar.</p>
+  </li>
+</ul>
+
+<p dir="ltr">Whenever a view is closed, all <code>copy</code> and <code>sync</code> 
+operations involving it are discarded. For example, the following sequence of 
+commands:<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp; open 1 as c:\web<br>
+&nbsp;&nbsp;&nbsp;&nbsp; open 2 as d:\web.zip<br>
+&nbsp;&nbsp;&nbsp;&nbsp; open 3 as e:\backups\web<br>
+&nbsp;&nbsp;&nbsp;&nbsp; copy 1 to 2<br>
+&nbsp;&nbsp;&nbsp;&nbsp; copy 2 to 3<br>
+&nbsp;&nbsp;&nbsp;&nbsp; copy 3 to 1<br>
+&nbsp;&nbsp;&nbsp;&nbsp; close 2<br>
+</code>Is equivalent to this series of commands:<br>
+<code>&nbsp;&nbsp;&nbsp;&nbsp; open 1 as c:\web<br>
+&nbsp;&nbsp;&nbsp;&nbsp; open 3 as e:\backups\web<br>
+&nbsp;&nbsp;&nbsp;&nbsp; copy 3 to 1</code></p>
+
+<h4 dir="ltr">Commit and Rollback</h4>
+
+<p dir="ltr">While <code>copy</code> and <code>sync</code> enable a user to mark 
+files and directories for copying and view the results, actual changes to the 
+file system are only caused by this command:</p>
+<ul>
+  <li>
+
+<p dir="ltr"><code><b>commit</b> - </code>This command performs all the marked 
+copies in the actual file system. This can involve directory to directory, 
+directory to zip file, zip file to directory or zip file to zip file transfers. 
+After this operation all views should be refreshed, and all the previous <code>
+copy/sync</code> commands are discarded.<br>
+On success, the text <code>Copy operations were committed</code> should appear 
+in the message bar.</p>
+  </li>
+</ul>
+
+<p dir="ltr">For example, after executing <code>commit</code> on the display 
+from the end of the previous section, files will be copied and then the display 
+will show:</p>
+<table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="100%">
+  <tr>
+    <td width="33%" align="center">
+    <p dir="ltr"><b><code>1</code></b></td>
+    <td width="33%" align="center">
+    <p dir="ltr"><b><code>2</code></b></td>
+    <td width="34%" align="center">
+    <p dir="ltr"><b><code>3</code></b></td>
+  </tr>
+  <tr>
+    <td width="33%">
+    <p dir="ltr"><code>one.txt<br>
+    four.txt<br>
+    two.txt<br>
+    others<br>
+&nbsp;&nbsp; five.txt<br>
+&nbsp;&nbsp; three.txt</code></td>
+    <td width="33%" valign="top">
+    <p dir="ltr"><code>one.txt<br>
+    four.txt<br>
+    two.txt<br>
+    others<br>
+&nbsp;&nbsp; five.txt<br>
+&nbsp;&nbsp; three.txt</code></td>
+    <td width="34%" valign="top">
+    <p dir="ltr"><code>one.txt<br>
+    four.txt<br>
+    two.txt<br>
+    others<br>
+&nbsp;&nbsp; five.txt<br>
+&nbsp;&nbsp; three.txt</code></td>
+  </tr>
+</table>
+
+<p>The user can also decide not to perform actual copying of the marked files, 
+using this command:</p>
+<ul>
+  <li>
+
+<p dir="ltr"><code><b>rollback</b> - </code>This command discards all previous
+<code>copy/sync</code> commands, and refreshes all views. This is equivalent to 
+closing and reopening all views in a single command.<br>
+On success, the text <code>Copy operations were rolled back</code> should appear 
+in the message bar.</p>
+  </li>
+</ul>
+
+<p dir="ltr">For example, after executing <code>rollback</code> on the display 
+from the end of the previous section, no files will be copied and the display 
+will show:</p>
+<table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="100%">
+  <tr>
+    <td width="33%" align="center">
+    <p dir="ltr"><b><code>1</code></b></td>
+    <td width="33%" align="center">
+    <p dir="ltr"><b><code>2</code></b></td>
+    <td width="34%" align="center">
+    <p dir="ltr"><b><code>3</code></b></td>
+  </tr>
+  <tr>
+    <td width="33%">
+    <p dir="ltr"><code>one.txt<br>
+    two.txt<br>
+    others<br>
+&nbsp;&nbsp; three.txt</code></td>
+    <td width="33%" valign="top">
+    <p dir="ltr"><code>one.txt<br>
+    four.txt</code></td>
+    <td width="34%" valign="top">
+    <p dir="ltr"><code>one.txt<br>
+    four.txt<br>
+    others<br>
+&nbsp;&nbsp; five.txt</code></td>
+  </tr>
+</table>
+
+<h4 dir="ltr">Undo and Redo</h4>
+
+<p dir="ltr">The last two commands that <code>ixzip</code> should support are 
+the following:</p>
+<ul>
+  <li>
+
+<p dir="ltr"><b><code>undo</code></b> - Undo the last command. The <code>open</code>,
+<code>close</code>, <code>copy</code>, <code>sync</code> and <code>display</code> 
+commands can be undone, and the result of undoing them should restore the 
+program to its exact state before the command was executed. On success, the text
+<code>Command [command name] was undone</code> should appear in the message bar. 
+The <code>commit</code> and <code>rollback</code> commands cannot be undone, and 
+trying to undo them should result in an informative error message. The user can 
+undo an unlimited number of commands - that is, the entire history of commands 
+since program startup or the last <code>commit</code> or <code>rollback</code> 
+command should be kept.</p>
+  </li>
+  <li><b><code>redo</code></b> - Redo the last command that was undone; or in 
+  other words, undo the last <code>undo</code> operation. This command can only 
+  be called if command preceding it was <code>undo</code>; if <code>undo</code> 
+  was called multiple times, then <code>redo</code> can be called multiple times 
+  as well to redo all these <code>undo</code> commands. On success, the message 
+  bar should contain the text of the relevant command that was redone.</li>
+</ul>
+
+<p dir="ltr">As an example, the following table demonstrates a list of commands, 
+and the text that should appear in the message bar after each command:</p>
+<table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="100%">
+  <tr>
+    <td width="36%"><i>Command:</i></td>
+    <td width="64%"><i>Message bar after the command:</i></td>
+  </tr>
+  <tr>
+    <td width="36%">
+    <p dir="ltr"><code>open 1 as c:\projects</code></td>
+    <td width="64%">
+    <p dir="ltr"><code>Opened c:\projects in view 1</code></td>
+  </tr>
+  <tr>
+    <td width="36%">
+    <p dir="ltr"><code>open 2 as d:\projects</code></td>
+    <td width="64%">
+    <p dir="ltr"><code>Opened d:\projects in view 2</code></td>
+  </tr>
+  <tr>
+    <td width="36%">
+    <p dir="ltr"><code>undo</code></td>
+    <td width="64%">
+    <p dir="ltr"><code>Command open was undone</code></td>
+  </tr>
+  <tr>
+    <td width="36%">
+    <p dir="ltr"><code>open 2 as d:\backup\projects.zip</code></td>
+    <td width="64%">
+    <p dir="ltr"><code>Opened d:\backup\projects.zip in view 2</code></td>
+  </tr>
+  <tr>
+    <td width="36%">
+    <p dir="ltr"><code>redo</code></td>
+    <td width="64%">
+    <p dir="ltr"><code>Error: Cannot redo since last command was not undo</code></td>
+  </tr>
+  <tr>
+    <td width="36%">
+    <p dir="ltr"><code>sync 1 and 2</code></td>
+    <td width="64%"><code>Marked views 1 and 2 to be synchronized</code></td>
+  </tr>
+  <tr>
+    <td width="36%"><code>undo</code></td>
+    <td width="64%"><code>Command sync was undone</code></td>
+  </tr>
+  <tr>
+    <td width="36%"><code>redo</code></td>
+    <td width="64%"><code>Marked views 1 and 2 to be synchronized</code></td>
+  </tr>
+  <tr>
+    <td width="36%">
+    <p dir="ltr"><code>commit</code></td>
+    <td width="64%">
+    <p dir="ltr"><code>Copy operations were committed</code></td>
+  </tr>
+  <tr>
+    <td width="36%">
+    <p dir="ltr"><code>undo</code></td>
+    <td width="64%"><code>Error: No commands to undo</code></td>
+  </tr>
+</table>
+
+<h4 dir="ltr">Performance and Testing Considerations</h4>
+
+<p>Although ixzip is an interactive program supporting at most nine views, in 
+its next version the same code is planned to be used as a synchronization 
+server, and will be required to handle up to thousands of concurrent 
+synchronizing client directories and zip files. This has two implications. 
+First, you should design this program as a performance-critical application:</p>
+<ul>
+  <li>The time required to handle a <code>copy/sync</code> command must be 
+  proportional to the number of involved views, and not to the number of all 
+  views. Iterating over all views is unacceptable.</li>
+  <li>The time required to handle a <code>commit</code> command must be 
+  proportional to the number of files and directories being copied, and not to 
+  the total number of files and directories in the open views.</li>
+  <li dir="ltr">
+
+<p dir="ltr">Saving on memory is important as well: Zip files should be 
+extracted to memory only when it is necessary to do so, and not immediately when 
+a zip file is opened into a view.</p>
+  </li>
+</ul>
+
+<p dir="ltr">Second, you should make it easy to reuse as much of the program's 
+code as possible in a different executable that will not have a Swing user 
+interface:</p>
+<ul>
+  <li dir="ltr">
+
+<p dir="ltr">Maintain a very clear separation between the Swing user interface 
+class(es) and all other program code. The Swing layer should be as thin as 
+possible, and should be encapsulated in a separate Java package.</p>
+  </li>
+</ul>
+
+<p>Such a separation is important in every application that contains a graphical 
+user interface for another reason: unit testing. Note that it is impossible to 
+directly unit-test a GUI, since you have no way to replace the human using the 
+keyboard and mouse. Unit tests only work on objects, and so you must maintain 
+the amount of code that you don't unit test (and only test manually, in this 
+exercise) to an absolute minimum.</p>
+<h4>Design</h4>
+<p>Answer the following questions about your design, in one or two paragraphs at 
+most:</p>
+
+<ol>
+  <li>Explain how your code is divided into packages, and what is the 
+  dependencies graph between packages. Explain the rationale behind this 
+  division.</li>
+  <li>Explain how your design handles a <code>copy/sync</code> command in a time 
+  that is proportional to the number of involved views, and not to the number of 
+  all views.</li>
+  <li>Explain how your design handles a <code>commit</code> command in a time 
+  that is proportional to the number of files and directories being copied, and 
+  not to the total number of files and directories in the open views.</li>
+</ol>
+<p>Then, for each of the following possible future requirements from <code>ixzip</code>, 
+explain in 2-3 sentences how your design can be easily extended to implement 
+them.</p>
+
+<ol start="4">
+  <li>It may be required to add a <code>recursion &lt;of/off&gt;</code> command, which 
+  toggles whether <code>copy</code> and <code>sync</code> commands operate 
+  recursively on directories or not. Note that the default, which you must code 
+  and test in this exercise, is to copy directories recursively.</li>
+  <li>It may be required to support <code>copy/sync</code> of a subset of files 
+  from one view to another. For example, a command such as <code>copy *.java 
+  from 1 to 2</code> would mean that only <code>*.java</code> files should be 
+  copied from view 1 to view 2.</li>
+  <li dir="ltr">
+<p dir="ltr">It may be required to support other commands on files displayed in 
+views, for example to <code>rename</code> a file or directory, <code>delete</code> 
+a file or directory, <code>move</code> a file from one view to another and so 
+on. Undo and redo functionality may be required for such commands as well.</p>
+
+  </li>
+</ol>
+
+<h4>Code & Unit Test</h4>
+
+<p dir="ltr">All the code &amp; unit test guidelines from <a href="ex1.html">
+Exercise 1</a> apply to this exercise as well. In addition, you are required to 
+use the code base and tests you developed for <code>xzip</code>, and you must 
+submit it as well. The submitted code, unit tests, UML diagrams and Ant build 
+file should include both <code>xzip</code> and <code>ixzip</code> in full. You 
+are allowed to make any changes in your <code>xzip</code> code to make it more 
+easily reusable for <code>ixzip</code>, but note that you will have to make sure 
+that <code>xzip</code> still works after these changes, and to maintain its unit 
+tests as well.</p>
+
+<p>The time and effort required to complete this exercise highly depend on the 
+quality of your design. The recommended order in which to think about your 
+design is to design the required data structures first, the classes and 
+operations that use these data structures second, and the Swing UI and main 
+program flow last. Also, think in advance about how to partition your code into 
+packages, and provide separate test classes for each package.</p>
+
+</td>
+</tr>
+
+<tr valign="top">
+<td class="desc">Submission</td>
+<td>
+Submit a zip file which contains the following:<ul>
+  <li>
+  <p dir="ltr">All program source code, for both <code>xzip</code> and <code>
+  ixzip</code>.</li>
+  <li>
+  <p dir="ltr">All unit tests source code, for both <code>xzip</code> and <code>
+  ixzip</code>.</li>
+  <li>
+  <p dir="ltr">An Ant <code>build.xml</code> file, whose default target compiles 
+  and runs all unit tests for both <code>xzip</code> and <code>ixzip</code>.</li>
+  <li>
+  <p dir="ltr">UML diagrams, which should include a package diagram describing 
+  the dependencies between all your packages, class diagrams that cover all 
+  classes (from both <code>xzip</code> and <code>ixzip</code>), and at least 
+  four sequence diagrams (two from <code>xzip</code> and two new ones about 
+  important interactions in <code>ixzip</code>).</li>
+  <li>
+  <p dir="ltr">A README file, with the usual contents (IDs, logins and full 
+  names, descriptive list of files and features) and answers to the six possible 
+  extensions in the design section above. The README file should also describe 
+  parts of the design or design choices that are not evident from reading the 
+  UML diagrams.</li>
+  <li>
+  <p dir="ltr">The Eclipse project file, to enable opening your project and 
+  reading all of the above files from within Eclipse.</li>
+</ul>
+</td>
+</tr>
+<tr valign="top">
+<td class="desc">Resources</td>
+<td>
+<ul>
+<li><a href="../guidelines.html">Guidelines</a>.</li>
+
+</ul>
+</td>
+</tr>
+</table>
+
+<!--
+******************************************************************************
+End of details
+******************************************************************************
+-->
+</td>
+</tr>
+</table>
+
+<!-- large frame -->
+</td>
+</tr>
+</table>
+<!-- /large frame -->
+
+</body>
+</html>

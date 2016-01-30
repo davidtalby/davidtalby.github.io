@@ -1,0 +1,70 @@
+/* Database Course, 1997/8
+   Practical Exercise 1 - Outputs
+
+   METARGEL SOLUTION
+*/
+
+
+
+/* Results 1 */
+
+P#    P#
+----- -----
+p1    p6
+p6    p1
+
+
+
+/* Results 2 */
+
+P#
+-----
+p2
+p3
+p6
+
+
+
+/* Results 3 */
+
+J#
+-----
+j3
+j4
+
+
+
+/* Results 4 */
+
+COLOR
+---------------
+green
+
+
+
+/* Results 5 */
+
+JNAME
+---------------
+mouse
+modem
+
+
+
+/* Results 6 */
+
+no rows selected
+
+
+/* Answer 7 */
+
+AVG(STATUS) MIN(STATUS) MAX(STATUS)
+----------- ----------- -----------
+         30          20          50
+
+
+/* Answer 8 */
+
+   P_PER_J
+----------
+       1.5

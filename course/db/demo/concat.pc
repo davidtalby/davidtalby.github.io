@@ -1,0 +1,70 @@
+#ifdef RCSID
+static char *RCSid = 
+   "$Header: concat.pc 1040100.1 91/03/04 16:40:02 epotteng Generic<base> $ concat.pc ";
+#endif /* RCSID */
+
+#include <stdio.h>
+#define min(a, b) ((a < b) ? a : b)
+/* ==================================================================
+    User Exit routine designed to concatenate the character images of
+    multiple fields and move the result to a specified field.
+    An exit routine is gererally faster than the equivalent SQL stmt.
+
+    Note: Care has been taken to maintain null terminated strings as
+          well as the VARCHAR structures.  
+
+    Calling syntax within a SQL*Forms trigger is:
+
+               #CONCAT field1,field2...,fieldn,result_field
+
+    A sample form, concat.inp, which invokes this user exit resides 
+    ORA_PRECOMP.
+====================================================================*/
+
+EXEC SQL BEGIN DECLARE SECTION;
+     VARCHAR value[81];
+     VARCHAR outvalue[241];
+     VARCHAR field[81];
+EXEC SQL END DECLARE SECTION;
+EXEC SQL INCLUDE SQLCA;
+EXEC SQL WHENEVER SQLERROR GOTO err; 
+
+int concat(cmd, cmdlen, msg, msglen, query)
+     char *cmd,*msg;
+     int  *cmdlen,*msglen,*query;
+{
+     char errmsg[81];
+     int  errlen;
+     char *f=field.arr;
+     char *cp=cmd+7;                 /* Set to look beyond the function name */ 
+
+     outvalue.arr[0]='\0';
+     for ( ; *cp != '\0' ; ++cp )    /* General parsing of the cmd string */
+         {
+           if ( *cp != ',') {                 /* Delimiter (,) is hard coded */
+              *f++ = *cp;
+           }
+           else {                             /* Found field now get value */
+              *f = '\0';
+              field.len = strlen(field.arr);
+              EXEC IAF GET :field INTO :value;
+              value.arr[value.len] = '\0';            /* NULL terminate */
+              strcat (outvalue.arr,value.arr);
+              f = field.arr;                          /* Reset field pointer */
+           }
+         }
+     outvalue.len = strlen(outvalue.arr);
+     field.len    = strlen(field.arr);
+
+     EXEC IAF PUT :field VALUES (:outvalue);  /* Put value to screen */
+
+     return(IAPSUCC);
+
+err:
+     strcpy(errmsg, "CONCAT: ");
+     strncat(errmsg, sqlca.sqlerrm.sqlerrmc, 
+                     min(80-8, sqlca.sqlerrm.sqlerrml));
+     errlen = strlen(errmsg);
+     sqliem(errmsg,&errlen);
+     return(IAPFAIL);
+}

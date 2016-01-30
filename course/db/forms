@@ -1,0 +1,13 @@
+Use the alias forms-design, forms-generate and forms-run to design, generate
+and run forms applications respectively.
+
+See the Oracle Forms manuals for more information.
+
+When logging on to the database, type user id as "/" and no password is
+necessary.
+
+Demos can be found in /cs/oracle/forms40/demo
+
+Toy examples (some from class) can be found in ~db/forms/examples
+(Note that the trigger text for these can be written more simply, as was
+done in class).

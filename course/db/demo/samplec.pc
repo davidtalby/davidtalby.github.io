@@ -1,0 +1,227 @@
+#ifdef RCSID
+static char *RCSid = 
+   "$Header: samplec.pc 6.1 91/10/16 14:33:50 sylee Generic<base> $ samplec.pc Copyr (c) 1986 Oracle";
+#endif /* RCSID */
+
+
+/***********************************************************************
+
+           samplec.pc is a simple example program which adds new 
+	   employee records to the personnel demonstration data 
+	   base.  Checking is done to insure the integrity of the 
+	   data base.  The employee numbers are automatically 
+	   selected using the current maximum employee number + 10.
+
+	   The program queries the user for data as follows:
+
+	   Enter employee name:
+	   Enter employee job:
+	   Enter employee salary:
+	   Enter employee dept:
+
+	   The program terminates if EOF (end of file) or a null
+	   string (<return> key) is entered when the employee name
+	   is requested.
+
+	   If the record is successfully inserted, the following
+	   is printed:
+
+	   ename added to department dname as employee # nnnnnn
+
+
+	   Once Pro*C has been installed, use the supplied makefile
+	   to build samplec:
+
+	       $ make -f $ORACLE_HOME/c/lib/proc.mk samplec
+
+	   On systems with dual universes, you may be required to 
+	   use att make as documented in your Oracle Installation
+	   and User's Guide.
+
+	   Before samplec can be run, you must build the 
+	   demonstration database.  This is done during the
+	   installation of sqlplus and can also be done manually
+	   using the sql script $ORACLE_HOME/rdbms/admin/sqlbld.sql.
+
+***********************************************************************/
+
+#include <stdio.h>
+#include <ctype.h>
+
+EXEC SQL BEGIN DECLARE SECTION;
+VARCHAR uid[20];
+				       /* username			      */
+VARCHAR pwd[20];
+				       /* password			      */
+
+int	empno;			       /* employee number		      */
+VARCHAR ename[15];
+				       /* employee name 		      */
+int	deptno; 		       /* department number		      */
+VARCHAR dname[15];
+				       /* department name		      */
+
+VARCHAR job[15];
+				       /* employee job			      */
+int	sal;			       /* employee salary		      */
+EXEC SQL END DECLARE SECTION;
+EXEC SQL INCLUDE sqlca.h;
+
+main()
+{
+
+/* -----------------------------------------------------------------------------
+   logon to ORACLE, and open the cursors. The program exits if any errors occur.
+----------------------------------------------------------------------------- */
+
+   strcpy(uid.arr,"SCOTT");
+   uid.len = strlen(uid.arr);
+   strcpy(pwd.arr,"TIGER");
+   pwd.len = strlen(pwd.arr);
+
+   EXEC SQL WHENEVER SQLERROR GOTO errexit;
+   EXEC SQL CONNECT :uid IDENTIFIED BY :pwd;
+
+/* -----------------------------------------------------------------------------
+   Retrieve the current maximum employee number
+----------------------------------------------------------------------------- */
+
+   EXEC SQL SELECT NVL(MAX(EMPNO),0) + 10
+	      INTO :empno
+	      FROM EMP;
+
+/* -----------------------------------------------------------------------------
+   read the user's input from STDIN.  If the employee name is
+   not entered, exit.
+   Verify that the entered department number is valid and echo the
+   department's name
+----------------------------------------------------------------------------- */
+
+   for( ; ; empno+=10 )
+     {
+     int l;
+
+     /* Get employee name to be inserted.
+
+	IMPORTANT NOTE: beware of coding as follows (I got burnt, 1st time):
+
+	  ename.len = asks("Enter employee name  : ", ename.arr);
+	  if ( ename.len <= 0 )
+	    ..etc..
+
+	In the above, asks() returns an int, but ename.len is an unsigned
+	short (see SQLCA). Therefore, the "if" fails for <EOF> (which returns
+	-1) because, by definition, the unsigned short can't be negative.
+     */
+     l = asks("Enter employee name  : ",ename.arr);
+
+     if ( l <= 0 )
+       break;
+
+     ename.len = l;
+
+     job.len = asks("Enter employee job   : ",job.arr);
+     askn("Enter employee salary: ",&sal);
+     for ( ; ; )
+       {
+       if ( askn("Enter employee dept  :   ",&deptno) < 0 )
+	 break;
+
+       EXEC SQL WHENEVER NOT FOUND GOTO nodept;
+       EXEC SQL SELECT DNAME
+		  INTO :dname
+		  FROM DEPT
+		  WHERE DEPTNO = :deptno;
+
+       dname.arr[dname.len] = '\0';
+
+       EXEC SQL WHENEVER NOT FOUND STOP;
+
+       /* Here if deptno was found in dbs. Insert new employee into dbs. */
+
+       EXEC SQL INSERT INTO EMP(EMPNO,ENAME,JOB,SAL,DEPTNO)
+		  VALUES (:empno,:ename,:job,:sal,:deptno);
+
+       printf("\n%s added to the %s department as employee number %d\n",
+	 ename.arr,dname.arr,empno);
+       break;
+
+       /* Here if deptno NOT found in dbs */
+       nodept:
+	 printf("\nNo such department\n");
+	 continue;
+       }
+     }
+
+/* -----------------------------------------------------------------------------
+   close the cursors and log off from ORACLE
+----------------------------------------------------------------------------- */
+
+   EXEC SQL COMMIT WORK RELEASE;
+   printf ("\nEnd of the C/ORACLE example program.\n");
+   return(1);
+
+errexit:
+   errrpt();
+   EXEC SQL WHENEVER SQLERROR CONTINUE;
+   EXEC SQL ROLLBACK WORK RELEASE;
+   return(0);
+}
+
+/*------------------------------------------------------------------------------
+COUNT askn(text,variable)
+
+   print the 'text' on STDOUT and read an integer variable from
+   SDTIN.
+
+   text points to the null terminated string to be printed
+   variable points to an integer variable
+
+   askn returns a 1 if the variable was read successfully or a
+       -1 if -eof- was encountered
+----------------------------------------------------------------------------- */
+
+int askn(text,variable)
+   char text[];
+   int	*variable;
+   {
+   char s[20];
+   printf(text);
+   if ( gets(s) == (char *)0 )
+     return(EOF);
+
+   *variable = atoi(s);
+   return(1);
+   }
+
+/* -----------------------------------------------------------------------------
+COUNT asks(text,variable)
+
+   print the 'text' on STDOUT and read up to 'len' characters into
+   the buffer pointed to by variable from STDIN.
+
+   text points to the null terminated string to be printed
+   variable points to a buffer of at least 'len'+1 characters
+
+   asks returns the number of character read into the string, or a
+       -1 if -eof- was encountered
+----------------------------------------------------------------------------- */
+
+int asks(text,variable)
+   char text[],variable[];
+   {
+   printf(text);
+   return( gets(variable) == (char *)0 ? EOF : strlen(variable) );
+   }
+
+/* -----------------------------------------------------------------------------
+VOID errrpt()
+
+   errrpt prints the ORACLE error msg and number.
+----------------------------------------------------------------------------- */
+
+errrpt()
+   {
+   printf("\n%.70s (%d)\n", sqlca.sqlerrm.sqlerrmc, -sqlca.sqlcode);
+   return(0);
+   }

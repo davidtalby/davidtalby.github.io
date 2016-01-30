@@ -1,0 +1,76 @@
+// Sample program for SQL embedded in C.
+// This program logs on to Oracle, prompts the user for a supplier number,
+// queries the database for the supplier's name and city, and displays the
+// result. It continues until the user enters a carriage return for the
+// employee number, or until an error is encountered.
+
+#include <iostream.h>
+
+EXEC SQL BEGIN DECLARE SECTION;
+  char oracleid = '/';
+  VARCHAR supp_num[6], supp_name[16], supp_city[16];
+EXEC SQL END DECLARE SECTION;
+
+EXEC SQL INCLUDE sqlca;
+
+void sql_error();
+int get_user_input(char *input);
+int total_queried = 0;
+
+main()
+{
+  EXEC SQL WHENEVER SQLERROR DO sql_error();
+  EXEC SQL CONNECT :oracleid;
+  cout << endl << "Connected to Oracle! << endl;
+  
+  while (get_user_input(supp_num.arr))
+  {
+    supp_num.len = strlen(supp_num.arr);
+    
+    EXEC SQL WHENEVER NOT FOUND GOTO notfound;
+    EXEC SQL SELECT SNAME, CITY
+      INTO :supp_name, :supp_city
+      FROM SUPPLIERS
+      WHERE S# = :supp_num;
+
+    cout << endl << "Supplier     \tCity" << endl;
+    cout << "-------------\t-----------" << endl;    
+    supp_name.arr[supp_name.len] = '\0';
+    supp_city.arr[supp_city.len] = '\0';
+    cout << supp_name << "\t\t" << supp_city << endl;
+    
+    total_queried++;
+    continue;
+    
+   notfound:
+   
+    cout << "\nThere is no supplier with the requested number - try again." << endl;
+  }
+  
+  cout << endl << "Total number of successfully queried suppliers is %d."
+       << total_queried) << endl;
+  
+  EXEC SQL COMMIT WORK RELEASE;
+  
+  return(0);
+}
+
+void sql_error()
+{
+  EXEC SQL WHENEVER SQLERROR CONTINUE;
+  
+  cout << endl << "Oracle error occured << endl << sqlca.sqlerrm.sqlerrmc << endl;
+  
+  EXEC SQL ROLLBACK RELEASE;
+  exit(1);
+}
+
+int get_user_input(char *input)
+{
+  cin >> input;
+  if (strlen(input) <= 0)
+    return 0
+  else  
+    return 1;
+}
+

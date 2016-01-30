@@ -1,0 +1,91 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage Express 2.0">
+<title>The DataBase Course</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<blockquote>
+    <p align="center"><font size="4"><strong>The DataBase Course</strong></font></p>
+    <p align="center"><font size="5"><strong>Solution of Exercise
+    No. 1</strong></font></p>
+    <p align="center"><font size="4">Entity-Relationship Model</font></p>
+    <blockquote>
+        <p>&nbsp;</p>
+    </blockquote>
+    <p><strong><u>Question 1</u></strong></p>
+    <p>The entity sets, relationship sets, attributes, keys and
+    multiplicity of relationships are all defined in the diagram.
+    The attributes given here are just examples - you may define
+    other attributes, as long as you define a key for every
+    entity set and store all the information explicitly mentioned
+    in the exercise (type of payment, for example). Note that
+    every entity set appears only once, in contrast with the
+    network model.</p>
+    <p>The given solution is not the only correct one, of course.
+    For example, it assumes that 'Car' is a weak entity set,
+    identified by its license number and branch name. Cars
+    obviously cannot be identified by license number only, since
+    cars from different countries may have the same number, but
+    you can add the country as an attribute to 'Car' and define {
+    License number, Car } to be its key. The 'Belongs To'
+    relationship will still exist then, but as a regular one.
+    Another choice that has to be made is how to represent the 'Rental'
+    relationship: Here, it is a relationship between four entity
+    sets, defining the renting customer, the car, the branch from
+    which the car was taken, and the branch to which it returned.
+    The start and end dates of the renting are attributes of the
+    relationship, which is many-to-many-to-many-to-many (can you
+    tell why?). Customers are divided to private ones, for which
+    a milage is kept for the frequent renter program, and
+    companies, which may use more than one insurance company at
+    once.</p>
+    <p align="center"><img src="ex1_q1_small.GIF" width="600"
+    height="518"></p>
+    <p><strong><u>Question 2</u></strong></p>
+    <p>Some students divided 'Worker' to 'Regular' and 'Big Boss'
+    using an is-a relationship, in order to express the fact that
+    all regular workers are supervised. This is a nice extension,
+    but the following diagram qualifies as a correct and simpler
+    solution. Attributes have been removed for clarity.</p>
+    <p align="center"><img src="ex1_q2.GIF" width="500"
+    height="255"></p>
+    <p><strong><u>Question 3</u></strong></p>
+    <p>There are two possible ways to write the relational
+    database schema:<br>
+    1. R1 = { Students } S1 = (ID Number, Name)<br>
+    2. Students(ID Number, Name)</p>
+    <p>We will use the second, shorter, style:</p>
+    <p>Worker (ID Number, Last Name, First Name, Job, Supervisor,
+    Department, Project)<br>
+    Department (Name, Location, Phone)<br>
+    Project (Name, Description, StartDate, EndDate)<br>
+    Projects_Departments (Department_Name, Project_Name)</p>
+    <p>What happens to constraints after the translation?
+    Attribute domains are kept in the relational model. The
+    miltiplicity (many-to-one, etc.) constraints are also kept -
+    it is visible from the translated schema that every worker
+    may have at most one project, while every project can belong
+    to many departments. Keys are not kept by the list of
+    relations, and for now they're lost - although they'll be
+    back with a vengeance in a later part of the course.
+    Participation constraints are not kept: There is no way of
+    saying that every project should have at least one entry in
+    the Projects_Departments relation.</p>
+    <p>One delicate point in the translation is the supervisor
+    attribute in worker, which is only valid if the model also
+    supports null values - that is, values that say &quot;nothing
+    is stored here&quot;, meaning &quot;this worker has no
+    supervisor&quot;. If you assume that null values don't exist
+    in the relational model than you have to create a relation
+    Supervising(Worker ID, Supervisor ID) to store this data -
+    but then, you can't be sure that every worker is assigned at
+    most one supervisor.</p>
+    <p>&nbsp;</p>
+</blockquote>
+</body>
+</html>

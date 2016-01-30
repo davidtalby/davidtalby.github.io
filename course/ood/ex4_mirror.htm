@@ -1,0 +1,87 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta name="GENERATOR" content="Microsoft FrontPage 5.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>Commands</title>
+</head>
+
+<body>
+
+<h4>Mirror Semantics</h4>
+<p>This section defines the full semantics of the 'mirror' command. This 
+presentation explains precisely which actions should run when a command is 
+executed after several 'mirrors' have been defined. The system state when the 
+command is executed includes the directory structure (that is given as kraken's 
+command line argument), the list of pairs of mirrored directories, and the 
+current directory. When a mirrored command is run, this is the definition of 
+what should be done:</p>
+<ol>
+  <li dir="ltr">
+  <p dir="ltr">Translate the command's files argument so that they all have a 
+  full path.<br>
+  For example, if the current directory is '/a/b' and the command was 'copy x 
+  /c/y', then translate the command to be 'copy /a/b/x /c/y'. From now on, it 
+  doesn't matter what the current directory is.</li>
+  <li dir="ltr">
+  <p dir="ltr">Loop over the list of mirrors, and whenever you find a directory 
+  name in it that matches one of the paths in the command, add to your list the 
+  same command, with that directory replaced by the directory that mirrors it. 
+  Repeat this process until the list no longer changes.<br>
+  For example, assume that in the example from the previous step, there is a 
+  mirror between '/a/b' and '/d/b', and another mirror between '/d/b' and '/e'. 
+  Then to the original command 'copy /a/b/x /c/y', we will add the command 'copy 
+  /d/b/x /c/y' (this is a simple string replacement). Then we will also add a 
+  third command 'copy /e/x /c/y' (because '/d/b' and '/e' are mirrored, and 
+  '/d/b' matches a directory in the list we already have). After another check 
+  we will see that we cannot extend the list any further by more replacements.<br>
+  There are cases when both the source and the target directories of a copy or 
+  move command will be replaced by the above rule. There is no problem with 
+  this. Also, in some cases that same command may be created more than once (for 
+  example, if there are circles in the mirroring graph). Do not add the same 
+  command more than once to the list.</li>
+  <li>Execute the list of commands that was created by the previous rule. The 
+  order of execution is undefined, except the requirement that the original 
+  command must be executed first. The same order of execution for the entire 
+  list must be used for both in-memory execution and commit.<br>
+  For example, in our example, the following commands need to be executed: 'copy 
+  /a/b/x /c/y', 'copy /d/b/x /c/y' and 'copy /e/x /c/y'. The order of the last 
+  two commands may be exchanged.</li>
+  <li>Undoing the command means undoing all the mirrored commands as well. The 
+  commands should be undone in the exact reverse order to the order in which 
+  they were executed.<br>
+  For example, assuming that the three commands in our example were executed in 
+  the order in which they are written, they activating 'undo' right after the 
+  'copy x /c/y' command will first undo 'copy /e/x /c/y', then undo 'copy /d/b/x 
+  /c/y', and then undo 'copy /a/b/x /c/y'. From kraken's user point of view, 
+  this will all happen in the same undo operation, just like the three copies 
+  were done as part of the same copy operation.</li>
+  <li>If a command fails for whatever reason, it outputs an error message, and 
+  this does not interfere with continuing to execute other commands in the same 
+  list.<br>
+  For example, assume that '/a/b' has a file called 'x' of size 100, 'd/b' has 
+  no file called 'x', and '/e' has a file called 'x' of size 200. Then after 
+  running our example, the user will see an error message like 'Error: copy 
+  failed, source files /d/b/x not found', and the directory '/c' will contain a 
+  file called 'y' of size 200. This will be the file copied from '/e/x', which 
+  overwrote the file '/a/b/x' that was copied there first.</li>
+</ol>
+<p>This is an operational semantics - it describes how to decide what to do, not 
+just how the result looks like. This was done in hope it will make it clear how 
+to deal with the many different situations that happen in mirroring, instead of 
+providing answers on a case-by-case basis. This also ensures that there's a 
+straight-forward way to implement these semantics.</p>
+<p>Students who have already invested time in designing and coding a different 
+semantics, are allowed to continue with what they already started. Students who 
+would like do define a more complex or general semantics that defined above are 
+also welcome to do so. Such students will be awarded a bonus of up to 10 points, 
+depending on the complexity and elegance of their semantics and design. The 
+condition to implementing anything different than defined above is to clearly 
+state this in your readme file, with specific explanations about how your 
+definitions work.</p>
+
+</body>
+
+</html>

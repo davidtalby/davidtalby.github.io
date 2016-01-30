@@ -1,0 +1,65 @@
+/******
+Second Sample program for SQL embedded in C.
+This program prints the parts whose weight is larger than 10 to the screen,
+ordered by descending part names.
+The use of cursors is demonstrated.
+******/
+
+#include <stdio.h>
+
+EXEC SQL BEGIN DECLARE SECTION;
+  char oracleid = '/';
+  VARCHAR part_num[6], part_name[16], part_color[16], part_city[16];
+  int part_weight;
+EXEC SQL END DECLARE SECTION;
+
+EXEC SQL INCLUDE sqlca;
+
+void sql_error();
+
+main()
+{
+  EXEC SQL WHENEVER SQLERROR DO sql_error();
+  EXEC SQL CONNECT :oracleid;
+
+  EXEC SQL DECLARE cursor_parts CURSOR FOR
+    SELECT *
+      FROM PARTS
+      WHERE WEIGHT > 10
+      ORDER BY PNAME;
+
+  EXEC SQL OPEN cursor_parts;
+  EXEC SQL WHENEVER NOT FOUND GOTO notfound;
+
+  printf("\nP#    PNAME           COLOR               WEIGHT CITY\n");
+  printf("----- --------------- --------------- ---------- ---------------\n");
+  while (1)
+  {
+    EXEC SQL FETCH cursor_parts 
+      INTO :part_num, :part_name, :part_color, :part_weight, :part_city;
+    part_num.arr[part_num.len] = '\0';
+    part_name.arr[part_name.len] = '\0';
+    part_color.arr[part_color.len] = '\0';
+    part_city.arr[part_city.len] = '\0';
+    printf("%-5s %-15s %-15s %10d %-15s\n", part_num.arr, part_name.arr,
+	   part_color.arr, part_weight, part_city.arr);
+  }
+ 
+ notfound:
+
+  EXEC SQL CLOSE cursor_parts;
+
+  EXEC SQL COMMIT WORK RELEASE;
+  return(0);
+}
+
+void sql_error()
+{
+  EXEC SQL WHENEVER SQLERROR CONTINUE;
+  
+  fprintf(stderr, "\nOracle error occured:\n");
+  fprintf(stderr, "%.70s\n", sqlca.sqlerrm.sqlerrmc);
+  
+  EXEC SQL ROLLBACK RELEASE;
+  exit(1);
+}

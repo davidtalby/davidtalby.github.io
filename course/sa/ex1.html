@@ -1,0 +1,109 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage Express 2.0">
+<title>The DataBase Course - Exercise No. 2</title>
+</head>
+
+<body>
+
+<p align="center"><font size="4"><strong>System Analysis and
+Design</strong></font></p>
+
+<p align="center"><font size="5"><strong>Exercise No. 1</strong></font></p>
+
+<blockquote>
+    <blockquote>
+        <p align="center"><font size="3">Due on December 16th by
+        5pm</font></p>
+    </blockquote>
+    <p>&nbsp;</p>
+    <p>Read the following article, which all the questions refer
+    to: <a href="http://www.elj.com/eiffel/dbc/">http://www.elj.com/eiffel/dbc/</a></p>
+</blockquote>
+
+<ol>
+    <li><font size="3">External quality factors are those whose
+        presence or absence can be detected by the software's
+        users; internal factors are those that can only be seen
+        by developers. Which of the listed factors are external
+        and which are internal?</font></li>
+</ol>
+
+<ol>
+    <li value="2"><font size="3">What are the advantages and
+        disadvantages of using lines of code (KLOC) as a measure
+        of software size or complexity? Offer alternative
+        measures.</font></li>
+</ol>
+
+<ol>
+    <li value="3"><font size="3">Give an example of a bug that
+        static checking of software text will never be able to
+        find.</font></li>
+</ol>
+
+<ol>
+    <li value="4"><font size="3">Give one example where
+        preconditions (&quot;require&quot;) should be used, and
+        one where input checking (&quot;if not condition then
+        print('Error: ...') end&quot;) should be used.</font></li>
+</ol>
+
+<ol>
+    <li value="5"><font size="3">C and C++ provide a library
+        function called assert(condition, string) that halts the
+        program and prints the string if the condition is false.
+        What can't this mechanism do?</font></li>
+</ol>
+
+<ol>
+    <li value="6"><font size="3">Explain the following statement:
+        Violation of a precondition reflects a bug in the
+        consumer (client of the class), while violation of a
+        postcondition reflects a bug in the producer (writer of
+        the class).</font></li>
+</ol>
+
+<ol>
+    <li value="7"><font size="3">Write the specification of a
+        class STACK that will support push, pop, is_empty and
+        count, and is an heir of class MY_DISPENSER presented in
+        section 5.4. Use the notation presented in the paper:</font></li>
+</ol>
+
+<blockquote>
+    <blockquote>
+        <p><font size="3">class STACK<br>
+        inherit<br>
+        ___ MY_DISPENSER<br>
+        ______ redefine insert, remove, count, is_empty<br>
+        ______ rename insert as push, remove as pop<br>
+        ___ end<br>
+        feature<br>
+        ___ -- this is the part you fill in...<br>
+        invariant<br>
+        ___ -- you fill this part as well...<br>
+        end</font></p>
+    </blockquote>
+    <p><font size="3">For each routine, write its signature (type
+    of arguments and return values if any), preconditions and
+    postconditions. Remember that these are also inherited. Also,
+    write the class's invariant.</font></p>
+</blockquote>
+
+<ol>
+    <li value="8">Write a function BinarySearch(array: ARRAY[G],
+        datum: G): BOOLEAN that implements binary search using a
+        loop (not recursion). The algorithm assumes that 'array'
+        is sorted and returns true if and only if 'datum' is a
+        member of array in O(log(array.count)) time, where 'array.count'
+        is the number of elements in the array. Specify
+        preconditions, postconditions, and the variant and
+        invariant of the loop you use (use the from..until..loop
+        syntax).</li>
+</ol>
+</body>
+</html>

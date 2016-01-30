@@ -1,0 +1,125 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>Design Exercise - Programmer's Editor</title>
+<meta name="Microsoft Theme" content="neon 011">
+</head>
+
+<body background="neobkgnd.jpg" bgcolor="#000000" text="#FFFFFF" link="#CCFF66" vlink="#00FFFF" alink="#FFCC33">
+
+
+<h2 align="center">Programmer's
+Editor</h2>
+
+<h3>Overview</h3>
+
+<p>This application is a text editor for programmers. It supports projects
+(working on several related files in parallel), standard editing functions like
+copy &amp; paste, indentation and undo/redo, and some specialties for
+programmers: Syntax highlighting, IntelliSense, AutoComplete and on-the-fly error
+signaling. All these are supported in multiple languages, and new language will
+be supported in future versions.</p>
+
+<h3>Requirements</h3>
+
+<p>Generic requirements: </p>
+
+<!--msthemelist--><table border="0" cellpadding="0" cellspacing="0" width="100%">
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">The
+      system shall allow defining a project, composed of multiple text files of
+      various languages and formats. It will be possible to work on one project
+      at once, but edit many of its files in parallel in a multiple-window user
+      interface.<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">The
+      system shall support save and load operations, both for a single file and
+      an entire project.<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">The
+      system shall support copy &amp; paste of dynamically defined text segments
+      between open files.<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">The
+      system shall support text find operations, both inside a single file, all
+      files, or a dynamically chosen set of files.<!--msthemelist--></td>
+  </tr>
+<!--msthemelist--></table>
+
+<p>The following requirements must be supported differently for several
+programming languages, and it should be easy to add new supported languages in
+the future:</p>
+
+<!--msthemelist--><table border="0" cellpadding="0" cellspacing="0" width="100%">
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">The
+      system shall provide language-dependent Syntax Highlighting, meaning that
+      comments, string and number literals, reserved words, special characters
+      and illegal characters will be painted in distinctive colors. The colors
+      for each language can be configured at runtime by the user.<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">The
+      system shall provide IntelliSense for function calls: Whenever the user
+      enters a function name and enters '(' to start writing its arguments, a
+      hint will be displayed on the screen describing what arguments this
+      function expects.<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">The
+      system shall provide AutoComplete for object fields and methods: In object
+      oriented languages, whenever a user types the name of an object and then
+      the '.' key, a combo box with all the fields and methods this object
+      supports will open.<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">The
+      system shall support on-the-fly error signaling: When moving the cursor to
+      another line in the editing window, the line that was just edited is
+      syntax-checked. If errors are found (illegal use of keywords, use of
+      undefined functions or variables, and so on), the line is marked on the
+      screen as containing an error.<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">The
+      system shall support automatic indentation of code while typing. For
+      example, if a line in C++ code ends with 'if (...) {' then the next line
+      should start indented inwards. If the previous line ends with '}', the
+      next line should start indented outside. The number of spaces for each
+      indentation can be configured by the user at runtime.<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">The
+      system shall enable counting the number of lines, the number of
+      non-comment lines, and the number of words either in a single file, all
+      files, or a dynamically chosen set of files.<!--msthemelist--></td>
+  </tr>
+<!--msthemelist--></table>
+
+<p>Each of these ten requirements are worth 10% of the grade on the exercise.
+Note that the grade of a single requirement is composed of how you dealt with it
+everywhere - in requirements, design, strong and weak spots, and the oral
+questions.</p>
+<p>Good luck!</p>
+
+
+</body>
+
+</html>

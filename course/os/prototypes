@@ -1,0 +1,247 @@
+SYNOPSIS
+       #include <sys/types.h>
+       #include <sys/socket.h>
+
+       int socket(int domain, int type, int protocol);
+
+DESCRIPTION
+       Socket creates an endpoint for communication and returns a
+       descriptor.
+	domain argument:
+              AF_UNIX  (UNIX internal protocols)
+
+              AF_INET  (ARPA Internet protocols)
+
+              AF_ISO   (ISO protocols)
+
+              AF_NS    (Xerox Network Systems protocols)
+
+              AF_IMPLINK
+                       (IMP "host at IMP" link layer)
+
+       The socket has the indicated  type,  which  specifies  the
+       semantics of communication.  Currently defined types are:
+              SOCK_STREAM
+              SOCK_DGRAM
+              SOCK_RAW
+              SOCK_SEQPACKET
+              SOCK_RDM
+
+
+
+       int   bind(int   sockfd,  struct  sockaddr  *my_addr,  int
+       addrlen);
+
+DESCRIPTION
+       bind gives the socket, sockfd, the local address  my_addr.
+       my_addr  is  addrlen  bytes  long.  Traditionally, this is
+       called "assigning a name to a socket" (when  a  socket  is
+       created with socket(2), it exists in a name space (address
+       family) but has no name assigned.)
+
+defined in #include <netinet/in.h>
+/*
+ * Socket address, internet style. */
+struct sockaddr_in {
+        short   sin_family;
+        u_short sin_port;
+        struct  in_addr sin_addr;
+        char    sin_zero[8];
+};
+
+
+
+
+
+SYNOPSIS
+       #include <sys/types.h>
+       #include <sys/socket.h>
+
+       int  connect(int  sockfd, struct sockaddr *serv_addr, int
+       addrlen );
+
+DESCRIPTION
+       The parameter sockfd is  a  socket.   If  it  is  of  type
+       SOCK_DGRAM,  this  call  specifies the peer with which the
+       socket is to be associated; this address is that to  which
+       datagrams  are to be sent, and the only address from which
+       datagrams are to be received.  If the socket  is  of  type
+
+
+SYNOPSIS
+       #include <sys/socket.h>
+
+       int listen(int s, int backlog);
+
+DESCRIPTION
+       To  accept  connections,  a  socket  is first created with
+       socket(2), a willingness to  accept  incoming  connections
+       and  a  queue limit for incoming connections are specified
+       with listen, and then the connections  are  accepted  with
+       accept(2).   The  listen  call  applies only to sockets of
+       type SOCK_STREAM or SOCK_SEQPACKET.
+	backlog limited to 5!
+
+
+
+       int accept(int s, struct sockaddr *addr, int *addrlen);
+
+DESCRIPTION
+       The  argument  s  is  a  socket that has been created with
+       socket(2), bound to an address with bind(2), and  is  lis-
+       tening  for  connections  after  a  listen(2).  The accept
+       function extracts the  first  connection  request  on  the
+       queue  of  pending  connections, creates a new socket with
+
+
+
+
+
+int recv(int s, void *buf, int len, unsigned int flags);
+
+       The flags argument to a recv call is formed by or'ing  one
+       or more of the values:
+       MSG_OOB process out-of-band data
+       MSG_PEEK peek at incoming message
+
+RETURN VALUES
+       These calls return the number of bytes received, or -1  if
+       an error occurred.
+
+ERRORS
+       EBADF   The argument s is an invalid descriptor.
+
+       ENOTCONN
+               The  socket  is  associated with a connection-ori-
+               ented protocol and has  not  been  connected  (see
+               connect(2) and accept(2)).
+
+       ENOTSOCK
+               The argument s does not refer to a socket.
+
+       EWOULDBLOCK
+               The socket is marked non-blocking, and the receive
+               operation would block, or a  receive  timeout  had
+               been set, and the timeout expired before data were
+               received.
+
+
+
+       int  send(int  s,  const  void *msg, int len, unsigned int
+       flags);
+       The flags parameter may include one or more of the follow-
+       ing:
+
+              #define   MSG_OOB        0x1  /* process out-of-band data */
+              #define   MSG_DONTROUTE  0x4  /* bypass routing, use direct interf
+ace */
+RETURN VALUES
+       The  call  returns the number of characters sent, or -1 if
+       an error occurred.
+
+
+
+SYNOPSIS
+       #include <sys/socket.h>
+
+       int  getsockname(int   s  , struct sockaddr * name , int *
+       namelen )
+
+DESCRIPTION
+       Getsockname returns the current  name  for  the  specified
+       socket.   The  namelen  parameter should be initialized to
+       indicate the amount of  space  pointed  to  by  name.   On
+       return  it  contains  the actual size of the name returned
+       (in bytes).
+       On success, zero is returned.  On error, -1  is  returned,
+       and  errno  is  set appropriately.  A 0 is returned if the
+       call succeeds, -1 if it fails.
+
+
+
+
+SYNOPSIS
+       #include <netinet/in.h>
+
+       unsigned long int htonl(unsigned long int hostlong);
+
+       unsigned short int htons(unsigned short int hostshort);
+
+       unsigned long int ntohl(unsigned long int netlong);
+
+       unsigned short int ntohs(unsigned short int netshort);
+
+DESCRIPTION
+       from host byte order to network byte order.
+
+       The  htons() function converts the short integer hostshort
+       from host byte order to network byte order.
+
+       The ntohl() function converts  the  long  integer  netlong
+       from network byte order to host byte order.
+
+       The  ntohs()  function converts the short integer netshort
+       from network byte order to host byte order.
+
+       On the i80x86 the host byte  order  is  Least  Significant
+       Byte first, whereas the network byte order, as used on the
+       Internet, is Most Significant Byte first.
+
+
+
+
+SYNOPSIS
+       #include <netdb.h>
+       extern int h_errno;
+
+       struct hostent *gethostbyname(const char *name);
+
+       #include <sys/socket.h>        /* for AF_INET */
+       struct hostent *gethostbyaddr(const char *addr, int len, int type);
+       The hostent structure is defined in <netdb.h> as follows:
+
+              struct hostent {
+                      char    *h_name;        /* official name of host */
+                      char    **h_aliases;    /* alias list */
+                      int     h_addrtype;     /* host address type */
+       The members of the hostent structure are:
+
+       h_name The official name of the host.
+
+       h_aliases
+              A zero-terminated array of  alternative  names  for
+              the host.
+
+       h_addrtype
+              The type of address; always AF_INET at present.
+
+       h_length
+              The length of the address in bytes.
+
+       h_addr_list
+              A  zero-terminated  array  of network addresses for
+              the host in network byte order.
+
+       h_addr The first address in h_addr_list for backward  com-
+              patibility.
+
+
+
+For errors in the above functions, use herror() and h_errno instead of perror() and errno.:
+
+       void herror(const char *s);
+
+       The variable h_errno can have the following values:
+       HOST_NOT_FOUND
+              The specified host is unknown.
+
+       NO_ADDRESS
+              The requested name is valid but does not have an IP
+              address.
+
+       NO_RECOVERY
+              A non-recoverable name server error occurred.
+
+       TRY_AGAIN
+              A temporary error occurred on an authoritative name
+              server.  Try again later.

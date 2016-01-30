@@ -1,0 +1,113 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage Express 2.0">
+<title>The DataBase Course - Exercise No. 2</title>
+</head>
+
+<body>
+
+<p align="center"><font size="4"><strong>The DataBase Course</strong></font></p>
+
+<p align="center"><font size="5"><strong>Exercise No. 2</strong></font></p>
+
+<p align="center"><font size="4">Relational Algebra</font></p>
+
+<blockquote>
+    <blockquote>
+        <p align="center"><font size="3">Due on November 25th by
+        midnight</font></p>
+    </blockquote>
+    <p><font size="3"><strong></strong></font>&nbsp;</p>
+</blockquote>
+
+<ol>
+    <li><font size="3">In the given database, suppliers supply
+        certain parts for certain projects. The information about
+        who supplies what to which projects is found in the
+        shipments table. The tables are:</font></li>
+</ol>
+
+<blockquote>
+    <blockquote>
+        <p><font size="3">Suppliers(s#,sname,status,city)<br>
+        Parts(p#,pname,color,weight,city)<br>
+        Projects(j#,jname,city)<br>
+        Shipments(s#,p#,j#)</font></p>
+    </blockquote>
+    <p><font size="3">The s#,p#,j#,s# attributes are key
+    attributes. Express the following queries in relational
+    algebra:</font></p>
+    <ul>
+        <li><font size="3">Get all pairs of part numbers that are
+            supplied by the same supplier. Do not include both
+            pairs (a,b) and (b,a) in your answer.</font></li>
+        <li><font size="3">Which part numbers are heavier than
+            p1?</font></li>
+        <li><font size="3">Which projects (give project numbers)
+            are made entirely out of red parts?</font></li>
+        <li><font size="3">For which colors are all the parts of
+            that color supplied by s5?</font></li>
+        <li><font size="3">What are the names of the projects
+            which are located in a city where no supplier is
+            located?</font></li>
+        <li><font size="3">Get supplier numbers for suppliers who
+            supply the same part to all projects.</font></li>
+    </ul>
+</blockquote>
+
+<blockquote>
+    <p><font size="3">The queries should be clearly explained!</font></p>
+    <p><font size="3"></font>&nbsp;</p>
+</blockquote>
+
+<ol>
+    <li value="2"><font size="3">The formal definition of the
+        Selection (delta) operator only allows us to use basic
+        conditions for filtering relations: Only a1=a2 or
+        a1&gt;a2 conditions are allowed. Prove that using only
+        these conditions, and the other relational algebra
+        operators, we can represent these conditions:</font></li>
+</ol>
+
+<blockquote>
+    <blockquote>
+        <p><font size="3">a1 &lt; a2<br>
+        a1 &lt;= a2<br>
+        a1 &gt;= a2<br>
+        not (condition1)<br>
+        (condition1) and (condition2)<br>
+        (condition1) or (condition2)</font></p>
+    </blockquote>
+    <p><font size="3">where a1,a2 are attributes and
+    condition1,condition2 are any (possibly complex) conditions.</font></p>
+    <p><font size="3"></font>&nbsp;</p>
+    <p><font size="3"></font>&nbsp;</p>
+</blockquote>
+
+<ol>
+    <li value="3"><font size="3">For each of the following
+        operators - union, cartesian product, substraction,
+        natural (eqvi) join, semi join and division - decide
+        whether:</font></li>
+</ol>
+
+<blockquote>
+    <ul>
+        <li><font size="3">Is it commotative: R1 x R2 = R2 x R1</font></li>
+        <li><font size="3">Is it associate: (R1 x R2) x R3 = R1 x
+            (R2 x R3)</font></li>
+        <li><font size="3">Does it have a neutral relation, that
+            is a relation Ro such that for every relation R,<br>
+            R x Ro = R</font></li>
+        <li><font size="3">Is there a funtion F whose domain and
+            range are relations, such that for every R,<br>
+            R x F(R) = R</font></li>
+    </ul>
+    <p><font size="3">Explain your answers shortly. Formal proofs
+    are not required.</font></p>
+</blockquote>
+</body>
+</html>

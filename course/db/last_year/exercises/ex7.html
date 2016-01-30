@@ -1,0 +1,72 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage Express 2.0">
+<title>The DataBase Course - Exercise No. 7</title>
+</head>
+
+<body>
+
+<p align="center"><font size="4"><strong>The Databases Course</strong></font></p>
+
+<p align="center"><font size="5"><strong>Exercise No. 7</strong></font></p>
+
+<p align="center"><font size="4">SQL embedded in C - Practical</font></p>
+
+<blockquote>
+    <blockquote>
+        <p align="center">Due on January 8th by midnight</p>
+    </blockquote>
+    <p><strong>The Example Database Schema:</strong> Suppliers
+    supply certain parts for certain projects. The information
+    about who supplies what to which projects is found in the
+    shipments table. The tables are:</p>
+    <p>Suppliers(s#,sname,status,city)<br>
+    Parts(p#,pname,color,weight,city)<br>
+    Projects(j#,jname,city)<br>
+    Shipments(s#,p#,j#)</p>
+    <p>The s#,p#,j# attributes are key attributes. The tables are
+    available to query using Oracle.</p>
+    <p><strong>Write a C program with embedded SQL statements to
+    do the following:</strong></p>
+    <p>Accept a number <em>n</em> from the user, and calculate
+    the most popular city for the first <em>n</em> suppliers
+    (ordered according to supplier names, ascending) to live in.
+    Print this city, and the number of suppliers (of the first <em>n</em>)
+    living there. There may be more than one most popular city -
+    in that case, print them all.</p>
+    <p>Recall database tables are usually very large. That is,
+    the suppliers relation and the number <em>n</em> may be <em>very</em>
+    large. Therefore it is unreasonable to assume that you can
+    store all the first <em>n</em> tuples in main memory at the
+    same time. Your program should use only a <em>fixed</em>
+    number of memory cells and cursors. Moreover, your program
+    should not create new database tables or Unix files during
+    its execution.</p>
+    <p>You may <em>not</em> assume that the tables are clean of
+    null values. You should ignore (and not count) suppliers
+    whose 's#' or 'city' fields are missing. Recall the 'is null'
+    predicate and 'count()' function definition.</p>
+    <p>Your program should be <em>extremely</em> well documented
+    - explain every step. You can use the example program from
+    class as a starting point. Good luck!</p>
+    <p><strong>You should submit:</strong></p>
+    <ul>
+        <li>Submit electronically (run ~db/bin/submit to submit <u>ex3.tar</u>)
+            the following files:<br>
+            <u>README</u> - containing only your login on the
+            first line, and your full name and relevant exercise
+            documentation afterwards.<br>
+            <u>Makefile</u> - When running 'gmake', exactly one
+            executable named 'ex3' should be created.<br>
+            <u>ex3.pc</u> - The program's source code.<br>
+            If you have more source files, specify their names in
+            the README file.</li>
+        <li>Submit printouts of everything, except the Makefile,
+            to the course's submission box.</li>
+    </ul>
+</blockquote>
+</body>
+</html>

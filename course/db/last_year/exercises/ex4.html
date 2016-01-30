@@ -1,0 +1,127 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage Express 2.0">
+<title>The Databases Course - Exercise No. 4</title>
+</head>
+
+<body>
+
+<p align="center"><font size="4"><strong>The Databases Course</strong></font></p>
+
+<p align="center"><font size="5"><strong>Exercise No. 4</strong></font></p>
+
+<p align="center"><font size="4">Relational Algebra, Calculus and
+QBE</font></p>
+
+<blockquote>
+    <blockquote>
+        <p align="center"><font size="3">Due on December 16th by
+        midnight</font></p>
+    </blockquote>
+    <p><em>This is a very important exercise - it summarizes the
+    subject of query languages. However, it is slightly bigger
+    than the other exercises. To encourage you to do it anyway,
+    anyone who submits this exercise will get an automatic bonus
+    of two points. So the maximum grade is 22 out of 20!</em></p>
+</blockquote>
+
+<ol>
+    <li><font size="3">You should by now be very familiar with
+        the database of Suppliers, Parts, Projects and Shipments
+        from exercises 2 and 3 - you already wrote the six
+        queries described in exercise 2 in relational algebra,
+        SQL and tuple relational calculus.<br>
+        Write these same six queries (from exercise 2 question 1)
+        in the <em>domain</em> relational calculus.</font></li>
+</ol>
+
+<ol type="1" start="2">
+    <li><font size="3">Express the following query in QBE (Query
+        by Example):<br>
+        What are the names of suppliers in Paris which supply red
+        parts?</font></li>
+</ol>
+
+<ol type="1" start="3">
+    <li><font size="3">The beer drinkers' database contains the
+        following relations:<br>
+        Frequents(drinker, bar) , Serves(bar, beer) ,
+        Likes(drinker, beer)<br>
+        The first indicates the bars each drinker visits, the
+        second tells what beers each bar serves, and the last
+        indicates which beers each drinker lines to drink. Note:
+        A drinker may not like any beer, a bar may not serve any
+        beers, etc.<br>
+        Express the following queries in both relational algebra
+        and the <em>safe tuple</em> relational calculus:</font></li>
+</ol>
+
+<blockquote>
+    <ol type="a" start="1">
+        <li><font size="3">Find the drinkers that frequent only
+            bars that serve some beer that they like.</font></li>
+        <li><font size="3">Find the drinkers that frequent no bar
+            that serves a beer that they like.</font></li>
+    </ol>
+</blockquote>
+
+<ol type="1" start="4">
+    <li><font size="3">A query is called <em>monotone</em> if
+        enlarging any of its input relations will not decrease
+        its output relation. Are the queries in question 3
+        monotone? Prove your answer.</font></li>
+</ol>
+
+<ol type="1" start="5">
+    <li><font size="3">Give a complete proof that none of the
+        union, cartesian product, projection and substraction
+        operators can be expressed in terms of the remaining
+        relational algebra operators, i.e. that projection cannot
+        be expressed in terms of union, product, selection and
+        substraction, etc.<br>
+        Hint: For each operator, look for the type of queries
+        that need this operator the most. For example, projection
+        is the only operator that lets you return a relation with
+        less attributes than the input relation, substraction is
+        the only non-monotone operator, and so on.</font></li>
+</ol>
+
+<ol type="1" start="6">
+    <li><font size="3">We examine a query Q(R</font><font
+        size="3" face="Times New Roman"><code>1</code></font><font
+        size="3">, ..., R</font><font size="3"
+        face="Times New Roman"><code>n</code></font><font
+        size="3">) over a given database. For all i=1..n R</font><font
+        size="3" face="Times New Roman"><code>i</code></font><font
+        size="3"> has t</font><font size="3"
+        face="Times New Roman"><code>i</code></font><font
+        size="3"> tupples and s</font><font size="3"
+        face="Times New Roman"><code>i</code></font><font
+        size="3"> attributes. The result of the query is a
+        relation with t</font><font size="3"
+        face="Times New Roman"><code>q</code></font><font
+        size="3"> tupples and s</font><font size="3"
+        face="Times New Roman"><code>q</code></font><font
+        size="3"> attributes. Q may be any well defined query in
+        relational algebra, and we assume that all atomic values
+        appearing in the output must also appear in the input (no
+        calculated fields, etc.). We also assume that Q contains
+        exactly </font><font size="3" face="Times New Roman"><code>q</code></font><font
+        size="3"> operators.</font></li>
+</ol>
+
+<blockquote>
+    <ol type="a" start="1">
+        <li><font size="3">Show an upper bound for the number of
+            tuples that can belong to the answer of Q.</font></li>
+        <li><font size="3">Show that this bound can be achieved
+            using the relational algebra (or calculus).</font></li>
+        <li><font size="3">Is there such a bound in the <em>SQL
+            Model</em>, where a table may contain duplicate rows?</font></li>
+    </ol>
+</blockquote>
+</body>
+</html>

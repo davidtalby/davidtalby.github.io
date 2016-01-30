@@ -1,0 +1,116 @@
+#ifdef RCSID
+static char *RCSid = 
+   "$Header: sample3.pc 1041300.1 93/05/05 16:00:31 jboyce Generic<base> $ sample3.pc ";
+#endif /* RCSID */
+
+/* Copyright (c) 1990 by Oracle Corporation */
+ 
+/* NAME
+     sample3.pc
+   FUNCTION
+     Oracle C Precompiler sample program
+   RETURNS
+ 
+   NOTES
+ 
+   MODIFIED
+    tssmith    03/03/93 - Fixing typdef and TYPE statements 
+    sfaris     12/06/91 - Touch ups 
+    Osborne    12/21/90 - Replacing with new version
+*/
+/**************************************************************
+Sample Program 3:  Host Arrays
+
+This program logs on to ORACLE, declares and opens a cursor,
+fetches in batches using arrays, and prints the results using
+the function print_rows().
+**************************************************************/
+
+#include <stdio.h>
+
+typedef char asciz[20];
+
+EXEC SQL BEGIN DECLARE SECTION;
+
+    /* User-defined type for  null-terminated strings */
+    EXEC SQL TYPE asciz IS STRING(20) REFERENCE;
+    asciz     username;
+    asciz     password;
+    asciz     emp_name[5];
+
+    int       emp_number[5];
+    float     salary[5];
+
+EXEC SQL END DECLARE SECTION;
+
+EXEC SQL INCLUDE sqlca;
+
+void print_rows();         /* produces program output      */
+void sqlerror();           /* handles unrecoverable errors */
+
+main()
+{
+    int  num_ret;          /* number of rows returned */
+  
+    /* Log on to ORACLE. */
+
+    strcpy(username, "SCOTT");
+    strcpy(password, "TIGER");
+
+    EXEC SQL WHENEVER SQLERROR DO sqlerror();
+
+    EXEC SQL CONNECT :username IDENTIFIED BY :password;
+    printf("\nConnected to ORACLE as user: %s\n", username);
+
+    EXEC SQL DECLARE c1 CURSOR FOR
+        SELECT EMPNO, ENAME, SAL FROM EMP;
+
+    EXEC SQL OPEN c1;
+
+    num_ret = 0;  /* Initialize the number of rows. */
+
+    for ( ; ; )   /* Array fetch loop - ends when NOT FOUND becomes true */
+    {
+        EXEC SQL WHENEVER NOT FOUND DO break;
+        EXEC SQL FETCH c1 INTO :emp_number, :emp_name, :salary;
+
+        print_rows(sqlca.sqlerrd[2] - num_ret);
+        num_ret = sqlca.sqlerrd[2];               /* Reset the number. */
+    }
+
+    /* Print remaining rows from last fetch, if any */
+    if ((sqlca.sqlerrd[2] - num_ret) > 0)
+        print_rows(sqlca.sqlerrd[2] - num_ret);
+
+    EXEC SQL CLOSE c1;
+
+    printf("\nHave a good day.\n");
+
+    EXEC SQL COMMIT WORK RELEASE;  /* Log off the database. */
+    exit(0);
+
+}
+
+void print_rows(n)
+int n;
+{
+    int i;  /* Use a loop counter. */
+
+    printf("\nNumber   Employee   Salary\n");
+    printf("------   --------   ------\n");
+
+    for (i=0; i<n; i++)
+        printf("%-9d%-8s%9.2f\n", emp_number[i], emp_name[i], salary[i]);
+
+}
+
+void sqlerror()
+{
+    EXEC SQL WHENEVER SQLERROR CONTINUE;
+
+    printf("\nORACLE error detected:\n");
+    printf("\n% .70s \n", sqlca.sqlerrm.sqlerrmc);
+
+    EXEC SQL ROLLBACK WORK RELEASE;
+    exit(1);
+}

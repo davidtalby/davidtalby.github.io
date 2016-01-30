@@ -1,0 +1,192 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage Express 2.0">
+<title>The Databases Course - Exercise No. 5</title>
+</head>
+
+<body>
+
+<p align="center"><font size="4"><strong>The Databases Course</strong></font></p>
+
+<p align="center"><font size="5"><strong>Exercise No. 5</strong></font></p>
+
+<p align="center"><font size="4">More SQL - Practical</font></p>
+
+<blockquote>
+    <blockquote>
+        <p align="center"><font size="3">Due on December 23th by
+        midnight</font></p>
+    </blockquote>
+    <p>&nbsp;</p>
+</blockquote>
+
+<ol>
+    <li><font size="3">Express the following queries in SQL:</font></li>
+</ol>
+
+<blockquote>
+    <ol type="a" start="1">
+        <li><font size="3">For which parts is the number of
+            different suppliers that supply the part larger than
+            the number of different projects which use that part?</font></li>
+        <li><font size="3">For each supplier from London and each
+            part, what is the total weight of that part supplied
+            by that supplier, in the case that the total weight
+            is more than twice the average weight?</font></li>
+        <li><font size="3">What is the average number of parts
+            supplied to projects? Notice that the average
+            calculated here is different from that in exercise 3
+            question 8, because here if a part is supplied to two
+            projects, or twice to a project, we want to count it
+            twice for the average.</font></li>
+        <li><font size="3">What are the numbers of suppliers who
+            supply p1, p2, p3 and p5 to all projects? Notice that
+            this demonstrates how division works in SQL. Hint:
+            Remember how we defined division using the other
+            algebra operators - the 'minus' keyword is probably
+            is quickest solution here as well.</font></li>
+    </ol>
+    <p><font size="3">If you succeed to express either a,b or c
+    (not d) without using 'group by', then you'll get two bonus
+    points (that's 10% of the maximum possible grade!). If you
+    can prove that it is impossible to express either of these
+    queries without 'group by' you'll also get two bonus points.
+    However, no more than two points will be given (as for two
+    different queries or proofs).</font></p>
+    <p>&nbsp;</p>
+</blockquote>
+
+<ol type="1" start="2">
+    <li><font size="3">Write an SQL file (list of queries) that
+        does the following, in the requested order:</font></li>
+</ol>
+
+<blockquote>
+    <ul>
+        <li><font size="3">Create a new table named 'friends'
+            with attributes for first name, last name, birthday,
+            height and current occupation. Decide on your own
+            about reasonable column names and data types.</font></li>
+        <li><font size="3">Insert ten records containing
+            information about people you know (well, we won't
+            check id's). At least one person should have a
+            current occupation of 'Student'.</font></li>
+        <li><font size="3">Display the table on the standard
+            output, ordered by height in descending order
+            (highest people first).</font></li>
+        <li>Update the height of all the people whose height is
+            above the average height to be exactly two meters.</li>
+        <li>Delete all records of students (people whose
+            occupation is 'Student').</li>
+        <li>Display the table again, ordered by last name
+            (ascending) and then by first name (also ascending).</li>
+        <li>Destroy the table.</li>
+    </ul>
+</blockquote>
+
+<ol type="1" start="3">
+    <li><font size="3">Assume S is a table with attributes A</font><font
+        size="3" face="Times New Roman"><code>1</code></font><font
+        size="3">, ..., A</font><font size="3"
+        face="Times New Roman"><code>n</code></font><font
+        size="3">, T is a table with attributes B</font><font
+        size="3" face="Times New Roman"><code>1</code></font><font
+        size="3">, ..., B</font><font size="3"
+        face="Times New Roman"><code>m</code></font><font
+        size="3">, and c and k are constants. Consider the SQL
+        query:</font></li>
+</ol>
+
+<blockquote>
+    <blockquote>
+        <p><font size="3">select distinct a</font><font size="3"
+        face="Times New Roman"><code>1</code></font><font
+        size="3">, ..., a</font><font size="3"
+        face="Times New Roman"><code>n</code></font><font
+        size="3"> from S where a</font><font size="3"
+        face="Times New Roman"><code>2</code></font><font
+        size="3"> = k <br>
+        and a</font><font size="3" face="Times New Roman"><code>1</code></font><font
+        size="3"> in (select b</font><font size="3"
+        face="Times New Roman"><code>1</code></font><font
+        size="3"> from T where b</font><font size="3"
+        face="Times New Roman"><code>2</code></font><font
+        size="3"> = c and b</font><font size="3"
+        face="Times New Roman"><code>3</code></font><font
+        size="3"> = S.a</font><font size="3"
+        face="Times New Roman"><code>3</code></font><font
+        size="3">);</font></p>
+    </blockquote>
+</blockquote>
+
+<blockquote>
+    <ol type="a" start="1">
+        <li>Rewrite the above query using 'exists' instead of
+            'in'.</li>
+    </ol>
+    <ol type="a" start="2">
+        <li>Rewrite the above query without using subqueries.</li>
+    </ol>
+    <ol type="a" start="3">
+        <li>Assume that the original query above did not contain
+            the 'distinct' keyword. Are your answer from parts 3a
+            and 3b still correct? If your answers used the
+            keyword 'distinct', will they be correct if this
+            keyword is removed? In all of the above cases, if the
+            answer is yes, explain why, and if the answer is no,
+            give example databases where the queries compared
+            give different answers.</li>
+    </ol>
+    <ol type="a" start="4">
+        <li>Consider the above query where the keyword 'in' is
+            replaced by 'not in':</li>
+    </ol>
+    <blockquote>
+        <p>select distinct a1, ..., an from S where a2 = k <br>
+        and a1 not in (select b1 from T where b2 = c and b3 =
+        S.a3);</p>
+        <p>Rewrite the above query using 'exists' / 'not exists'
+        instead of 'not in'.</p>
+    </blockquote>
+    <ol type="a" start="5">
+        <li>Is it possible to rewrite the above query (from
+            question 3d) without using a subquery? If yes, give
+            the query. If no, prove that it is not possible. To
+            prove that it is not possible, it is acceptable to
+            show that there is no equivalent query of the form:</li>
+    </ol>
+    <blockquote>
+        <p>select [distinct] column-name {, column-name, ...}<br>
+        from table-name [alias] {, table-name [alias], ...}<br>
+        where predicate</p>
+        <p>Here predicate is one of:</p>
+        <ul>
+            <li>a comparison (using =, &gt;, &lt;, &gt;=, &lt;=)
+                between two column names, or between a column
+                name and a constant.</li>
+            <li>if p1 and p2 are predicates, then (p1 and p2) ,
+                (p1 or p2) , (not p1) are also predicates.</li>
+        </ul>
+    </blockquote>
+    <p><strong></strong>&nbsp;</p>
+    <p><strong>You should submit:</strong></p>
+    <ul>
+        <li>The answer to question 3, on paper.</li>
+        <li>Printouts of all the SQL queries and outputs from
+            questions 1 and 2.</li>
+        <li>Submit electronically (run ~db/bin/submit to submit <u>ex2.tar</u>)
+            the following files:<br>
+            <u>README</u> - containing only your login on the
+            first line, and your full name and relevant exercise
+            documentation afterwards.<br>
+            <u>queries1.sql, queries2.sql</u> - containing the
+            queries of questions 1 and 2 accordingly.<br>
+            <u>outputs1.txt, outputs2.txt </u>- containing the
+            outputs of questions 1 and 2 accordingly.</li>
+    </ul>
+</blockquote>
+</body>
+</html>

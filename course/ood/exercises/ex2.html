@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0059)http://www.cs.huji.ac.il/course/2003/ood/exercises/ex2.html -->
+<HTML><HEAD><TITLE>Object Oriented Design Course : Exercise 2</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=iso-8859-8"><LINK 
+href="ex2_files/style.css" type=text/css rel=stylesheet>
+<META name=author value="David Rabinowitz">
+<META content="Microsoft FrontPage 5.0" name=GENERATOR></HEAD>
+<BODY><!-- large frame -->
+<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+  <TBODY>
+  <TR>
+    <TD style="PADDING-RIGHT: 20px"><!-- /large frame -->
+      <TABLE id=headerTable cellSpacing=0 cellPadding=0>
+        <TBODY>
+        <TR>
+          <TD id=header vAlign=center noWrap>Object Oriented Design 
+        Course</TD></TR></TBODY></TABLE><!-- large frame --></TD></TR>
+  <TR>
+    <TD style="PADDING-RIGHT: 20px"><!-- /large frame -->
+      <TABLE class=borderedtable style="MARGIN: 5px" cellSpacing=0 cellPadding=0 
+      width="100%">
+        <TBODY>
+        <TR>
+          <TD class=pagetitle><!--
+******************************************************************************
+Page title
+******************************************************************************
+-->Exercise 
+            2 - Various Subjects <!--
+******************************************************************************
+End of page title
+******************************************************************************
+--></TD></TR>
+        <TR>
+          <TD class=maindata><!--
+******************************************************************************
+Details
+******************************************************************************
+-->
+            <TABLE cellPadding=2 bgColor=white border=0 cellsacing="2">
+              <TBODY>
+              <TR vAlign=bottom>
+                <TD class=desc>Deadline</TD>
+                <TD>April 26<sup>th</sup>, 2006 at Ross closing time</TD></TR>
+              <TR vAlign=top>
+                <TD class=desc>Description</TD>
+                <TD>
+                  <H4>Design Patterns for Generic Programming</H4>
+                  <a href="../resources/design-patterns-for-generic.pdf">Read this paper 
+                  first</a>; focus on sections 1, 2 and the descriptions of the 
+                  Abstract Factory, Decorator and Visitor patterns. Answer the following questions: 
+                  <OL>
+                    <LI>For each of these three patterns, compare their 
+                    &quot;classic&quot; object-oriented versions with the generic versions 
+                    that the paper presents, in terms of:<UL>
+                      <LI>Performance 
+                      <LI>Number of classes 
+                      <LI>Compilation dependencies 
+                      <LI>Amount of "glue" code the pattern requires</LI></UL>
+                    <LI>Under which conditions is each of the patterns 
+                    preferable to the other? Give at least one case in which 
+                    each version is better than the other, for each of the three 
+                    patterns.</OL>
+                  <H4>Memory Leaks in Java Code</H4>
+                  <p>
+                  <a href="http://www.javaworld.com/javaworld/jw-03-2006/jw-0313-leak.html">Read 
+                  this paper first</a>, and answer the following questions: </p>
+                  <OL start=3>
+                    <LI>Give concrete code examples of how a memory leak can be 
+                    created in Java in these cases: 
+                    <UL>
+                      <LI>A flyweight factory that does not release unused 
+                      flyweights.<LI>Observer objects that are not un-registered 
+                      when they are no longer used.</UL>
+                    </LI>
+                    <li>Assume that you need to debug an application with one of 
+                    the two bugs from the previous question. Which features of a 
+                    performance analysis/debugging tool are most useful for such 
+                    a task? Give examples of how they are used, from the stage 
+                    finding that a memory leak exists at all, to the stage of 
+                    finding the source code lines that cause the problem, and 
+                    verifying that the problem was fixed.</li>
+                  </OL>
+                  <H4>Code Generation Models</H4>
+                  <p>
+                  <a href="http://www.codegeneration.net/tiki-index.php?page=ModelsIntroduction">Read 
+                  this paper first</a>, and answer the following question: </p>
+                  <OL start=5>
+                    <LI>For each of the first five presented models of code 
+                    generators, list a scenario (different than the one given in 
+                    the paper) in which using such a code generator would save 
+                    time, reduce effort or prevent errors.</LI> 
+                    <LI>Consider code generation from UML Models, for example 
+                    the generation of Java code from UML class and sequence 
+                    diagrams. Analyze the potential benefits and drawbacks of 
+                    this approach with respect to quality, consistency, 
+                    productivity and abstraction. Under which conditions is this 
+                    approach most valuable?</LI></OL>
+                  <H4>Exception-Safe Generic Containers</H4>
+                  <a href="../resources/Exception_Safe_Generic_Containers.pdf">Read this paper 
+                  first</a>, and 
+                  answer the following questions: 
+                  <OL start=7>
+                    <LI>Quote: <I>"More generally, mutator functions should not 
+                    return T objects by value"</I>. Explain why this is a 
+                    problem. State a general rule of generic class design, that 
+                    designers must follow to avoid this problem. 
+                    <LI>Explain why the three methods of <CODE>StackImpl</CODE> 
+                    are both exception-neutral and exception-safe.</OL>
+                  </TD></TR>
+              <TR vAlign=top>
+                <TD class=desc>Submission</TD>
+                <TD>Submit a zip file containing the document with your answers, 
+                in PDF, TXT or HTML format.</TD></TR>
+              <TR vAlign=top>
+                <TD class=desc>Resources</TD>
+                <TD>
+                  <UL>
+                    <li><a href="../resources/design-patterns-for-generic.pdf">
+                    Design Patterns for Generic Programming in C++</a></li>
+                    <LI><font face="verdana, arial, helvetica" size="3">
+                    <a href="http://www.javaworld.com/javaworld/jw-03-2006/jw-0313-leak.html">
+                    Plug memory leaks in enterprise Java applications</a></font><LI><A 
+                    href="http://www-106.ibm.com/developerworks/java/library/j-leaks/">Memory 
+                    Management</A> 
+                    <LI>
+                    <a href="http://www.codegeneration.net/tiki-index.php?page=ModelsIntroduction">
+                    Code Generation Models</a><LI>
+                    <a href="http://www.onjava.com/pub/a/onjava/2003/09/03/generation.html?page=1">
+                    Code-Generation Techniques for Java</a><LI>
+                    <a href="../resources/Exception_Safe_Generic_Containers.pdf">Exception-Safe Generic Containers</a><LI>
+                    <a href="../guidelines.html">Guidelines</a></LI></UL></TD></TR></TBODY></TABLE><!--
+******************************************************************************
+End of details
+******************************************************************************
+--></TD></TR></TBODY></TABLE><!-- large frame --></TD></TR></TBODY></TABLE><!-- /large frame --></BODY></HTML>

@@ -1,0 +1,127 @@
+<html>
+
+<head>
+<meta NAME="GENERATOR" CONTENT="Microsoft FrontPage 3.0">
+<title>Files and I/O in Unix</title>
+</head>
+
+<body LINK="#0000ff" VLINK="#800080" BGCOLOR="#ffffff">
+<strong><font SIZE="5">
+
+<p ALIGN="CENTER">Unix System Calls for Files and I/O</p>
+</font>
+
+<p ALIGN="CENTER">Creating Files</p>
+
+<ol>
+  </strong>
+  <li>Include files:<br>
+    <font FACE="Courier New" SIZE="2">#include &lt;sys/types.h&gt;<br>
+    #include &lt;sys/stat.h&gt;<br>
+    #include &lt;fcntl.h&gt;<br>
+    #include &lt;unistd.h&gt;</li>
+  <li>int open (const char *pathname, int flag, mode_t mode);</font><br>
+    Returns file descriptor of opened file on success, or -1 on failure.<br>
+    First parameter is filename. Second is the &quot;or&quot; of any of these options:<br>
+    <font FACE="Courier New" SIZE="2">O_RDONLY, O_WRONLY, O_RDWR, O_APPEND, O_CREAT, ...</font><br>
+    Third parameter is only used when creating new files.</li>
+  <li>File descriptors: 0, 1 and 2 are standard input, standard output and standard error,
+    respectively. The <font FACE="Courier New" SIZE="2">STDIN_FILENO, STDOUT_FILENO</font> and
+    <font FACE="Courier New" SIZE="2">STDERR_FILENO</font> constants in the <font
+    FACE="Courier New" SIZE="2">&lt;unistd.h&gt;</font> file holds these values.</li>
+  <font FACE="Courier New" SIZE="2">
+  <li>int creat(const char *pathname, mode_t mode);</font><br>
+    Deprecated, equal to: <font FACE="Courier New" SIZE="2">open(pathname, O_WRONLY | O_CREAT
+    | O_TRUNC, mode);</li>
+  <li>int close(int fd);</li>
+  </font><strong><p ALIGN="CENTER">Accessing Files</p>
+  </strong><font FACE="Courier New" SIZE="2">
+  <li>off_t lseek(int fd, off_t offset, int whence);</font><br>
+    whence can be one of: <font FACE="Courier New" SIZE="2">SEEK_SET, SEEK_CUR, SEEK_END</font>.<br>
+    Returns -1 on error, on the new position on success:<br>
+    <font FACE="Courier New" SIZE="2">my_pos = lseek(my_fd, 0, SEEK_CUR); <br>
+    </font>Files can have a negative offset, so check return value with <font
+    FACE="Courier New" SIZE="2">&quot;== -1&quot;</font> and not <font FACE="Courier New"
+    SIZE="2">&quot;&lt; 0&quot;</font>.</li>
+  <font FACE="Courier New" SIZE="2">
+  <li>ssize_t read (int fd, void *buf, size_t nbytes);</font><br>
+    Tries to read nbytes into buf. ssize_t is a signed integer, size_t is an unsigned one.<br>
+    Returns -1 on error, 0 on end-of-file, otherwise number of bytes read. Should be nbytes
+    unless read from network.</li>
+  <font FACE="Courier New" SIZE="2">
+  <li>ssize_t write (int fd, const void *buf, size_t nbytes);</font><br>
+    Returns nbytes unless an error has occured. Write at current offset unless the file was
+    opened with <font FACE="Courier New" SIZE="2">O_APPEND</font>.</li>
+  <font FACE="Courier New" SIZE="2">
+  <li>int dup (int fd);</font><br>
+    <font FACE="Courier New" SIZE="2">int dup2 (int fd_source, fd_dest);</li>
+  <li>int fcntl (int fd, int command, int some_argument);</font><br>
+    Does one of many things, depending on the command parameter: Duplicate file descriptors,
+    get or set status flags, get or set file owner, get or set file or records locks, ...</li>
+  <font FACE="Courier New" SIZE="2">
+  <li>int stat (const char *pathname, struct stat *buf);<br>
+    int fstat (int fd, struct stat *buf);<br>
+    int lstat (const char *pathname, struct stat *buf);</font><br>
+    The <font FACE="Courier New" SIZE="2">'struct stat'</font> includes data about file type,
+    permissions, i-node number, device number, number of links, user and group IDs of owner,
+    size in bytes (for regular files), times of last access, last modification and last status
+    change, and a few others.<br>
+    <font FACE="Courier New" SIZE="2">lstat()</font> is the only variant that may return a
+    file type of 'symbolic link'. </li>
+  <strong><p ALIGN="CENTER">File Status</p>
+  </strong>
+  <li>File types: Regular, directory, symbolic link, character special, block special, fifo
+    (named pipe), and socket. Use the macros <font FACE="Courier New" SIZE="2">S_ISREG(),
+    S_ISDIR(), S_ISLNK()</font> and so forth in <font FACE="Courier New" SIZE="2">&lt;sys/stat.h&gt;</font>
+    to extract file type from a struct stat variable:<br>
+    <font FACE="Courier New" SIZE="2">struct stat buf; if (lstat(&quot;my_file&quot;,
+    &amp;buf) == -1) exit(1);<br>
+    if (S_ISREG(buf.st_mode)) printf(&quot;regular file\n&quot;);</li>
+  <li>int chmod(const char *pathname, mode_t mode);<br>
+    </font>mode is a logical or of constants in &lt;sys/stat.h&gt;, for example:<br>
+    <font FACE="Courier New" SIZE="2">chmod(&quot;my_file&quot;, S_IRUSR | S_IRGRP | S_IROTH);</li>
+  <li>int chown (const char *pathname, uid_t owner, gid_t group);</font><br>
+    Change file's user and group ownership (used for permissions and quota).<br>
+    'fchown()' and 'lchown()' usually exist as well but are non-standard.</li>
+  <strong><p ALIGN="CENTER">Hard and Symbolic Links</p>
+  </strong><font FACE="Courier New" SIZE="2">
+  <li>int link (const char *existingpath, const char *newpath);<br>
+    </font>int unlink (const char *pathname);<br>
+    link() does not copy a file - it creates a new hard link to an existing one.<br>
+    It's impossible to create hard links to other file systems or to directories.<br>
+    <font FACE="Courier New" SIZE="2">remove()</font> does the same as unlink(), but works on
+    directories too (like <font FACE="Courier New" SIZE="2">rmdir() does</font>).</li>
+  <font FACE="Courier New" SIZE="2">
+  <li>int rename (const char *oldname, const char *newname);<br>
+    </font>Gives a new name to an existing hard link. Works on files and directories.</li>
+  <font FACE="Courier New" SIZE="2">
+  <li>int symlink (const char *pathname, const char *sympath);<br>
+    </font>Creates a symbolic link named 'sympath' to the file in 'pathname'. May introduce
+    cycles, which will cause file I/O functions to return -1 and set the <font
+    FACE="Courier New" SIZE="2">errno</font> variable to <font FACE="Courier New" SIZE="2">ELOOP</font>.</li>
+  <font FACE="Courier New" SIZE="2">
+  <li>int readlink (const char *pathname, char *buf, int bufsize);<br>
+    </font>Read the contents of the symbolic link itself, not the file it points to. Returns
+    the number of bytes placed in buf.</li>
+  <li>Creating a hard link from the terminal: &quot;<font FACE="Courier New" SIZE="2">ln
+    existingpath newpath</font>&quot;. Creating a symbolic link: &quot;<font
+    FACE="Courier New" SIZE="2">ln -s pathname sympath</font>&quot;.</li>
+  <strong><p ALIGN="CENTER">Directories</p>
+  </strong><font FACE="Courier New" SIZE="2">
+  <li>int mkdir (const char *pathname, mode_t mode);<br>
+    int rmdir (const char *pathname);</li>
+  <li>DIR *opendie (const char *pathname);<br>
+    struct dirent *readdir (DIR *dp);<br>
+    void rewinddir (DIR *dp);<br>
+    int closedir (DIR *dp);<br>
+    </font>First two functions return <font FACE="Courier New" SIZE="2">NULL</font> on error,
+    fourth one returns -1 on error.<br>
+    Struct dirent contains two items: <font FACE="Courier New" SIZE="2">d_ino</font> which a
+    file's i-node number, and <font FACE="Courier New" SIZE="2">d_name</font> which is a
+    file's name.</li>
+  <font FACE="Courier New" SIZE="2">
+  <li>int chdir (const char *pathname);<br>
+    </font>This changes the current directory of the current process (only).</li>
+</ol>
+</body>
+</html>

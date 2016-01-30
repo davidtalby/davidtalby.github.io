@@ -1,0 +1,106 @@
+<HTML>
+<HEAD>
+<META NAME="Generator" CONTENT="Microsoft Word 97">
+<TITLE>SQL Summary</TITLE>
+</HEAD>
+<BODY>
+
+<P ALIGN="CENTER">The Databases Course</P>
+<B><FONT SIZE=4><P ALIGN="CENTER">SQL Summary</P>
+</B></FONT><P ALIGN="LEFT"></P>
+<P ALIGN="LEFT">This document contains all the SQL that this course requires you to know. This means that the syntax of the commands given here is (very) partial. You are welcome to explore further using Oracle’s ‘help [command]’ command.</P>
+<P ALIGN="LEFT"></P>
+<B><I><U><P ALIGN="LEFT">Subselect general form:</P>
+</B></I></U><P ALIGN="LEFT">select [<U>all</U> | distinct ] expression [alias] {, expression [alias], … }</P>
+<P ALIGN="LEFT">from tablename [corr_name] {, tablename [corr_name], … }</P>
+<P ALIGN="LEFT">where search_condition</P>
+<P ALIGN="LEFT">group by column, column, …</P>
+<P ALIGN="LEFT">having search_condition</P>
+<P ALIGN="LEFT"></P>
+<B><I><U><P ALIGN="LEFT">Full select general form:</P>
+</B></I></U><P ALIGN="LEFT">Subselect</P>
+<P ALIGN="LEFT">[union | union all | intersect | minus</P>
+<P ALIGN="LEFT">Subselect</P>
+<P ALIGN="LEFT">…]</P>
+<P ALIGN="LEFT">[ order by result_column [<U>asc</U> | desc] {, result_column [<U>asc</U> | desc], … } ]</P>
+<P ALIGN="LEFT"></P>
+<B><I><U><P ALIGN="LEFT">Conceptual order of SELECT evaluation</P>
+<OL>
+
+</B></I></U><P ALIGN="LEFT"><LI>The Cartesian product of all tables in the <B>from</B> clause is formed.</LI></P>
+<P ALIGN="LEFT"><LI>From this, rows not satisfying the <B>where</B> condition are eliminated.</LI></P>
+<P ALIGN="LEFT"><LI>The remaining rows are grouped in accordance with the <B>group by</B> clause.</LI></P>
+<P ALIGN="LEFT"><LI>Groups not satisfying the <B>having</B> clause are then eliminated.</LI></P>
+<P ALIGN="LEFT"><LI>The expressions of the select clause target list are evaluated.</LI></P>
+<P ALIGN="LEFT"><LI>If the keyword <B>distinct</B> is present, duplicate rows are now eliminated.</LI></P>
+<P ALIGN="LEFT"><LI>The <B>union</B>/intersect/minus is taken after each subselect is evaluated.</LI></P>
+<P ALIGN="LEFT"><LI>Finally, the set of all selected rows is sorted if an <B>order</B> <B>by</B> is present.</LI></P></OL>
+
+<P ALIGN="LEFT"></P>
+<B><I><U><P ALIGN="LEFT">Search Conditions and predicates:</P>
+</B></I></U><P ALIGN="LEFT">A search condition is: predicate | not(predicate) | (pred1 and pred2) | (pred1 or pred2).</P>
+<P ALIGN="LEFT">A predicate can be:</P>
+<OL>
+
+<P ALIGN="LEFT"><LI>Comparison predicate: expr1 [ =, &lt;&gt;, &gt;, &lt;, &gt;=, &lt;= ] (expr2 | Subselect)<BR>
+<I>p.price &gt; 5</LI></P>
+</I><P ALIGN="LEFT"><LI>Between predicate: expr1 [not] between expr2 and expr3<BR>
+<I>c.discount between 10.0 and 14.0</LI></P>
+</I><P ALIGN="LEFT"><LI>Quantified predicate: expr [=,&lt;&gt;,&gt;,&lt;,&gt;=,&lt;=][any | all] (Subselect)<BR>
+<I>c.price &gt;=all (select price from parts)</LI></P>
+</I><P ALIGN="LEFT"><LI>In predicate: expr [not] in (Subselect)<BR>
+<I>city in (‘New York’, ‘Atlanta’)</LI></P>
+</I><P ALIGN="LEFT"><LI>Exists predicate: [not] exists (Subselect)<BR>
+<I>exists (select * from parts where p.weight &gt; 100)</LI></P>
+</I><P ALIGN="LEFT"><LI>Is null predicate: column_name is [not] null<BR>
+<I>c.address is not null</LI></P>
+</I><P ALIGN="LEFT"><LI>Like predicate: column_name is [not] like ‘pattern’<BR>
+<I>cname is like ‘A%’</LI></P></OL>
+
+<B><U><P ALIGN="LEFT">Managing tables</P>
+<OL>
+
+</B></I></U><P ALIGN="LEFT"><LI>create table tablename (field1 datatype [default expr], field2 datatype [default expr], …, primary key(field1, field2, …) ) as Subselect;<BR>
+<I>create table parts (p# integer, pname varchar(30), price numeric(8,2), department smallint default 1, primary key(p#));<BR>
+create table my_parts as select * from parts;</LI></P>
+</I><P ALIGN="LEFT"><LI>drop table tablename<BR>
+<I>drop table parts;</LI></P>
+</I><P ALIGN="LEFT"><LI>alter table tablename [ add field datatype | drop field | modify field datatype], …<BR>
+<I>alter table parts add validity date, drop pname;</LI></P></OL>
+
+</I><P ALIGN="LEFT"></P>
+<B><I><U><P ALIGN="LEFT">Data Types (partial list)</P>
+</B></I></U><P ALIGN="LEFT">Smallint – 16 bits integer</P>
+<P ALIGN="LEFT">Integer – 32 bits integer</P>
+<P ALIGN="LEFT">Char(n) – fixed length character string</P>
+<P ALIGN="LEFT">Varchar(n) – variable length character string</P>
+<P ALIGN="LEFT">Numeric(precision, scale) – a real number</P>
+<P ALIGN="LEFT">Float(precision, scale) – a real number</P>
+<P ALIGN="LEFT">Date, Time – date or time types</P>
+<P ALIGN="LEFT">Boolean – a true/false variable</P>
+<P ALIGN="LEFT">Bytes(n) – Anything (user defined)</P>
+<P ALIGN="LEFT"></P>
+<B><I><U><P ALIGN="LEFT">Updating tables:</P>
+<OL>
+
+</B></I></U><P ALIGN="LEFT"><LI>insert into table_name (field1, field2, …) values (value1, value2, …)<BR>
+<I>insert into parts (p#, weight, pname) values (11, 0.250, ‘Pacifier’);</LI></P>
+</I><P ALIGN="LEFT"><LI>insert into table_name (Select)<BR>
+<I>insert into projects select * from old_proj where old_proj.duration &gt; 365;</LI></P>
+</I><P ALIGN="LEFT"><LI>delete from table_name where search_condition<BR>
+<I>delete from suppliers where city = ‘Rome’;</LI></P>
+</I><P ALIGN="LEFT"><LI>update table_name set (field1) = value1{, (field2) = value2, …} where condition<BR>
+<I>update parts set (price)=0.0, (dept)='SendBack' where city='London';</LI></P></OL>
+
+</I><P ALIGN="LEFT"></P>
+<B><I><U><P ALIGN="LEFT">Views</P>
+</B></I></U><P ALIGN="LEFT">A view is a virtual table: It is actually a name for a query. You can use views in select, insert, update or delete statements instead of table_names.</P>
+<OL>
+
+<P ALIGN="LEFT"><LI>create [or replace] [force | <U>noforce</U>] view view_name as (Select)<BR>
+<I>create view partnames as select pname from parts;</LI></P>
+</I><P ALIGN="LEFT"><LI>drop view view_name<BR>
+<I>drop view partnames;</LI></P></OL>
+
+</I><P ALIGN="LEFT"></P></BODY>
+</HTML>

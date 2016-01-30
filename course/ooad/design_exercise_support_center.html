@@ -1,0 +1,151 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>Design Exercise - Fault Management</title>
+<meta name="Microsoft Theme" content="neon 011">
+</head>
+
+<body background="neobkgnd.jpg" bgcolor="#000000" text="#FFFFFF" link="#CCFF66" vlink="#00FFFF" alink="#FFCC33">
+
+
+<h2 align="center">Support
+Center</h2>
+
+<h3>Overview</h3>
+
+<p>This application manages the logging and correction of faults reported by
+users and machines of a large distributed system. Users may report errors
+through forms in their application, but errors may be reported from software
+agents as well. Errors arrive at a support center, where the support people
+solve these problems. Support managers need the ability to query the status of
+errors and assign errors to people who must solve them; people need information
+about the error to be able to support it. The system also supports programming
+scripts that filter errors, and that automatically respond to common errors.
+Since the supervised application can never be shut down, all administration of
+the support system must be done at runtime.&nbsp;</p>
+
+<h3>Requirements</h3>
+
+<p>These are the requirements from the supervising software agents:</p>
+
+<!--msthemelist--><table border="0" cellpadding="0" cellspacing="0" width="100%">
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">The
+      system shall enable dynamically defining a large set of supervised
+      entities. An entity can be a computer, a router, an executable, a network
+      connection, a process, a service or a user. Entities are supervised by an
+      agent (a software process) running on their computer.<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">The
+      system shall include agents able to communicate with the application
+      through a well-defined API. Agents can be dynamically configured to expect
+      several kinds of reports from the application, add other system
+      information (such as CPU use, list of running processes, current user,
+      current time and so forth) to the report, and send it to a central
+      database. Each error report includes, among other things, the category of
+      error (use interface, network, etc.) and a level of severity (annoying,
+      urgent, critical, etc.).<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">The
+      system shall enable dynamically configuring agents to monitor different
+      variables of the system periodically, and send reports if these variables
+      exceed certain bounds. For example, an agent can be configured to check
+      virtual memory levels every minute, and send an error report if free
+      virtual memory is below 5% for more than five minutes. Agents must be
+      available for many operating systems, so that the variables that may be
+      checked are different for different agents.<!--msthemelist--></td>
+  </tr>
+<!--msthemelist--></table>
+
+<p>These are the requirements from the support center application:</p>
+
+<!--msthemelist--><table border="0" cellpadding="0" cellspacing="0" width="100%">
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">The
+      system shall include a support center application (user interface), which
+      enables all supporters (people who work in the support center) to view,
+      investigate and fix errors. It is possible to add, edit and delete users,
+      and set different access privileges (which entities and errors are
+      visible, which actions are allowed) to each user.<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">The
+      system shall enable a user to dynamically define queries which determines
+      which errors to show him. Queries can be on any field of the error (time,
+      severity, entity type, etc.), and can be complex (include 'and', 'or',
+      'not' conditions). It is possible to query on entity-specific fields (such
+      as 'programming language', only available for 'executable' entities).<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">The
+      system shall allow a supporter to view several queries on different
+      windows of her/his screen at once. Whenever the central database changes
+      (an error is created or fixed) in a manner that changes queries at
+      someone's screen, the screen shall reflect this immediately. That is, the
+      refresh should be always active and automatic.<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">The
+      system shall enable certain users to be defined as managers for a specific
+      category. Managers are able to assign errors in their category to other
+      supporters which must fix them. They also need queries and reports about
+      what the supporters that work for them do, what is the status of errors
+      they assigned (received / assigned / fixed / unfixed), and at what time
+      status changes occurred (how long it takes to fix different kinds of
+      problems).<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">The
+      system shall allow supporters to perform several operations on a
+      supervised entity remotely: Reboot a machine, reload a router, change
+      network or OS settings somewhere, change user permissions, or take over a
+      machine. Note that different operations are possible on different entity
+      types; also, not all supporters have privileges to perform all operations.<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">The
+      system shall support the dynamic definition of filtering rules for new
+      errors. This is meant to ensure that if a router collapses, the supporters
+      won't get 200 errors from all computers and processes that use it. A
+      filtering rule is of the form &quot;if between X and Y errors that answer
+      the condition &lt;SOME COMPLEX CONDITION&gt; arrive in a &lt;TIME&gt;
+      period, convert them into a single error &lt;WITH THESE
+      PROPERTIES&gt;&quot;.<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">The
+      system shall support the dynamic definition of scripts that automatically
+      handle common types of errors. It is possible to define that a script is
+      executed every time an error which answers to some (complex) condition is
+      created. The scripting language will be able to query the error's
+      properties, do all operations that a user can do, and support 'if', 'for',
+      'while' construct as well as calls to other scripts.<!--msthemelist--></td>
+  </tr>
+<!--msthemelist--></table>
+
+<p>Each of these ten requirements are worth 10% of the grade on the exercise.
+Note that the grade of a single requirement is composed of how you dealt with it
+everywhere - in requirements, design, strong and weak spots, and the oral
+questions.</p>
+<p>Good luck!</p>
+
+
+</body>
+
+</html>

@@ -1,0 +1,121 @@
+<HTML>
+<HEAD>
+<META NAME="Generator" CONTENT="Microsoft Word 97">
+<TITLE>The DataBase Course</TITLE>
+</HEAD>
+<BODY>
+
+<FONT SIZE=4><P ALIGN="CENTER">The Databases Course</P>
+</FONT><FONT SIZE=5><P ALIGN="CENTER">Solution of Exercise No. 3</P>
+</FONT><P ALIGN="CENTER">SQL and Relational Calculus</P>
+<FONT SIZE=2><P ALIGN="LEFT"></P>
+</FONT><B><U><P ALIGN="LEFT">&nbsp;</P>
+<OL>
+
+</B></U><P ALIGN="LEFT"><LI>{  t<SUP>(2)</SUP>  | <FONT FACE="Symbol">&#36;</FONT>
+p<SUB>1<FONT FACE="Symbol">&#36;</FONT>
+</SUB>p<SUB>2<FONT FACE="Symbol">&#36;</FONT>
+</SUB>s<FONT FACE="Symbol">&#36;</FONT>
+h<SUB>1<FONT FACE="Symbol">&#36;</FONT>
+</SUB>h<SUB>2</SUB>[ parts(p<SUB>1</SUB>) <FONT FACE="Symbol">&#217;</FONT>
+ parts(p<SUB>2</SUB>) ^ suppliers(s) <FONT FACE="Symbol">&#217;</FONT>
+ shipments(h<SUB>1</SUB>) ^ shipments(h<SUB>1</SUB>) ^ p<SUB>1</SUB>.p# <FONT FACE="Symbol">&#185;</FONT>
+ p<SUB>2</SUB>.p# <FONT FACE="Symbol">&#217;</FONT>
+ <BR>
+h<SUB>1</SUB>.s# = s.s# <FONT FACE="Symbol">&#217;</FONT>
+ h<SUB>1</SUB>.p# = p<SUB>1</SUB>.p# <FONT FACE="Symbol">&#217;</FONT>
+ h<SUB>2</SUB>.s# = s# <FONT FACE="Symbol">&#217;</FONT>
+ h<SUB>1</SUB>.p# = p<SUB>2</SUB>.p# <FONT FACE="Symbol">&#217;</FONT>
+<BR>
+t[1] = p<SUB>1</SUB>.p# <FONT FACE="Symbol">&#217;</FONT>
+ t[2] = p<SUB>2</SUB>.p# ]  }<BR>
+select distinct sh1.p#, sh2.p#<BR>
+      from shipments sh1, shipments sh2  <BR>
+      where sh1.p# &lt;&gt; sh2.p# and sh1.s# =  sh2.s#;</LI></P>
+<P ALIGN="LEFT"><LI>{  t<SUP>(1)</SUP>  | <FONT FACE="Symbol">&#36;</FONT>
+p<FONT FACE="Symbol">&#36;</FONT>
+p<SUB>1</SUB>[ parts(p) <FONT FACE="Symbol">&#217;</FONT>
+ parts(p1) <FONT FACE="Symbol">&#217;</FONT>
+ p1.p# = ‘p1’ <FONT FACE="Symbol">&#217;</FONT>
+ p.weight &gt; p1.weight <BR>
+<FONT FACE="Symbol">&#217;</FONT>
+ t[1] = p.p# ] }<BR>
+select p.p# <BR>
+      from parts p, parts p4<BR>
+      where p4.p# = 'p4' and p.weight &gt; p4.weight;</LI></P>
+<P ALIGN="LEFT"><LI>{  t<SUP>(1)</SUP>  |  <FONT FACE="Symbol">&#36;</FONT>
+j[ projects(j) <FONT FACE="Symbol">&#217;</FONT>
+ t[1] = j.j# <FONT FACE="Symbol">&#217;</FONT>
+<BR>
+<FONT FACE="Symbol">&#34;</FONT>
+s<FONT FACE="Symbol">&#34;</FONT>
+p[ ( shipments(s) <FONT FACE="Symbol">&#217;</FONT>
+ parts(p) <FONT FACE="Symbol">&#217;</FONT>
+ s.p# = p.p# <FONT FACE="Symbol">&#217;</FONT>
+ s.j# = j.j# ) <FONT FACE="Symbol">&#174;</FONT>
+ p.color = ‘red’ ] ] }<BR>
+select j.j#<BR>
+      from  projects j<BR>
+      where not exists (select *<BR>
+                                  from shipments h, parts p<BR>
+                                  where sh.j# = j.j# and sh.p# = p.p# and (not (p.color = red')));</LI></P>
+<P ALIGN="LEFT"><LI>{  t<SUP>(1)</SUP>  |  <FONT FACE="Symbol">&#36;</FONT>
+p[ parts(p) <FONT FACE="Symbol">&#217;</FONT>
+ t[1] = p.p# <FONT FACE="Symbol">&#217;</FONT>
+<BR>
+<FONT FACE="Symbol">&#34;</FONT>
+h<FONT FACE="Symbol">&#34;</FONT>
+s[ (shipments(h) <FONT FACE="Symbol">&#217;</FONT>
+ suppliers(s) <FONT FACE="Symbol">&#217;</FONT>
+ h.s# = s.s# <FONT FACE="Symbol">&#217;</FONT>
+ h.p# = p.p# ) <FONT FACE="Symbol">&#174;</FONT>
+ s.s# = ‘s5’] ] } <BR>
+select distinct p.color<BR>
+      from  parts p<BR>
+      where p.color not in (select p2.color<BR>
+                                        from  parts p2, shipments sh<BR>
+                                        where sh.p# =  p2.p# and sh.s# &lt;&gt; 's5' );</LI></P>
+<P ALIGN="LEFT"><LI>{  t<SUP>(1)</SUP>  |  <FONT FACE="Symbol">&#36;</FONT>
+j[ projects[j] <FONT FACE="Symbol">&#217;</FONT>
+ t[1] = j.jname <FONT FACE="Symbol">&#217;</FONT>
+ <FONT FACE="Symbol">&#34;</FONT>
+s[ suppliers(s) <FONT FACE="Symbol">&#174;</FONT>
+ j.city <FONT FACE="Symbol">&#185;</FONT>
+ s.city ] }<BR>
+select j.jname<BR>
+      from  projects j<BR>
+      where not exists (select *<BR>
+                                  from suppliers sp<BR>
+                                  where sp.city = j.city);</LI></P>
+<P ALIGN="LEFT"><LI>{  t<SUP>(1)</SUP>  |  <FONT FACE="Symbol">&#36;</FONT>
+s<FONT FACE="Symbol">&#36;</FONT>
+p[ suppliers(s) <FONT FACE="Symbol">&#217;</FONT>
+ parts(p) <FONT FACE="Symbol">&#217;</FONT>
+ t[1] = s.s# <FONT FACE="Symbol">&#217;</FONT>
+ <BR>
+<FONT FACE="Symbol">&#34;</FONT>
+j[ projects(j) <FONT FACE="Symbol">&#174;</FONT>
+ <FONT FACE="Symbol">&#36;</FONT>
+h[ shipments(h) <FONT FACE="Symbol">&#217;</FONT>
+ h.j# = j.j# <FONT FACE="Symbol">&#217;</FONT>
+ h.s# = s.s# <FONT FACE="Symbol">&#217;</FONT>
+ h.p# = p.p# ] ] ] }<BR>
+select sp.s#<BR>
+      from suppliers sp<BR>
+      where exists (select *<BR>
+                            from  parts p<BR>
+                            where not exists (select *<BR>
+                                                        from  projects j<BR>
+                                                        where not exists (select *   <BR>
+                                                                                    from  shipments sh          <BR>
+                                                                                    where (sh.s# = sp.s#)<BR>
+                                                                                        and (sh.p# = p.p#)<BR>
+                                                                                        and (sh.j# = j.j#) ) ) );</LI></P>
+<P ALIGN="LEFT"><LI>select avg(status), min(status), max(status)<BR>
+      from suppliers;</LI></P>
+<P ALIGN="LEFT"><LI>select count(distinct p#) / count(distinct j#) p_per_j<BR>
+      from projects, parts;<BR>
+This solution defines the average as the total number of parts divided by the total number of projects. Other solutions which will explicitly define a different average, and implement that average correctly, will also be excepted. However, if you didn’t explain that you’re using a different average, don’t expect us to accept anything that returns a number.</LI></P></OL>
+
+<P ALIGN="LEFT"></P></BODY>
+</HTML>

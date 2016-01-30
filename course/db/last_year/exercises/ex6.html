@@ -1,0 +1,78 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=iso-8859-1">
+<meta name="Template"
+content="C:\PROGRAM FILES\MICROSOFT OFFICE\OFFICE\html.dot">
+<meta name="GENERATOR" content="Microsoft FrontPage Express 2.0">
+<title>The Databases Course - Exercise No. 6</title>
+</head>
+
+<body link="#0000FF" vlink="#800080">
+
+<p align="center"><font size="4"><strong>The Databases Course</strong></font></p>
+
+<p align="center"><font size="5"><strong>Exercise No. 6</strong></font></p>
+
+<p align="center"><font size="4">Design Theory</font></p>
+
+<p align="center">Due on January 1st (1998!) by midnight</p>
+
+<p>&nbsp;</p>
+
+<ol>
+    <li>Armstrong's axioms for inferring functional dependencies
+        are just one example of an axiom system. Consider the
+        following axiom system:<p>Reflexivity: X <font
+        face="Symbol">®</font> X<br>
+        Accumulation: X <font face="Symbol">®</font> YZ, Z <font
+        face="Symbol">®</font> CW ¦ X <font face="Symbol">®</font>
+        YZC<br>
+        Projectivity: X <font face="Symbol">®</font> YZ ¦ X <font
+        face="Symbol">®</font> Y</p>
+        <p>Prove that these axioms are sound, and that
+        Armstrong's axioms can be derived from them. </p>
+    </li>
+    <li>Let R be a relation with S = { A, B, C, D, E, F } and F =
+        { A <font face="Symbol">®</font> BC , BD <font
+        face="Symbol">®</font> E , B <font face="Symbol">®</font>
+        C , ACF <font face="Symbol">®</font> E , BC <font
+        face="Symbol">®</font> F , AD <font face="Symbol">®</font>
+        C }.</li>
+</ol>
+
+<blockquote>
+    <ol>
+        <li type="a">Find a non-redundant (= minimal) cover for
+            F. Show, step by step, how the algorithm taught in
+            class finds this minimal cover.</li>
+        <li type="a">Let X = { B , D }. Use the table algorithm
+            to find X<sup>+</sup><sub>F,AA</sub>.</li>
+        <li type="a">Find one elementary key of R, and one
+            superkey of R that is not R. Prove your answer.</li>
+    </ol>
+</blockquote>
+
+<ol>
+    <li value="3">Find a set of functional dependencies having
+        two non-redundant covers, each one with a different
+        number of dependencies.</li>
+</ol>
+
+<ol>
+    <li value="4">Consider changing the algorithm given in class
+        for finding non-redundant covers (see also Ullman,
+        Theorem 7.3), so that first redundant dependencies are
+        removed, and afterwards redundant attributes are removed.
+        Show that such an algorithm can produce redundant
+        dependencies.</li>
+</ol>
+
+<ol>
+    <li value="5">For the (correct) algorithm for finding
+        non-redundant covers, prove that it is sufficient to
+        check each attribute and each dependency only once.</li>
+</ol>
+</body>
+</html>

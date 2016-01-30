@@ -1,0 +1,706 @@
+<html>
+
+<head>
+<title>Chapter 5 : Inheritance and Feature Adaptation - Eiffel : An Advanced Introduction</title>
+
+<META Name="description"
+Content="Perhaps the most potent contribution to software reusability and  
+adaptability is the notion of inheritance. Using this powerful
+facility, software construction becomes a simple task of adapting
+previously written, and more importantly, previously tested code.
+It is almost paradoxical, though in that this important feature
+of the object paradigm is almost never fully recognized  
+in most programming languages that claim to be object oriented.
+Some may offer a single inheritance mechanism, others offer
+multiple inheritance, but do not provide facilities to deal
+effectively with such ambiguities as name collisions, and
+repeated inheritance.">
+
+<META Name="keywords"
+Content="Alan Snyder, Brian Vetter">
+
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<center>
+<font size="-1">
+<b>
+[ <a href="http://www.elj.com/">Eiffel Liberty</a> |
+<a href="http://www.progsoc.uts.edu.au/~geldridg/">GUERL</a> |
+<a href="http://www.elj.com/sooap/">sOOap</a> ]
+<hr>
+
+[ <a href="http://www.elj.com/eiffel/intro/">toc</a> ]
+
+[ <a href="../intro/">Intro</a> |
+<a href="../s1/">1</a> |
+<a href="../s2/">2</a> |
+<a href="../s3/">3</a> |
+<a href="../s4/">4</a> |
+5 |
+<a href="../s6/">6</a> |
+<a href="../s7/">7</a> |
+<a href="../s8/">8</a> |
+<a href="../copyrite/">Copyright</a> ]
+
+[ <a href="http://www.elj.com/eiffel/intro/full/">html (full)</a> |
+<a href="http://www.progsoc.uts.edu.au/~geldridg/eiffel/advance-intro/efladv.zip">ps</a> |
+<a href="http://www.progsoc.uts.edu.au/~geldridg/eiffel/advance-intro/efladv.pdf">pdf</a> ]
+</b>
+</font>
+</center>
+<p>
+<center>
+<a href="http://www.elj.com/eiffel/intro/"><img src="http://www.progsoc.uts.edu.au/~geldridg/eiffel/advance-intro/images/advintro.gif" border="0" width="391" height="86" alt="[Logo-Eiffel:Advance Intro]"></a>
+</center>
+<p>
+<center>
+<h2>Eiffel: An Advanced Introduction</h2>
+<p>
+by
+<p>
+<b><a href="mailto:74741.2430@compuserve.com">Alan A. Snyder</a><br>
+and<br>
+Brian N. Vetter</b>
+</center>
+<p>
+<!-- body-of-text -->
+<h2>Chapter 5:</h2>
+  
+<h3>Inheritance and Feature Adaptation</h3>
+  
+<pre>
+<a href="#ch5">5</a> - <b>Inheritance and Feature Adaptation</b>
+    <a href="#s5.0">5.0</a> Introduction  
+    <a href="#s5.1">5.1</a> Selecting  
+    <a href="#s5.2">5.2</a> Renaming  
+    <a href="#s5.3">5.3</a> Redefining  
+        <a href="#s5.3.1">5.3.1</a> Feature Signature  
+    <a href="#s5.4">5.4</a> Changing the Export Status of Inherited Features  
+    <a href="#s5.5">5.5</a> Undefinition  
+        <a href="#s5.5.1">5.5.1</a> Semantic Constraints on Undefinition  
+              <a href="#s5.5.1.1">5.5.1.1</a> Frozen Features  
+</pre>
+  
+<a name="s5.0">
+<h3>5.0 Introduction</h3>
+
+<blockquote>
+Perhaps the most potent contribution to software reusability and  
+adaptability is the notion of inheritance. Using this powerful
+facility, software construction becomes a simple task of adapting
+previously written, and more importantly, previously tested code.
+It is almost paradoxical, though in that this important feature
+of the object paradigm is almost never fully recognized  
+in most programming languages that claim to be object oriented.
+Some may offer a single inheritance mechanism, others offer
+multiple inheritance, but do not provide facilities to deal
+effectively with such ambiguities as name collisions, and
+repeated inheritance.
+<p>  
+Eiffel, on the other hand, is very unique in these respects. The  
+language provides mechanisms to enable all of the benefits of multiple  
+inheritance to be used to their fullest consequences. Eiffel allows a  
+descendant class to rename, redefine, undefine, select, effect (in the case of  
+deferred features), and change the export status of virtually all inherited  
+features. Of course, there are semantic restrictions placed on the new class  
+when attempting to adapt an inherited feature in an ambiguous, or perhaps  
+unsafe manner.  
+  
+</blockquote>
+  
+<a name="s5.1">
+<h3>5.1 Selecting</h3>
+
+<blockquote>
+To start our journey into the vast combinations of feature
+adaptations, we will take a look at the selection mechanism. For a given class
+C which inherits from at least two classes, say <b>A</b> and <b>B</b>, there exists a
+possibility that <b>A</b> and <b>B</b> will both have a feature named f for instance. If <b>C</b>
+inherits from <b>A</b> and <b>B</b>, we have what is called a name collision or clash. The
+problem of this ambiguity may be more prominently displayed in this
+example:
+
+<pre>  
+   class A
+   feature
+      f : INTEGER;
+   end -- A
+  
+   class B   
+   feature  
+      f:: REAL;  
+   end -- B
+  
+   class C  
+      inherit A;  
+              B; -- Illegal!  
+      end  
+   end -- C
+</pre>
+  
+The question is then, how to resolve the two inherited features with  
+the same name f, from <b>A</b> and <b>B</b>. The select clause offers one solution. By  
+modifying the text of <b>C</b>:  
+
+<pre>  
+   class C   
+      inherit   
+         A select f;  
+         B   
+      end;  
+   feature  
+      ...        
+   end -- C
+</pre>
+  
+we explicitly state that we wish to allow f to be inherited from <b>A</b> and not  
+from <b>B</b>, thus resolving the clash. Feature f from <b>B</b> is not inherited in class 
+<b>C</b>, although if the select clause were to be placed in <b>B</b>'s inherit clause as in:
+
+<pre>
+   class C   
+      inherit   
+         A;  
+         B select f;   
+      end;  
+   feature  
+   ...  
+   end -- C
+</pre>
+  
+the opposite would hold true. That is, f would be inherited from <b>B</b>, and not  
+from <b>A</b>.  
+<p>  
+Without a select clause, one could not tell whether the run-time  
+environment would dynamically bind f in <b>C</b> to <b>A</b>'s or B's version. If the  
+compiler does not permit this ambiguity, then it must report to the  
+programmer that such an inheritance situation is a violation of the language.  
+Clearly, there may very well be a reason to inherit in this manner; a simple  
+naming duplication should not prevent one from attempting inheritance.  
+</blockquote>
+  
+<a name="s5.2">
+<h3>5.2 Renaming</h3>
+
+<blockquote>  
+In some contexts, it may be desirable for a descendant class to inherit  
+two features identically named f from two different classes <b>A</b> and <b>B</b>. In this  
+case, selecting just one f from either <b>A</b> or <b>B</b> will not sufficiently enable one 
+to acquire both versions of f. Recall that selection enables only one version of 
+f to be inherited from any set of parents.  
+<p>  
+However, we can rename one version of f to g for example, thusly  
+resolving a name clash, if any, and enabling two versions of f to be acquired,  
+one of which is under a different name. The following revision of class <b>C</b>  
+describes this situation:  
+
+<pre>  
+   class C   
+   inherit  
+      A   
+         rename f as g;  
+      B;  
+   end;  
+   feature  
+   ...  
+   end -- C
+</pre>
+  
+In this situation, <b>A</b>'s version of f has been renamed to g. This has dual  
+purpose. First it resolves the name clash of the two versions of f from <b>A</b> and  
+<b>B</b>. Second it allows both versions of f to be inherited in <b>C</b>, <b>A</b>'s version under  
+a different name, giving greater control to the programmer concerning how  
+features should be adapted according to how he/she sees fit.  
+<p>  
+One can also use this facility in the absence of a name collision. For  
+instance, if a feature is not descriptive enough to match its new 
+surroundings, it may be renamed to reflect its new role in the system.
+
+<pre>
+   class EMPLOYEE   
+   inherit  
+      PERSON   
+         rename occupation as company_division  
+      end;  
+   feature  
+   ...  
+   end -- PERSON
+</pre>
+  
+In the above context, since we know that an <b>EMPLOYEE</b>'s  
+occupation is working for the company of which <b>EMPLOYEE</b> refers, it is  
+possible to rename occupation as company_division and still keep all of the  
+semantics intact.  
+<p>  
+This poses one to question the validity of other features inherited  
+from <b>PERSON</b> which reference occupation. That is, if a feature from  
+<b>PERSON</b> depends on the occupation field, will it still be a valid feature since  
+occupation doesn't exist anymore? Consider:  
+
+<pre>  
+   class A   
+   feature  
+      x, y : INTEGER;  
+      set_x (new : INTEGER) is  
+         do x := new end;  
+   end -- A
+  
+   class C   
+   inherit  
+      A  
+         rename x as x1  
+      end  
+   end -- C  
+</pre>
+  
+Now, if we create an instance of class <b>C</b>, and attempt to call the set_x  
+routine, is this legal? The answer is yes, this is perfectly legal. The fact 
+that x has been renamed to x1 does not affect the routine set_x (although it should  
+be stated that set_x should be itself renamed to set_x1 for consistency on the  
+programmer's part. The compiler does not require you to rename all  
+references to a renamed feature). Although, if another routine say double_x1  
+which doubles the value of x1 is to be written in <b>C</b>'s context, it must refer 
+to x1 and not x. The effect of renaming x to x1 also makes the identifier x  
+available to <b>C</b>. That is, <b>C</b> itself may declare a feature x that is totally 
+different than the original x from <b>A</b>.  
+<p>  
+We have seen thus far the two conventions of selecting and renaming  
+features to adapt them to their new environment. Eiffel provides another  
+mechanism to adapt a feature to its new environment.  
+</blockquote>
+  
+<a name="s5.3">
+<h3>5.3 Redefining</h3>
+
+<blockquote>  
+A situation commonly encountered in software development is when  
+a feature does not necessarily conflict with another feature's name, but it  
+might be suitable just to enhance or specialize a feature to reflect an  
+algorithmic improvement or other benefit of such nature. This is where  
+redefinition enters the scene. Redefining an inherited feature allows one to  
+properly adapt it to its new environment. This form of software Darwinism is  
+one of the most attractive capabilities of the object paradigm.  
+<p>
+Before we give actual examples of redefinition, it should be said,  
+though that there is a considerable constraint placed on feature redefinition  
+that the selecting and renaming clauses did not impose. This constraint is 
+that the new signature of a feature f must conform to its original signature. It 
+now seems appropriate to discuss the exact meaning of the signature of a feature.
+</blockquote>
+  
+<a name="s5.3.1">
+<h3>5.3.1 Feature Signature</h3>
+
+<blockquote>  
+The signature of a feature f is the pair (A,R) where A is the sequence  
+of argument types of a routine or function (empty for entities); R (empty for  
+routines) is the return type for a function, or just the entity type for 
+entities. The following examples make this more clear:  
+  
+<pre>
+   Feature                                     Signature
+   -----------------------------------------   ------------------------
+   variable_attribue (entity)  
+      x : INTEGER                              (<>, <INTEGER>)  
+      y : REAL                                 (<>, <REAL>)  
+  
+   function_without_arguments  
+      day_of_year : INTEGER                    (<>, <INTEGER>)  
+  
+   function_with_arguments  
+      func(x : INTEGER; r : REAL) : REAL       (<INTEGER, REAL>,<REAL>)  
+      func(a : SOME_CLASS; x : INTEGER)        (<CLASS,INTEGER>,CLASS)  
+  
+   procedure_with_arguments  
+      proc(a : CLASS; r : REAL; x : INTEGER)   (<CLASS,REAL,INTEGER>,<>)  
+      proc(x, y : INTEGER)                     (<INTEGER, INTEGER>, <>)
+   -----------------------------------------   -------------------------
+</pre>
+  
+Simply put, the signature of a feature is the sequence of all types of  
+arguments, if any, and the return type (in the case of a function); or just 
+the attribute type in the case of an entity.  
+<p>
+What does this have to do with redefinition? As mentioned above,  
+there is a constraint placed on a class that wishes to redefine an inherited  
+feature. That is, the new redefined feature's signature must conform to the  
+signature of the feature which is being redefined. An example is deserved:  
+  
+<pre>
+   class A   
+   feature  
+      set_all( x, y : INTEGER; r : REAL ) is  
+         do ... end -- set_all
+   end -- A
+
+   class B inherit  
+      A   
+         redefine set_all  
+      end;  
+   feature  
+      set_all( i, j : INTEGER; s : REAL ) is  
+         do ... end -- set_all
+   end -- B
+</pre>
+  
+Here we have the case of class <b>B</b> redefining set_all such that its  
+routine body is algorithmically different from that of <b>A</b>'s version of set_all.  
+Notice that the signature of set_all defined in <b>B</b> conforms to that of the  
+signature of set_all in <b>A</b>:  
+
+<pre>  
+   Feature                             Signature
+   ---------------------------------   ---------------------------
+   set_all(x, y : INTEGER; r : REAL)   (<INTEGER,INTEGER,REAL>,<>)  
+   set_all(i, j : INTEGER; s : REAL)   (<INTEGER,INTEGER,REAL>,<>)
+   ---------------------------------   ---------------------------
+</pre>
+  
+What is the difference between conforming signatures and matching  
+signatures? A signature <b>S</b> is said to conform to a signature
+<b>P</b> if the following holds true:  
+<p>  
+Signature Conformance
+<ol>
+<li>The number of types in the argument sequence of both signatures  
+match exactly.<p>
+<li>Each type in <b>S</b>'s argument sequence is a descendant of the  
+corresponding type in <b>P</b>'s sequence. Remember that a type is also
+a descendant of itself so that corresponding types in the sequences
+may be identical.  
+</ol>
+  
+What this means is that the number of types in both the argument and  
+return type sequences of <b>P</b> and <b>S</b> must be exactly the same. The second rule  
+states that a redefined feature is not required to use the exact same types in  
+its arguments and return types; it may use a descendant of any or all of the  
+types, as it sees fit.  
+<p>
+Getting back to our example from above, observe the following:  
+  
+<pre>
+   class A   
+   feature  
+      set_all( x, y : INTEGER; r : REAL ) is  
+         do ... end -- set_all
+   end --A  
+  
+   class NEW_INTEGER   
+   inherit  
+      INTEGER end;  - You CAN inherit from INTEGERs!!  
+   feature  
+   ...  
+   end --NEW_INTEGER  
+  
+   class B   
+   inherit  
+      A   
+         redefine set_all   
+      end;  
+   feature  
+      set_all( i, j : NEW_INTEGER; s : REAL ) is  
+         do ... end -- set_all
+   end -- B
+</pre>
+  
+Is this legal? Absolutely! Since the signature of set_all in <b>B</b> does  
+indeed conform to that of set_all in <b>A</b>, this is legal. <b>NEW_INTEGER</b> was  
+defined as a descendant of <b>INTEGER</b>, making <b>INTEGER</b> an heir of  
+<b>NEW_INTEGER</b>. The new signatures  
+
+<pre>  
+   Feature                            Signature
+   --------------------------------   ----------------------------------
+   set_all(x,y:INTEGER;r:REAL)        (<INTEGER,INTEGER,REAL>,<>)  
+   set_all(i,j:NEW_INTEGER; s:REAL)   (<NEW_INTEGER,NEW_INTEGER,REAL>,<>)
+   --------------------------------   -----------------------------------
+</pre>
+  
+do not match, but they do conform. That is, <b>B</b>'s set_all conforms to <b>A</b>'s  
+set_all. It is obviously impossible for the opposite to be true. <b>A</b>'s set_all  
+signature does not conform to that of <b>B</b>'s set_all signature.
+</blockquote>
+  
+<a name="s5.4">
+<h3>5.4 Changing the Export Status of Inherited Features</h3>
+
+<blockquote>  
+Recall from section 2.4 that we could explicitly export a particular  
+feature (or features) to a certain class or classes. For instance:  
+  
+<pre>
+   class VEHICLE   
+   feature {DRIVER}  
+      identification : INTEGER;  
+   end -- VEHICLE
+</pre>
+  
+declares that the feature identification is available only to clients who are  
+either descendants of class <b>DRIVER</b>, or are themselves of class <b>DRIVER</b>.
+The question then arises as to what happens to this rule when we do the  
+following:  
+
+<pre>
+   class LAND_VEHICLE
+   inherit
+      VEHICLE
+   end -- LAND_VEHICLE
+</pre>
+  
+Does identification lose its restrictive export status for a more general one  
+(i.e. available to <b>ANY</b> class)?  
+<p>  
+Since we did not explicitly redeclare the export status of  
+identification when we inherited from <b>VEHICLE</b>, the status of this feature  
+remains the same.  
+<p>  
+However, we could have explicitly changed the export status of this,  
+and any other inherited features for that matter, with the export clause:  
+
+<pre>
+   class LAND_VEHICLE   
+   inherit  
+      VEHICLE  
+         export {DMV_PEOPLE} identification  
+      end;  
+   end; -- LAND_VEHICLE
+</pre>
+  
+This states that any class wishing to use <b>LAND_VEHICLE</b> as a  
+client, can only access identification directly if it is an heir of <b>DMV_PEOPLE</b>
+(of course, <b>DMV_PEOPLE</b> classes themselves may access identification).  
+There is no restriction placed upon descendants of a class who wish to  
+redeclare the export status of a feature. That is, referring to  
+<b>LAND_VEHICLE</b> above, there is no requirement to newly export  
+identification to a class that is related to <b>DRIVER</b>. The previous export  
+status of a feature imposes no restrictions upon the descendant classes  
+wishing to modify it.  
+<p>  
+We could also have declared a group of classes that we wish to  
+export identification to, instead of just <b>DMV_PEOPLE</b>:  
+
+<pre>  
+   class LAND_VEHICLE   
+   inherit  
+      VEHICLE  
+         export {DMV_PEOPLE, MECHANIC, FBI}  
+      identification  
+      end;  
+   end -- LAND_VEHICLE
+</pre>
+  
+In this case, when <b>DMV_PEOPLE</b>, <b>MECHANIC</b>, or <b>FBI</b> are clients  
+of <b>LAND_VEHICLE</b>, they have unrestricted access to identification. The  
+initial export status of a feature imposes no limitations when redeclaring its  
+export status. We could have just as easily exported identification to <b>NONE</b>,  
+or ANY, or any combination of classes in-between.  
+<p>  
+For syntactical ease, Eiffel provides a mechanism (a keyword) that  
+allows one to export all features of an inherited class to one class, or group  
+of classes. When using the keyword all, you may declare that all features  
+from a particular class are now made available to a certain client, or group 
+of clients:
+
+<pre>
+   class FEATURES_A_PLENTY   
+   inherit  
+      FEATURES_GALORE  
+         export {LUCKY_CLASS} all  
+      end  
+   feature {NONE}  
+      private_data : INTEGER;  
+   end -- FEATURES_A_PLENTY
+</pre>
+  
+Assume that <b>FEATURES_A_PLENTY</b> is inheriting many features  
+from <b>FEATURES_GALORE</b>. The export status of every feature from  
+<b>FEATURES_GALORE</b> is now made exclusively available to  
+<b>LUCKY_CLASS</b> and all of its descendants. The feature private_data has  
+been declared in <b>FEATURES_A_PLENTY</b>, and is not subject to the export  
+clause of <b>FEATURES_GALORE</b>. No clients are able to directly access  
+private_data since it is exported to <b>NONE</b>.
+</blockquote>
+  
+<a name="s5.5">
+<h3>5.5 Undefinition</h3>
+
+<blockquote>  
+A rather interesting part of Eiffel's feature adaptation capabilities is  
+the ability to undefine a feature. That is, to effectively ignore its 
+existence in an inherit clause. This poses some semantic questions that
+will be explored later. For now, consider:
+
+<pre>
+   class NEW_CLASS  
+   inherit  
+      OLD_CLASS  
+         undefine redundant_routine;  
+      end  
+   end -- NEW_CLASS
+</pre>
+  
+The redundant_routine which would have been inherited from <b>OLD_CLASS</b>
+no longer exists in <b>NEW_CLASS</b>. By undefining it, we also free its identifier;
+that is, we may declare a feature redundant_routine in <b>NEW_CLASS</b> if
+desired.  
+</blockquote>
+  
+<a name="s5.5.1">
+<h3>5.5.1 Semantic Constraints on Undefinition</h3>
+
+<blockquote>  
+Undefining a feature may interfere (unintentionally) with a  
+dependency between the undefined feature, and another feature. Observe:  
+
+<pre>  
+   class DEPENDENT
+
+   feature
+
+      small_routine( n : INTEGER ) is   
+         do ... end; -- small_routine
+
+      big_routine( arguments... ) is  
+         do   
+            ...  
+            small_routine( x ); --call small_routine  
+         ...  
+         end -- big_routine
+
+   end -- DEPENDENT
+</pre>
+  
+This class appears to be perfectly normal in its organization, and may  
+be a class that is commonly used. If we try to undefine small_routine in a  
+new descendant class as such:  
+
+<pre>  
+   class NEW_DEPENDENT   
+   inherit  
+     DEPENDENT  
+        undefine small_routine end  
+   end -- NEW_DEPENDENT
+</pre>
+  
+we would be halted in our footsteps by our compiler. Clearly the fact that  
+big_routine requiring small_routine to execute properly is enough to prevent  
+us from undefining small_routine.  
+<p>  
+There are two more constraints placed upon undefinition clauses. The  
+first is straight-forward: you may not undefine a feature that is an 
+attribute. That is, only routines and functions may be undefined.  
+</blockquote>
+  
+<a name="s5.5.1.1">
+<h3>5.5.1.1 Frozen Features</h3>
+
+<blockquote>  
+The next constraint concerns frozen features which may only be  
+routines or functions. Any frozen feature of an heir may not be undefined,  
+redefined or renamed in a descendant:  
+
+<pre>  
+      class THERMOMETER
+      feature
+         frozen decrease_temperature is
+            do ... end; -- decrease_temperature
+      end -- THERMOMETER
+  
+      class THERMISTOR   
+      inherit  
+         THERMOMETER  
+            undefine decrease_temperature end; --Illegal!  
+      end -- THERMISTOR
+</pre>
+  
+<b>THERMISTOR</b>'s attempt to <b>undefine decrease_temperature</b> is not  
+allowed. This semantically makes sense because any feature that is declared  
+frozen should not be able to be undefined, redefined, or renamed.  
+<p>  
+The benefit of undefinition becomes more clear in an ambiguous  
+multiple inheritance scenario:  
+  
+<pre>
+   class A   
+   feature  
+      f : INTEGER;  
+   end -- A
+  
+   class B feature  
+      f( arg1, arg2 : REAL ) is  
+         do ... end; -- f
+   end -- B
+  
+   class C inherit  
+      A;  
+      B end;  -- invalid!!  
+   end -- C
+</pre>
+  
+Recall from section 4.1 of this chapter that selection enabled us to  
+select which version of f, either from <b>A</b> or <b>B</b> we wish
+to inherit in <b>C</b>. If we modify <b>C</b> as follows:  
+  
+<pre>
+   class C   
+   inherit  
+      A;  
+      B   
+         undefine f end;  
+   end -- C
+</pre>
+  
+it now becomes possible to inherit f from <b>A</b>, and not from <b>B</b>. How is this  
+different from selecting <b>B</b>'s version of <b>f</b> with a select clause?  
+  
+<pre>
+   class C   
+   inherit  
+      A  
+         select f end;  
+      B;   
+   end -- C
+</pre>
+</blockquote>
+<!-- /body-of-text -->
+<p>
+<center>
+<a href="http://www.elj.com/eiffel/intro/"><img src="http://www.progsoc.uts.edu.au/~geldridg/eiffel/advance-intro/images/advintro.gif" border="0" width="391" height="86" alt="[Logo-Eiffel:Advance Intro]"></a>
+</center>
+<p>
+<center>
+<font size="-1">
+<b>
+[ <a href="http://www.elj.com/eiffel/intro/">toc</a> ]
+
+[ <a href="../intro/">Intro</a> |
+<a href="../s1/">1</a> |
+<a href="../s2/">2</a> |
+<a href="../s3/">3</a> |
+<a href="../s4/">4</a> |
+5 |
+<a href="../s6/">6</a> |
+<a href="../s7/">7</a> |
+<a href="../s8/">8</a> |
+<a href="../copyrite/">Copyright</a> ]
+
+[ <a href="http://www.elj.com/eiffel/intro/full/">html (full)</a> |
+<a href="http://www.progsoc.uts.edu.au/~geldridg/eiffel/advance-intro/efladv.zip">ps</a> |
+<a href="http://www.progsoc.uts.edu.au/~geldridg/eiffel/advance-intro/efladv.pdf">pdf</a> ]
+<p>
+[ <a href="http://www.elj.com/">Eiffel Liberty</a> |
+<a href="http://www.progsoc.uts.edu.au/~geldridg/">GUERL</a> |
+<a href="http://www.elj.com/sooap/">sOOap</a> ]
+</b>
+</font>
+</center>
+<hr>
+<font size="-1">Page is <a href="http://www.elj.com/eiffel/intro/s5/">
+http://www.elj.com/eiffel/intro/s5/</a><br>
+Date : 21 Nov 97
+</font>
+</body>
+  
+</html>

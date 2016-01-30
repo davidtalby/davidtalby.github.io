@@ -1,0 +1,163 @@
+/* Database Course, 1998/9
+   Exercise 6 - SQL embedded in C
+
+   This program receives two command line arguments, an animal id and a natural number n,
+   and finds all the animals that participate in all the n earliest research projects that
+   the animal whose id is given took part of. The program then lists these animals, ordered
+   by ascending animal id.
+
+   Statistics: Total 147 lines. 36 comments lines, 31 blank lines, and 80 code lines.
+
+   by David Talby
+*/
+
+#include <stdio.h>
+#include <string.h>
+
+/* Define constants and error handling macro */
+#define ID_FIELD_SIZE 5
+#define BUFSIZE 1000
+#define SUCCESS 0
+#define FAILURE (-1)
+#define ERROR(msg)  { fprintf(stderr, "Error: %s\n", msg); exit(1); }
+#define ERROR_USAGE { fprintf(stderr, "Usage: ex3 <animal_id> <n>\n"); exit(1); }
+
+/* Declare variables used by SQL, and include sqlca for error handling */
+EXEC SQL BEGIN DECLARE SECTION;
+    char oracle_id = '/';
+    VARCHAR input_aid[ID_FIELD_SIZE+1];
+    VARCHAR last_rid[ID_FIELD_SIZE+1];
+    int last_year;
+    VARCHAR aid[ID_FIELD_SIZE+1];
+    VARCHAR rid[ID_FIELD_SIZE+1];
+    VARCHAR species[16];
+EXEC SQL END DECLARE SECTION;
+
+EXEC SQL INCLUDE sqlca;
+
+/* Forward function declarations and global variables */
+int projects_count;
+int  find_last_relevant_project();
+void print_animals();
+void sql_error();
+
+/* main() - Establish connection with the oracle server, parse command line input, 
+   call functions to find animals and print them, and close database. */
+int main(int argc, char *argv[])
+{
+  /* Get input and call the three executing functions */
+  if (argc != 3)
+    ERROR("Usage: ex3 <animal_id> <n>\n");
+  if (strlen(argv[1]) > ID_FIELD_SIZE)
+    ERROR("Animal id may be at most five characters long");
+  strcpy(input_aid.arr, argv[1]);
+  input_aid.len = strlen(argv[1]);
+  projects_count = atol(argv[2]);
+  if (projects_count <= 0)
+    ERROR("Number of projects must be a natural number");
+  
+  /* Connect to database */
+  EXEC SQL WHENEVER SQLERROR DO sql_error();
+  EXEC SQL CONNECT :oracle_id;
+
+  /* Find the n'th project the input aid participated in */
+  if (find_last_relevant_project() == FAILURE)
+  {
+    EXEC SQL ROLLBACK RELEASE;
+    ERROR("Given animal participated in less than the given number of projects.");
+  }
+
+  /* Find and print all animals that participated in the first n project with input_aid */
+  print_animals();  
+
+  /* Disconnect from database */
+  EXEC SQL COMMIT RELEASE;
+  exit(0);
+}
+
+/* This function defines a cursor of pairs: Projects that 'input_aid' joined, and the
+   earliest year it did so. It then reads the first projects_count tuples of this cursor,
+   and stores the last tuple in the last_rid and last_year global variables.
+   Returns ERROR iff the animal in 'input_aid' joined less than n different projects. */
+int find_last_relevant_project()
+{
+  int i, result = SUCCESS;
+
+  EXEC SQL DECLARE projects_cursor CURSOR FOR
+    SELECT DISTINCT rid, year
+    FROM events e
+    WHERE aid = :animal_id 
+      AND (rid IS NOT NULL) AND (year IS NOT NULL)
+      AND year <=all (SELECT year FROM events 
+                        WHERE rid = e.rid AND aid = :animal_id AND year IS NOT NULL)
+    ORDER BY year;
+
+  EXEC SQL OPEN projects_cursor;
+  EXEC SQL WHENEVER NOT FOUND GOTO lastproj_notfound;
+  for (i = 0; i < projects_count; i++)
+  {
+    EXEC SQL FETCH projects_cursor INTO :last_rid, :last_year;
+    continue;
+   lastproj_notfound:
+    result = FAILURE;
+    break;
+  }
+  EXEC SQL CLOSE projects_cursor;
+  return result;
+}
+
+/* Find and print all animals that participated in the first n project with input_aid.
+   Do so by declaring a cursor of all animals that participate in the n'th project, and
+   iterating over this cursor. For each animal in it, iterate over the first n tuples
+   of projects_cursor (projects of input_aid), and check whether the current animal
+   joined that project. If the current animal joined all the first n projects of input_aid,
+   print it to the standard output. */
+void print_animals()
+{
+  EXEC SQL DECLARE animals_cursor CURSOR FOR
+    SELECT DISTINCT aid 
+      FROM events
+      WHERE rid = :last_rid
+      ORDER BY to_number(ltrim(aid,'a'));
+  EXEC SQL OPEN animal_cursor;
+  for (;;)
+  {
+    EXEC SQL WHENEVER NOT FOUND DO break;
+    EXEC SQL FETCH animals_cursor INTO :aid;
+    EXEC SQL OPEN projects_cursor;
+    output_animal = 1;
+
+    /* Check that 'aid' participated in the first n projects of 'input_aid' */
+    for (i = 1; i < projects_count; i++)
+    {
+      EXEC SQL WHENEVER NOT FOUND GOTO :event_notfound;
+      EXEC SQL FETCH projects_cursor into :rid, :last_year;            /* always succeeds */
+      EXEC SQL SELECT rid FROM events WHERE aid = :aid and rid = :rid; /* may be notfound */
+      continue;
+     event_notfound:
+      output_animal = 0;
+      break;
+    }
+    EXEC SQL CLOSE projects_cursor;
+  
+    /* If the animal participated in all the required projects, print it */
+    if (output_animal)
+    {
+      EXEC SQL SELECT species INTO :species FROM animals WHERE aid = :aid;
+      aid.arr[aid.len] = '\0';
+      species.arr[species.len] = '\0';
+      printf("%-5s %-15s", aid.arr, species.arr);
+    }
+  }
+  EXEC SQL CLOSE animals_cursor;
+}
+
+/* Handle SQL errors - print an error message, close database and exit with exit code 1. */
+void sql_error()
+{
+  EXEC SQL WHENEVER SQLERROR CONTINUE;
+  fprintf(stderr, "Oracle error detected: \n% .70s\n", sqlca.sqlerrm.sqlerrmc);
+  EXEC SQL ROLLBACK RELEASE;
+  exit(1);
+}
+

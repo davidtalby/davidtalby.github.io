@@ -1,0 +1,116 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage Express 2.0">
+<title>The DataBase Course - Exercise No. 1</title>
+</head>
+
+<body>
+
+<p align="center"><font size="4"><strong>The Databases Course</strong></font></p>
+
+<p align="center"><font size="5"><strong>Exercise No. 1</strong></font></p>
+
+<p align="center"><font size="4">Entity-Relationship Model</font></p>
+
+<blockquote>
+    <blockquote>
+        <p align="center">Due on December 22th by midnight</p>
+        <p>&nbsp;</p>
+        <p><strong><u>Important Course Information:</u></strong></p>
+        <ul>
+            <li>See the course home page on <a
+                href="http://www.cs.huji.ac.il/course/~db">www.cs.huji.ac.il/course/db</a></li>
+            <li>Subscribe to the course's newsgroup <a
+                href="news:local.course.db">local.course.db</a></li>
+            <li>Register to the course immediately to get an
+                oracle account, by running ~db/bin/register</li>
+        </ul>
+    </blockquote>
+    <p>&nbsp;</p>
+</blockquote>
+
+<blockquote>
+    <ol>
+        <li>You are required to design a database for a car
+            rental company. The company has many branches all
+            over the world, and customers may pick a car in one
+            branch and return it in another. Every car belongs to
+            one branch, and until now every branch kept separate
+            car lists. Branches are responsible for regular
+            maintenance of their cars, and records of accidents,
+            periodic treatments and replaced parts should be kept.
+            Customers pay either by one of several major credit
+            cards or by cash. For every rental, the driver's
+            personal information, type and condition of the car,
+            insurance information and so on is kept. For private
+            customers, the company offers a 'frequent renter'
+            program to encourage repeating business. Customers
+            that are companies, on the other hand, may enjoy
+            bigger and more constant discounts, but do not take
+            part in the 'frequent renter' program. Companies can
+            also use several insurance companies for the cars
+            currently at their disposal, while private customers
+            can only use one<font size="3">.<br>
+            <br>
+            Define the entity sets, relationship types, and their
+            relevant properties (not all of which have been
+            stated above). Specify keys for each entity set, and
+            the functionality (many-to-one, for example) for each
+            relationship type. Denote weak entity sets and their
+            partial keys. Answer in the form of an E-R diagram,
+            and </font>state explicitly any assumptions which you
+            have made.</li>
+    </ol>
+    <p>&nbsp;</p>
+    <ol>
+        <li value="2"><font size="3">Attribute domains,
+            functional relationships and keys are all forms of <em>constraints</em>
+            on the modeled system. Another common form is that of
+            participation - stating that each entity of an entity
+            set must take part in a relationship that set is
+            attached to. This constraint is marked by a double
+            line between that entity set and the relationship
+            type; for example, the following states that each
+            child has exactly one mother, and women may have
+            between zero to any number of children:</font></li>
+    </ol>
+    <p align="center"><font size="3"><img src="ex1_q2.jpg"
+    width="443" height="58"></font></p>
+    <blockquote>
+        <p><font size="3">Create an E-R model with entity sets
+        for workers, departments and projects, and add
+        relationship types and constraints to model the following
+        rules. Every worker works at exactly one department, and
+        every department has some workers. Every project is
+        assigned to at least one department, but some projects
+        belong to several ones. A department may have many
+        projects or no projects at all. Every project also has a
+        set of workers assigned to it; every worker has at most
+        one project, but not always has one at all. Every worker
+        has a supervisor (another worker), except the big boss
+        who nobody supervises. Not all workers are also
+        supervisors, although some workers supervise many others.</font></p>
+        <p>&nbsp;</p>
+    </blockquote>
+    <ol>
+        <li value="3">E-R diagrams are useful for modeling, but
+            not for implementation - other models can be
+            described by efficient data structures and can
+            compute queries with known time and space complexity.</li>
+    </ol>
+    <blockquote>
+        <ol type="a" start="1">
+            <li>Transform the E-R diagram from question 2 into a
+                relational database schema. See last year's
+                exercise 1 (on the web) for an example.</li>
+            <li>Which forms of constraints are kept by the
+                relational schema, and which are lost?</li>
+        </ol>
+    </blockquote>
+    <p>&nbsp;</p>
+</blockquote>
+</body>
+</html>

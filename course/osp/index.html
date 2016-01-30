@@ -1,0 +1,209 @@
+<html>
+
+<head>
+<meta name="GENERATOR" content="Microsoft FrontPage 12.0">
+<title>Operating Systems Project</title>
+<meta name="Microsoft Theme" content="cactus 011">
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-28693318-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+</head>
+
+<body background="cactxtr.gif" bgcolor="#FFFFCC" text="#000000" link="#006600"
+vlink="#993333" alink="#CC6600">
+
+
+<p align="center"><img src="letter_o.jpg" width="89" height="89"
+alt="wpe2.jpg (5396 bytes)"><img src="letter_s.jpg" width="89" height="89"
+alt="wpe3.jpg (5331 bytes)"></p>
+
+
+<h2 align="center"><em><font
+face="Comic Sans MS">The Threads Project</font></em></h2>
+
+
+<p align="center"><a href="#Welcome">Welcome</a>&nbsp; <img src="../os/magenta-ball.gif"
+width="12" height="12">&nbsp; <a href="#Design">Design</a>&nbsp; <img
+src="../os/magenta-ball.gif" width="12" height="12">&nbsp; <a href="#Library">Library</a>
+&nbsp; <img src="../os/magenta-ball.gif" width="12" height="12">&nbsp; <a
+href="#Schedulers">Schedulers</a>&nbsp; <img src="../os/magenta-ball.gif" width="12"
+height="12">&nbsp; <a href="#Server">Server</a>&nbsp; <img src="../os/magenta-ball.gif"
+width="12" height="12">&nbsp; <a href="#Rules">Rules</a>&nbsp; <img
+src="../os/magenta-ball.gif" width="12" height="12">&nbsp; <a href="#Links">Links</a></p>
+<hr>
+
+<p align="left"><a name="Welcome"></a>This year's project is to design and implement a
+flexible multi-threading library. The library will work under Linux and C++. The four
+parts to the project are described in the next sections.</p>
+
+<p align="left">The course will have two teachers, <a href="mailto:arielr@cs.huji.ac.il">Ariel
+Rossenblatt</a> and <a href="mailto:davidt@cs.huji.ac.il">David Talby</a>. After condensed
+meetings to present the project in the first three weeks of the semester, you'll work on
+your own. Their job will be to answer new questions and check your work. Post your
+questions on the same <a href="http://talkitover.com/elizabeth/luxembourg">discussion
+group</a> we used last year.</p>
+
+
+<h1 align="left"><a
+name="Design"></a>Design</h1>
+
+
+<p align="left">After listening very carefully in class, here you must provide a complete
+and explained design explaining how you are about to implement the library. Pay utmost
+attention to these issues:</p>
+<ul>
+	<li><p align="left">Data
+    structures.</p>
+	</li>
+	<li><p align="left">Critical
+    sections.</p>
+	</li>
+	<li><p align="left">Inheritance.</p>
+	</li>
+</ul>
+
+
+<p align="left">Submit your work on paper. The deadline for this part is the 14th of
+November 1999.</p>
+
+
+<h1 align="left"><a
+name="Library"></a>Library</h1>
+
+
+<p align="left">Here you will program the basic features of the library, by implementating
+the classes <a href="Thread.h"><em>Thread</em></a>, <a href="Semaphore.h"><em>Semaphore</em></a>
+and <a href="RoundRobinScheduler.h"><em>RoundRobinScheduler</em></a> (which inherits from <em><a
+href="Scheduler.h">Scheduler</a></em>). You may only add private functions and data
+members to the supplied header files.</p>
+
+<p align="left">The library should be compiled to a library file named <em>hthread.a</em>
+and you should provide an example program that uses it. Sophisticated programs will result
+in grade bonuses of up to 15%. A very simple example program that creates three threads
+and prints &quot;Hello, World!&quot; on the screen is <a href="hello_world.c">here</a>.</p>
+
+<p align="left">The deadline for this part is the 5th of December.</p>
+
+
+<h1 align="left"><a
+name="Schedulers"></a>Schedulers</h1>
+
+
+<p align="left">Now it is time to extend the abilities of the library by writing three
+advanced scheduling modules:</p>
+<ul>
+	<li><p align="left"><a
+    href="PriorityScheduler.h"><em>PriorityScheduler</em></a> - enable different quality of
+    service levels</p>
+	</li>
+	<li><p align="left"><a
+    href="RealTimeScheduler.h"><em>RealTimeScheduler</em></a> - support soft-real time
+    requirements</p>
+	</li>
+	<li><p align="left"><a
+    href="MeasuredScheduler.h"><em>MeasuredScheduler</em></a> - measure performance and
+    fairness statistics</p>
+	</li>
+</ul>
+
+
+<p align="left">According to the tradition of Object-Oriented programming, these three
+additions should integrate well with previous programs and with each other as well. It
+should be possible to easily construct a priority, real-time measured scheduler, for
+example. Threads being created on such a scheduler could request priorities only, a
+real-time demand only, to be measured, or a combination of these. To provide for this
+flexibility variants of the Thread class are needed: <a href="PriorityThread.h"><em>PriorityThread</em></a>,
+<a href="RealTimeThread.h"><em>RealTimeThread</em></a>, <a href="MeasuredThread.h"><em>MeasuredThread</em></a>.
+A utility <a href="Time.h">Time</a> class will also be needed. Once again, you are only
+allowed to add private functions and data members to the supplied headers.</p>
+
+<p align="left">The extended library should be compiled to a new version of <em>hthread.a</em>
+and you should provide an example program that uses it as well. Sophisticated programs
+will result in grade bonuses of up to 15%. A very simple variation on the hello world
+program that uses the three schedulers is <a href="scheduled_world.c">here</a>.</p>
+
+<p align="left">The deadline for this part is the 26th of December.</p>
+
+
+<h1 align="left">Server</h1>
+
+
+<p align="left">The last part of the project is composed of three parts:</p>
+<ul>
+	<li><p align="left">Write
+    a non-blocking implementation of several system calls that may block an entire process,
+    such as <em>read</em>, <em>write</em> and <em>accept</em>.</p>
+	</li>
+	<li><p align="left">Write
+    a multi-threaded server that supports bank transactions.</p>
+	</li>
+	<li><p align="left">Measure
+    this server's performance under different workloads, analyze the effectiveness of
+    priorities, and optimize the server.</p>
+	</li>
+</ul>
+
+
+<p align="left">Submit the server program, as well as a written analysis of the
+performance tests you did. The goal is to make good&nbsp; use of priorities to improve the
+server's responsiveness. Very smart optimization will imply a bonus.</p>
+
+<p align="left">The deadline for this part is the 16th of January 2000.</p>
+
+
+<h1 align="left"><a
+name="Rules"></a>Rules</h1>
+
+
+<p align="left">The final grade of the course will be composed of 10% for the Design part
+and 30% for each of the implementation parts. All parts must be submitted. Except the
+change to C++, follow the <a href="../os/guidelines.html">guidelines</a> of last year's
+Operating Systems course - in particular, add a Readme and Makefile to each submission.
+Specific submission instructions will be given in class.</p>
+
+<p align="left">You are encouraged to work in pairs, not only to reduce the work load but
+to be able to correct each other's mistakes sooner. Every part of the project relies on
+previous ones, and it is difficult for one person to see the whole picture. Also, the
+creativity of two people will help you when designing bonus-winning examples and
+optimizations. If you worked alone so far - think twice!</p>
+
+
+<h1 align="left"><a
+name="Links"></a>Links</h1>
+<!--msimagelist--><table border="0" cellpadding="0" cellspacing="0" width="100%">
+	<!--msimagelist--><tr>
+		<!--msimagelist--><td valign="baseline" width="42">
+		<img src="werbul3a.gif"></td>
+		<td valign="top" width="100%"><p align="left">System
+    Calls Summaries: <a href="../os/unix_files.html">File System</a>, <a
+    href="../os/unix_process.html">Processes and Signals</a>, <a href="../os/unix_ipc.html">Inter-Process
+    Communciation</a>.</p>
+		<!--msimagelist--></td>
+	</tr>
+	<!--msimagelist--><tr>
+		<!--msimagelist--><td valign="baseline" width="42">
+		<img src="werbul3a.gif"></td>
+		<td valign="top" width="100%"><p align="left"><a
+    href="../os/riddles.html">Riddle collection</a></p>
+		<!--msimagelist--></td>
+	</tr>
+	<!--msimagelist--></table>
+
+
+<p align="left">&nbsp;</p>
+<hr>
+
+</body>
+</html>

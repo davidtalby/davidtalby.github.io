@@ -1,0 +1,70 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage Express 2.0">
+<title>The DataBase Course - Exercise No. 3</title>
+</head>
+
+<body>
+
+<p align="center"><font size="4"><strong>The DataBase Course</strong></font></p>
+
+<p align="center"><font size="5"><strong>Exercise No. 3</strong></font></p>
+
+<p align="center"><font size="4">SQL and Relational Calculus -
+Practical</font></p>
+
+<blockquote>
+    <blockquote>
+        <p align="center">Due on December 7nd by midnight</p>
+    </blockquote>
+    <blockquote>
+        <p><strong>The Example Database Schema:</strong>
+        Suppliers supply certain parts for certain projects. The
+        information about who supplies what to which projects is
+        found in the shipments table. The tables are:</p>
+        <p>Suppliers(s#,sname,status,city)<br>
+        Parts(p#,pname,color,weight,city)<br>
+        Projects(j#,jname,city)<br>
+        Shipments(s#,p#,j#)</p>
+        <p>The s#,p#,j# attributes are key attributes. The tables
+        are available to query using Oracle.</p>
+        <p><strong>Express the following queries in tuple
+        relational calculus and SQL:</strong></p>
+        <ol>
+            <li>Get all pairs of part numbers that are supplied
+                by the same supplier. Include both pairs (a,b)
+                and (b,a) in your answer.</li>
+            <li>Which part numbers are heavier than p1?</li>
+            <li>Which projects (give project numbers) are made
+                entirely out of red parts?</li>
+            <li>For which colors are all the parts of that color
+                supplied by s5?</li>
+            <li>What are the names of the projects which are
+                located in a city where no supplier is located?</li>
+            <li>Get supplier numbers for suppliers who supply the
+                same part to all projects.</li>
+            <li>What are the average, minimum and maximum values
+                for supplier status?</li>
+            <li>What is the average number of parts per project?</li>
+        </ol>
+        <p>The queries should be clearly documented! For
+        questions 7 and 8 only an SQL query is required.</p>
+        <p><strong>You should submit:</strong></p>
+        <ul>
+            <li>The first six queries in calculus, on paper.</li>
+            <li>Printouts of the eight SQL queries and outputs.</li>
+            <li>Submit electronically (run ~db/bin/submit to
+                submit <u>ex1.tar</u>) the following files:<br>
+                <u>README</u> - containing only your login on the
+                first line, and your full name and relevant
+                exercise documentation afterwards.<br>
+                <u>queries.sql</u> - containing the queries.<br>
+                <u>outputs.txt</u> - containing the outputs.</li>
+        </ul>
+    </blockquote>
+</blockquote>
+</body>
+</html>

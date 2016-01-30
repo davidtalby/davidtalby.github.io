@@ -1,0 +1,137 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>Design Exercise - Configuration Control</title>
+<meta name="Microsoft Theme" content="neon 011">
+</head>
+
+<body background="neobkgnd.jpg" bgcolor="#000000" text="#FFFFFF" link="#CCFF66" vlink="#00FFFF" alink="#FFCC33">
+
+
+<h2 align="center">Configuration
+Control</h2>
+
+<h3>Overview</h3>
+
+<p>This application is a configuration control system: A file system, and a user
+interface above it, that enables many people to work together on a software
+project. For each file, several versions are kept. Different users have
+different views on the file system (that is, they see different versions of the
+same files), but once a user's view is defined, s/he sees a regular file system
+and can do any normal operation on files. Editing files requires checkout and checkin
+operations. The file system itself is distributed: While a central database
+stores data about the users, views and file descriptions, the files themselves
+are stored on the many computers of the system's users.</p>
+
+<h3>Requirements</h3>
+
+<!--msthemelist--><table border="0" cellpadding="0" cellspacing="0" width="100%">
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">The
+      system shall support user management: Adding, editing and removing users,
+      defining user groups, and assigning users to groups, and restricting user
+      access to various operations (inserting files, changing ownership, adding
+      users, etc.).<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">The
+      system shall support adding a file into the configuration control
+      database; the inserted version of the file is named &quot;base&quot;
+      (except the file name, every version has a name). The inserting user
+      determine the initial owner of the file, who has the right to change
+      access privileges to it.<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">The
+      system shall protect file privileges at a level similar to Unix:
+      read/write/execute access can be defined separately for user/group/world.<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">The
+      system shall prevent editing (writing) files that are in configuration
+      control. When a user wishes to edit a version of the file, s/he must
+      perform a checkout operation on that version (notice that you checkout a
+      version, not all versions of the file). If successful, s/he can write the
+      file, and no other user may checkout this version (that is, this version
+      of the file is locked).<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">When
+      a user finishes editing the file, s/he performs one of two operations -
+      checkin and &quot;undo checkout&quot;. In a checkin operation, a new
+      version of the file is created. The user who performs the operation names
+      the new version. This also removes the lock from the version that was
+      checked out. In an &quot;undo checkout&quot; operation, the lock from the
+      version that was checked out is removed, but no new version is created.<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">The
+      system shall support all the above operations - add to configuration
+      control, checkout, checkin, undo checkout - on directories as well as
+      files. Directories store files and directories inside them; for example,
+      adding a file, deleting a file or renaming a file requires checking out
+      its directory.<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">The
+      system shall support distributed storage of files and version. While data
+      about users, files and versions may be stored in a single central server,
+      the data files themselves must be stored on the personal computers of the
+      users in the network. The system must be able to locate where in the
+      network some version of a file is stored, and ask the operating system to
+      send it to another computer. Note that the same user can work in different
+      computers from time to time.<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">The
+      system shall enable each user to define a view of the files and
+      directories under configuration control, and edit this view dynamically. A
+      view defines which files and directories the user sees at all, and which
+      version of the file is seen. A user can request to see the latest
+      checked-in version, or a specific version name. If a user checked out a
+      version, s/he can only see the checked-out version.<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">The
+      system shall support view private files. Private files are files or
+      directories that are inside controlled directories, but have not being
+      added to configuration control. Only the user that created them can see
+      them (from any computer in the network). Such files can be edited freely
+      (no checkout operation), and they have no versions (no checkin operation)
+      - they are regular files, and no operation on them changes controlled
+      files (adding/renaming/deleting them does not require checking out their
+      directory, for example).<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">The
+      system shall support the create, delete, rename, copy and move operations
+      on all files and directories, both controlled and private. Creating a file
+      creates a private file. All other operations only affect the version of
+      the file that the user currently sees.<!--msthemelist--></td>
+  </tr>
+<!--msthemelist--></table>
+
+<p>Each of these ten requirements are worth 10% of the grade on the exercise.
+Note that the grade of a single requirement is composed of how you dealt with it
+everywhere - in requirements, design, strong and weak spots, and the oral
+questions.</p>
+<p>Good luck!</p>
+
+
+</body>
+
+</html>

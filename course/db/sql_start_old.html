@@ -1,0 +1,179 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=windows-1255">
+<meta name="GENERATOR" content="Microsoft FrontPage Express 2.0">
+<title>SQL Setup and Basics</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<p align="center"><font size="4"><strong>The DataBase Course</strong></font></p>
+
+<p align="center"><font size="5" face="Times New Roman"><strong>SQL:
+Setup and Basics</strong></font></p>
+
+<blockquote>
+    <p><strong><br>
+    </strong><strong><u>Setting Up Your Account</u></strong></p>
+    <p><font face="Times New Roman">Copy the Oracle default
+    configuration file from db's home directory to your home
+    directory:</font></p>
+    <blockquote>
+        <p><font size="4" face="Times New Roman"><code>cp ~db/prefs.ora
+        .</code></font></p>
+    </blockquote>
+    <p><font face="Times New Roman">Then, if you are registered
+    to the course, you should be able to enter SQL interactive
+    mode. To do this, type:</font></p>
+    <blockquote>
+        <p><font size="4" face="Times New Roman"><code>sqlplus /</code></font></p>
+    </blockquote>
+    <p><font face="Times New Roman">Once inside, you can type SQL
+    queries and see their answer at once. You can also type </font><em>exit</em><font
+    face="Times New Roman"> to leave SQL interactive, or </font><em>help</em><font
+    face="Times New Roman"> to get help on the language and
+    environment.</font></p>
+    <p><font face="Times New Roman">The first thing you should do
+    is run the example database creation file of exercise 3:</font></p>
+    <blockquote>
+        <p><font size="4" face="Times New Roman"><code>sqlplus /
+        &lt; ~db/animals.sql</code></font></p>
+    </blockquote>
+    <p><font face="Times New Roman">This will read and run the
+    file ~db/animals.sql - you'll see the output of the sql
+    commands in the file on your screen. The file creates the
+    five tables used in the exercise, and also inserts demo
+    values into these tables. Feel free to change these tables (read
+    animals.sql to see how simply this can be done), so that you
+    can test your queries on cases that the demo tables don't
+    cover.</font></p>
+    <p><font face="Times New Roman">The easiest way to write and
+    test complex SQL queries is not the interactive way; instead,
+    write a text file and give it as input to Oracle. This will
+    make SQL run the commands/queries in the file input.sql, and
+    write the output to the file output.sql:</font></p>
+    <blockquote>
+        <p><font size="4" face="Times New Roman"><code>sqlplus /
+        &lt; input.sql &gt; output.sql</code></font></p>
+    </blockquote>
+    <p><font face="Times New Roman">You are expected to submit
+    printed input and output files with every exercise. Document
+    your queries well - lines started with a semicolon are
+    treated as comments in an SQL file.</font></p>
+    <p><font face="Times New Roman"><br>
+    </font><strong><u>Basic SQL Queries</u></strong></p>
+    <p><font face="Times New Roman">All queries are expressed
+    with the </font><em>select </em><font face="Times New Roman">keyword.
+    The basic form is select-from-where which translates to
+    &quot;do a cartesian product of what the </font><em>from </em><font
+    face="Times New Roman">says, the do a selection according to
+    the what the </font><em>where </em><font
+    face="Times New Roman">says, then do a projection to what the
+    </font><em>select </em><font face="Times New Roman">says&quot;.
+    All SQL commands are case insensitive (that is, SELECT and
+    select are the same word), and are terminated by a semicolon.</font></p>
+    <p><font face="Times New Roman">Print the names and subjects
+    of research projects:<br>
+    </font>select name, subject from research;<font
+    face="Times New Roman"><br>
+    Print all fields of the animals table: <br>
+    select * from animals;<br>
+    Print all the species of animals we have, but only print each
+    species once:<br>
+    select distinct species from animals;<br>
+    Print countries which offer sites with a humid climate:<br>
+    select distinct country from sites where climate = 'humid';<br>
+    Print the cartesian product of sites and events:<br>
+    select * from sites, events;<br>
+    Print the natural join of projects and events:<br>
+    select projects.pid, name, subject, aid, sid, year from
+    projects, events where projects.pid = sites.pid;<br>
+    Print pairs of projects that have the same subject:<br>
+    select p1.pid, p2.pid from projects p1, projects p2 where p1.subject
+    = p2.subject;<br>
+    Print animals and their age:<br>
+    select aid, 1999 - birthyear from animals;<br>
+    Print animals and their age. Only print animals older than
+    ten years:<br>
+    select aid, 1999 - birthyear age from animals where age &gt;
+    10;</font></p>
+    <p><font face="Times New Roman"><br>
+    </font><strong><u>Aggregate Queries</u></strong></p>
+    <p><font face="Times New Roman">The following queries
+    calculate the average, minimum and maxium sizes of sites:</font></p>
+    <p><font face="Times New Roman">select avg(size), min(size),
+    max(size) from sites;</font></p>
+    <p>These calculate the number of lines in the animals table,
+    the number of lines with non-null species field, and the
+    number of distinct species in the table:</p>
+    <p>select count(*), count(species), count(distinct species)
+    from animals;</p>
+    <p><font face="Times New Roman">These are called aggregate
+    queries, because they take many values (all sizes) and
+    aggregate (summarize) it to one value (for example, the
+    average).</font></p>
+    <p><font face="Times New Roman"><br>
+    </font><strong><u>Not So Basic Predicates</u></strong></p>
+    <p><font face="Times New Roman">This section discusses things
+    you can do in a </font><em>where </em><font
+    face="Times New Roman">clause. The most basic things are
+    testing for equality using = &lt;&gt; or for ordering using
+    &gt; &lt; &gt;= &lt;= and </font><em>between</em><font
+    face="Times New Roman">. You can also use </font><em>not</em><font
+    face="Times New Roman">, </font><em>and</em><font
+    face="Times New Roman">, </font><em>or</em><font
+    face="Times New Roman"> to create complex conditions. The
+    following is a simple example (note that no parentheses are
+    needed):</font></p>
+    <p><font face="Times New Roman">select * from animals where
+    size &gt;= 10 and birthyear &lt;= 1998 and not species = 'Whale';<br>
+    select * from sites where size between 10 and 20 and climate
+    &lt;&gt; 'desert';</font></p>
+    <p><font face="Times New Roman">The </font><em>in</em><font
+    face="Times New Roman"> and </font><em>not in</em><font
+    face="Times New Roman"> predicate returns true if a value is
+    in a given set. You can specify the set directly or using a
+    sub-select like here:</font></p>
+    <p><font face="Times New Roman">select * from sites where
+    country not in ('Japan', 'Papua New Guinea', 'Taiwan');<br>
+    select * from animals where aid in (select parent from
+    children);</font></p>
+    <p><font face="Times New Roman">The exists and not exists
+    predicates get a table, and return true if and only if the
+    table is not empty:</font></p>
+    <p><font face="Times New Roman">select * from sites where
+    exists (select * from events where sid = sites.sid);</font></p>
+    <p><font face="Times New Roman">There's no 'forall' predicate,
+    so such queries have to be translated from 'for all x, P(x)'
+    to 'not exists x such that not P(x)'. For example:</font></p>
+    <p><font face="Times New Roman">select * from animals a1
+    where not exists (select * from animals a2 where a1.size &gt;
+    a2.size);</font></p>
+    <p><font face="Times New Roman">Besides </font><em>in</em><font
+    face="Times New Roman"> and </font><em>exists</em><font
+    face="Times New Roman"> there are also operators that can
+    compare values to a group of other values. These operators
+    are composed of a regular comparison operator and either the </font><em>all
+    </em><font face="Times New Roman">or </font><em>any </em><font
+    face="Times New Roman">keywords:</font></p>
+    <p><font face="Times New Roman">select * from animals where
+    size &lt;=all (select size from animals);<br>
+    select * from animals where size &gt;any (select size from
+    animals);<br>
+    select sid, name from sites where climate &lt;&gt;all (select
+    climate from site where county = 'Norway');</font></p>
+    <p><font face="Times New Roman">Another useful keyword is
+    contains, which tests for exactly what its name suggests:</font></p>
+    <p><font face="Times New Roman">select * from animals a where
+    (select sid from events where aid = a.aid and pid = 'p1')
+    contains (select sid from events where aid = a.aid and pid =
+    'p2');</font></p>
+    <p><font face="Times New Roman">Sub-selects can be nested as
+    much as you want them to. Most queries can be expressed in
+    more than one way, and the most efficient and readable way
+    should be chosen.</font></p>
+</blockquote>
+</body>
+</html>

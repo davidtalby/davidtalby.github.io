@@ -1,0 +1,161 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage Express 2.0">
+<title>The Databases Course - Exercise No. 7</title>
+</head>
+
+<body>
+
+<p align="center"><font size="4"><strong>The Databases Course</strong></font></p>
+
+<p align="center"><font size="5"><strong>Exercise No. 7</strong></font></p>
+
+<p align="center"><font size="4">Design Theory - Theoretical</font></p>
+
+<blockquote>
+    <blockquote>
+        <p align="center"><font size="3">Due on February 11th by
+        midnight<br>
+        </font></p>
+    </blockquote>
+</blockquote>
+
+<ol start="2">
+    <li value="1">Let R = &lt;S,F&gt; , S = {A,B,C,D,E} and F = {
+        AB <font face="Symbol">о </font>C, BE <font
+        face="Symbol">о</font> A, C<font face="Symbol"> о </font>D,
+        D <font face="Symbol">о</font> B, DE <font face="Symbol">о</font>
+        A}.</li>
+</ol>
+
+<blockquote>
+    <ol type="a" start="1">
+        <li>Find a non-redundant cover of F.</li>
+        <li>Find all the simple keys of R.</li>
+        <li>Categorize each dependency from your answer of (a) as
+            a partial, transitive or full dependency.</li>
+        <li>Give a 3NF, lossless and dependency preserving (with
+            respect to F) decomposition of S.</li>
+        <li>What are the projected dependencies for each of your
+            schemes?</li>
+    </ol>
+</blockquote>
+
+<ol start="2">
+    <li>Let R = &lt;S,F&gt; , S = {A,B,C,D} and F = { B <font
+        face="Symbol">о </font>A, C<font face="Symbol"> о </font>A,
+        D <font face="Symbol">о B</font>C}.<br>
+        Let <em>p </em>be the decomposition { AB, AC, BD }.</li>
+</ol>
+
+<blockquote>
+    <ol type="a" start="1">
+        <li>Find the projected dependencies for each of the
+            relation schemes of <em>p</em>.</li>
+        <li>Does <em>p</em> preserve the given dependencies?</li>
+        <li>Does <em>p</em> have a lossless join with respect to
+            the given dependencies?</li>
+    </ol>
+</blockquote>
+
+<ol start="4">
+    <li value="3">Prove the following lemmas:</li>
+</ol>
+
+<blockquote>
+    <ol type="a" start="1">
+        <li>Every relation whose schema has two fields is in BCNF.</li>
+        <li>A relation R that has a single simple key is in BCNF
+            if and only if it is in 3NF.</li>
+        <li>If R is in 3NF, and every simple key of R has only
+            one field, then R is in BCNF.</li>
+    </ol>
+</blockquote>
+
+<ol type="1" start="3">
+    <li value="4">Given is a schema S = (A, B, C) and an instance
+        of it that contains the following tuples:<br>
+        <em>r</em> = { (1,2,3), (4,2,3), (5,3,3), (5,3,4), (1,2,4),
+        (4,2,1) }<br>
+        Which of the following multi-valued dependencies are
+        violated by <em>r</em>, and which are not?</li>
+</ol>
+
+<blockquote>
+    <ol type="a" start="1">
+        <li><font size="3">A </font><font face="Symbol">оо </font>B</li>
+        <li><font size="3">BC </font><font face="Symbol">оо </font>A</li>
+        <li>B<font face="Symbol"> оо </font>C</li>
+    </ol>
+</blockquote>
+
+<p>&nbsp;</p>
+
+<p>Answering the above four questions gives a full grade of 100%
+for this exercise. Answering each of the following questions
+gives an extra 10%, up to a maximum grade of 24 out of 20 in this
+exercise.</p>
+
+<ol type="1" start="5">
+    <li>Finding dependencies:</li>
+</ol>
+
+<blockquote>
+    <ol type="a" start="1">
+        <li>Consider a relation with a schema S = (A,B,C,D) and a
+            non-redundant dependency set F that includes three
+            dependencies: AB<font face="Symbol">о</font>C, B<font
+            face="Symbol">о</font>D and another dependency. Can
+            R be in BCNF? If so, with what third dependency?</li>
+        <li type="a">A relation with S = (A,B,C) is in 3NF but
+            not in BCNF, and has a non-redundant dependency set F
+            = { C <font face="Symbol">о </font>B, X <font
+            face="Symbol">о </font>Y }. Find all the
+            possibilities for X and Y.</li>
+    </ol>
+    <p>&nbsp;</p>
+</blockquote>
+
+<ol type="1" start="6">
+    <li>The following algorithm is suggested for the
+        decomposition of R=&lt;S,F&gt;. We find an X<font
+        face="Symbol">о</font>Y in F that violates BCNF,
+        decompose S into S1 = S - Y and S2 = {X,Y}, and then
+        active the algorithm recursively on S1 and S2. For
+        example, if given S = &lt;A,B,C,D,E&gt; and F = { AB<font
+        face="Symbol">о</font>C, B<font face="Symbol">о</font>D,
+        C<font face="Symbol">о</font>E}, we first find that B<font
+        face="Symbol">о</font>D violates BCNF (it's a partial
+        dependency), so we create S1 = (ABCE) and S2=(BD). S2 is
+        in BCNF because it only has two fields, but S1 is not in
+        BCNF becuase of the dependency C<font face="Symbol">о</font>E.
+        So again we create S3=(ABC) and S4=(CE). Now both S3 and
+        S4 are in BCNF, so we conclude to say that our final
+        answer is <em>p</em> = { BD, ABC, CE }.</li>
+</ol>
+
+<blockquote>
+    <ol type="a" start="1">
+        <li>Prove that this algorithm returns a lossless
+            decomposition that is in BCNF.</li>
+        <li type="a">Show an example that shows that the
+            algorithm may return a non-dependency-preserving
+            decomposition.</li>
+    </ol>
+</blockquote>
+
+<p>&nbsp;</p>
+
+<p>Before the test, be sure to review the following questions
+from last year:</p>
+
+<p>Exercise 6, question 4.</p>
+
+<p>Exercise 8, questions 4 and 5.</p>
+
+<p>&nbsp;</p>
+</body>
+</html>

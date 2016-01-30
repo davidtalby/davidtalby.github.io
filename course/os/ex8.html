@@ -1,0 +1,163 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=windows-1255">
+<meta name="GENERATOR" content="Microsoft FrontPage Express 2.0">
+<title>Operating Systems - Exercise 8</title>
+<!-- Appears in the title bar -->
+</head>
+
+<body background="icons/blueback.gif">
+
+<h1 align="center"><font size="4" face="Times New Roman">The
+Operating Systems Course</font></h1>
+
+<h1 align="center"><font size="5" face="Times New Roman">Exercise
+8: Learning Unix and C</font></h1>
+
+<h2><font face="Times New Roman"><img src="accent.gif" width="32"
+height="31">Goals</font></h2>
+
+<ol>
+    <li><font face="Times New Roman">Learn the Unix environment:
+        File and directory handling, editing and compiling files,
+        first look at makefiles and libraries.</font></li>
+    <li><font face="Times New Roman">Use central features of the
+        C language: Memory allocation and arrays, the
+        preprocessor, passing functions as arguments.</font></li>
+</ol>
+
+<p><font face="Times New Roman">Important: Before starting, read
+the </font><a href="guidelines.html"><font face="Times New Roman">exercise
+guidelines</font></a><font face="Times New Roman"> for this
+semester!</font></p>
+
+<h2><font face="Times New Roman"><img src="accent.gif" width="32"
+height="31">First Look at Unix</font></h2>
+
+<p><font face="Times New Roman">Your best friend in Unix is the <em>man</em>
+command. Make sure you are familiar with the following commands (type
+&quot;man chmod&quot;, for example):</font></p>
+
+<blockquote>
+    <p><font face="Times New Roman"><em>ls, cp, mv, rm, mkdir,
+    rmdir, cd, more, head, ps, chmod, finger, who, date</em></font></p>
+</blockquote>
+
+<p><font face="Times New Roman">In order to execute a command in
+the background, end the line containing it with a &amp; sign (as
+in &quot;emacs &amp;&quot;). Also make sure you can open new
+terminals and other programs by clicking the left moue button on
+an empty spot on the screen.</font></p>
+
+<p><font face="Times New Roman">Your programming tools are <em>emacs
+</em>- the editor, <em>gcc </em>- the compiler and linker, <em>ddd
+</em>- the debugger, and <em>gmake </em>- which aids in
+maintainance. Emacs and ddd have help menus which are well worth
+a look, while gcc and gmake have man pages.</font></p>
+
+<p><font face="Times New Roman">Take some time to learn the basic
+key combinations of Emacs - it will more than pay itself back,
+and soon.</font></p>
+
+<h2><font face="Times New Roman"><img src="accent.gif" width="32"
+height="31"> The Dynamic Array Library</font></h2>
+
+<p><font face="Times New Roman">You will implement a library that
+defines a container data structure, which grows dynamically as
+items are added to it but still can be randomly accessed in
+constant time complexity. You must use the exact header file we
+supply, named </font><a href="libdarray.h"><font
+face="Times New Roman">libdarray.h</font></a><font
+face="Times New Roman">. It contains the headers of the ten
+functions that must be implemented, with documentation on what
+each of them should do.</font></p>
+
+<p><font face="Times New Roman">You should write a single file
+called <u>libdarray.c</u> to implement the library.</font></p>
+
+<p><font face="Times New Roman">The header file contains
+preconditions for some of the functions - in this exercise, check
+them using the <em>assert(3)</em> function. This means that we
+give the responsibility for checking argument correction to the
+caller of the library functions. You may also place assertions
+anywhere in your code where you feel it to be helpful.</font></p>
+
+<p><font face="Times New Roman">You must implement the library as
+an array of pointers. When you need to allocate memory for new
+insertions into the array, you are allowed to copy the existing
+elements of the array to a new location in memory. See the <em>malloc(3)</em>,
+<em>realloc(3)</em> and <em>free(3)</em> about memory allocation.
+However, you should not copy the entire array every time a new
+element is inserted, since this would be too inefficient;
+allocate for future insertions in advance.</font></p>
+
+<p><font face="Times New Roman">When removing an element from the
+array, say the <em>n</em>'th element, you may copy all elements
+that come after it one step backwards in the array. This means
+that the n+1'th element will become the n'th element, and next
+elements will change places as well. This has the disadvantages
+that a removal takes O(n) time and that references into the array
+are invalidated after a remove(), but has the advantage of being
+easy to implement :-).</font></p>
+
+<p><font face="Times New Roman">Second, when quick-sorting an
+array, you are allowed to use the <em>qsort(3)</em> function that
+comes with the standard C library, instead of implementing the
+algorithm yourself.</font></p>
+
+<p><font face="Times New Roman">Programming-wise, the exercise is
+quite short and easy. Most of your time is expected to be taken
+on learning the environment, syntax and other technical details.</font></p>
+
+<h2><font face="Times New Roman"><img src="accent.gif" width="32"
+height="31"> Testing the Library</font></h2>
+
+<p><font face="Times New Roman">Copy this </font><a
+href="Makefile"><font face="Times New Roman">Makefile</font></a><font
+face="Times New Roman"> to the directory in which you are working
+(note: Do not copy and paste it from the browser. Use the 'Save
+as...' option instead so that tabs won't be converted to spaces).
+When running the <em>gmake</em> command, this file will be used.
+It contains instructions to look for two files named <u>libdarray.h</u>
+and <u>libdarray.c</u> in the current directory, compile them
+into an object file named <u>libdarray.o</u> and turning it into
+a library named <u>libdarray.a</u>. Running <em>gmake</em> will
+print compiler error and warning messages on the screen if any;
+if there are no problems, no message will be printed.</font></p>
+
+<p><font face="Times New Roman">In order to use the library (for
+example, to test it), write a C file with a main() function that
+includes libdarray.h and uses the array typedef and functions.
+Two such example files are </font><a href="test1.c"><font
+face="Times New Roman">test1.c</font></a><font
+face="Times New Roman"> and </font><a href="test2.c"><font
+face="Times New Roman">test2.c</font></a><font
+face="Times New Roman">. In order to compile and link such a file,
+the files libdarray.h and libdarray.a should be in the same
+directory with it. To compile test1.c, for example, type:</font></p>
+
+<blockquote>
+    <p><font size="3" face="Times New Roman"><code>gcc test1.c -o
+    test1 -Wall -ldarray -L.</code></font></p>
+</blockquote>
+
+<p><font face="Times New Roman">Remember that Unix is case
+sensitive (that is, -o and -O are two different switches). If you'd
+like to use the debugger on the resulting executable, add the -g
+switch to the gcc command. If there are no errors, this command
+should create an executable file named test1 in the current
+directory.</font></p>
+
+<p><font face="Times New Roman">Solve this exercise alone! If you
+rely on others now, you'll have little chance to catch up in
+future exercises. However, you are encouraged to share tests you
+write with other pairs.</font></p>
+
+<p><font face="Times New Roman"></font>&nbsp;</p>
+
+<p align="center"><font face="Times New Roman"><img
+src="line_colorbar.gif" width="585" height="1"></font></p>
+</body>
+</html>

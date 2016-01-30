@@ -1,0 +1,373 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>Object Oriented Design Course : Exercise 1</title>
+	<link href="../style.css" type="text/css" rel="stylesheet">
+	<meta name="author" value="David Rabinowitz">
+</head>
+
+<body>
+<!-- large frame -->
+<table cellpadding="0" cellspacing="0" width="100%" border="0"><tr><td style="padding-right:20px;">
+<!-- /large frame -->
+<table id="headerTable" cellpadding="0" cellspacing="0">
+
+<tr>
+<td valign="middle" id="header" nowrap>Object Oriented Design Course</td>
+</tr>
+</table>
+
+<!-- large frame -->
+</td></tr><tr><td style="padding-right:20px;">
+<!-- /large frame -->
+
+<table class="borderedtable" cellpadding="0" cellspacing="0" width="100%" style="margin : 5px;">
+<tr>
+<td class="pagetitle">
+<!--
+******************************************************************************
+Page title
+******************************************************************************
+-->
+Exercise 1 - Zip File Extractor<br>
+<font size="-1">Design, Code and Unit-Test Using Structural and Traversal Design Patterns</font>
+<!--
+******************************************************************************
+End of page title
+******************************************************************************
+-->
+</td>
+</tr>
+<tr>
+<td class="maindata">
+<!--
+******************************************************************************
+Details
+******************************************************************************
+-->
+<table cellsacing="2" cellpadding="2" border="0" bgcolor="white">
+
+<tr valign="bottom">
+<td class="desc">Deadline</td>
+<td>April 6<sup>th</sup>, 2006 at Ross closing time</td>
+</tr>
+
+<tr valign="top">
+<td class="desc">Description</td>
+<td>
+In this exercise you will:
+<ul>
+<li>Design the first version of a ZIP file manager and extractor</li>
+<li>Produce a set of UML class and sequence diagrams to document your design</li>
+<li>Experience design patterns in actual  Java code</li>
+<li>Write a covering set of unit tests</li>
+<li>Experience working with Eclipse, JUnit and Ant</li>
+</ul>
+
+<h4>Requirements</h4>
+
+<p>Create an executable named <code>xzip</code> which is able to print and 
+extract the contents of ZIP files.
+The program's usage from the command line should be:</p>
+<p><code>xzip [-l | -s | -x] [-nr] &lt;zip file name&gt;</code></p>
+<p dir="ltr">Note that the first two parameters are optional, but the file name 
+is not. Parameters must appear in this order.</p>
+<p>A zip file can contain files, which may be compressed (but don't have to be). 
+In addition, a zip file can also contain directories, which may by themselves 
+contain files and other directories. When a zip file is extracted, the 
+directories it contains are extracted as well, and files within these 
+directories are extracted to their correct relative location.</p>
+
+<p>For the examples given below, assume that the zip file <code>my.zip</code> 
+contains the following: A file called <code>mysong.mp3</code> which is an MP3 
+song, a file called <code>myicon.gif</code> which is a GIF image, and a 
+directory called '<code>web</code>' which includes two HTML files called <code>
+index.html</code> and <code>other.html </code>and one directory called <code>
+backup </code>
+file which includes two other files with these same names.</p>
+
+<p>The first argument of <code>xzip</code> dictates what action will be 
+performed on the zip file:</p>
+<ul>
+<li><code>-l</code> (long print): This action prints the names and details of 
+the files stored in the given zip file. The long format means that in addition 
+to the file names, more details are printed for each file. For example:<br>
+<br>
+<code>&gt; java xzip -l my.zip</code><br>
+<code>mysong.mp3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (7901 bytes, MP3 
+file)<br>
+myicon.gif&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (910 bytes, 32x32 GIF 
+image)<br>
+web&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+(directory, total 5 files)<br>
+&nbsp;&nbsp; index.html&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+(5657 bytes, 122 lines of text)<br>
+&nbsp;&nbsp; other.html&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+(6983 bytes, 208 lines of text)<br>
+&nbsp;&nbsp; backup&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+(directory, total 2 files)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; index.html&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+(5622 bytes, 120 lines of text)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; other.html&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+(7501 bytes, 234 lines of text)<br>
+</code><br>
+As you can see, the details printed for each file type are different, and follow 
+these rules:<br>
+<code>1. </code>For each text file, the name of the file is printed, followed by 
+a tab, and then the text <code>(N bytes, M lines of text) </code>where <code>N</code> 
+is the uncompressed size of the file, and <code>M</code> is the number of lines 
+(measured by the number of new-line characters) in the file. A text file is 
+defined as any file whose extension is <code>*.txt</code>, <code>*.html</code> 
+or <code>*.java</code>.<br>
+<code>2. </code>For each image file, the name of the file is printed, followed 
+by a tab, and then the text <code>(N bytes, WxH EXT image)</code> where <code>N</code> 
+is the uncompressed size of the file, <code>W</code> is the image's width, <code>
+H</code> is the image's height, and <code>EXT</code> is the image file extension 
+in uppercase. An image file is defined as any file whose extension is <code>
+*.gif</code> or <code>*.jpg</code>.<br>
+<code>3. </code>For any other file type - any regular file not a text or zip file, 
+such as <code>mysong.mp3</code> and <code>backup.zip</code> in the above example - print the file name, a 
+tab, and the text <code>(N bytes, EXT file)</code> where <code>N</code> is the 
+size of the uncompressed file and <code>EXT</code> is the file extension in 
+uppercase.<code><br>
+4. </code>For each directory, the name of the directory is printed, 
+followed by a tab, and then the text <code>(directory, total N files)</code> where
+<code>N</code> is the number of files in that directory. Each  directory that the directory contains 
+is counted as one (for the directory itself) plus the number of files inside 
+that directory, recursively. In addition, as the example above shows, the 
+contents of the directory are printed in the following lines, under the same 
+rules, with an indent of three spaces relative to the indent of the directory.<br>
+&nbsp;</li>
+<li><code>-s</code> (short print): This action prints the names of the files and 
+directories in the given zip files, but without the extra details (file size, 
+number of text lines and so forth) which the long format provides. Printing is 
+equivalent to what the <code>-l</code> option outputs, including indentation and 
+recursion into directories and zip files - only the text in parentheses for each 
+file/directory is not printed. For example:<br>
+<br>
+<code>&gt; java xzip -s my.zip</code><br>
+<code>mysong.mp3<br>
+myicon.gif<br>
+web<br>
+&nbsp;&nbsp; index.html<br>
+&nbsp;&nbsp; other.html<br>
+&nbsp;&nbsp; backup<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; index.html<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; other.html<br>
+</code>&nbsp;</li>
+<li><code>-x</code> (extract): This action actually extracts the contents of the 
+zip file into the file system. That is, for each file/directory in the zip file, 
+a new uncompressed file/directory should be created in the file system. Files 
+should be created in the current directory, but files that are inside 
+directories in the zip file should be created inside these relative directories 
+in the file system. If a file is being extracted and another file with the same 
+name already exists, then the existing file should be overwritten.<br>
+Upon completion, this action prints one line to the console in this format:
+<code>Extracted N files, M files failed</code>. <code>N</code> is the total 
+number of&nbsp; files and directories that were successfully created, and <code>
+M</code> is the total number of files and directories that failed. In addition, 
+one line is printed for each failed file or directory, including a detailed 
+error message. Whenever possible, an error should not result in halting the 
+entire program, and the program should output the error message and continue 
+normally. For example:<br>
+<br>
+<code>&gt; java xzip -x my.zip<br>
+Error: Failed to extract myicon.gif: Cannot overwrite existing file - file is in 
+use<br>
+Extracted 7 files, 1 files failed</code><br>
+<br>
+And the reported 7 successful files will be the following (locations are 
+relative to the current directory):<br>
+<code>mysong.mp3</code><br>
+<code>web\<br>
+web\index.html<br>
+web\other.html<br>
+web\backup\<br>
+web\backup\index.html<br>
+web\backup\other.html</code></li>
+</ul>
+
+<p>The second command-line argument of <code>xzip</code> means &quot;no recursion&quot;, 
+and if it appears then all actions should be performed without recursion into 
+directories. This means that only one summary line is printed for every 
+directory in the printing actions, and that the directory is created but not 
+populated in the extract action. For example:</p>
+
+<p>
+  <code>&gt; java xzip -l -nr my.zip</code><br>
+  <code>mysong.mp3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (7901 bytes, MP3 
+  file)<br>
+myicon.gif&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (910 bytes, 32x32 GIF 
+image)<br>
+web&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+  (directory, total 5 files)<br>
+  <br>
+  &gt; java xzip -x -rn my.zip<br>
+  Extracted 3 files, 0 files failed<br>
+  <br>
+  </code>In this example, the 3 extracted files will be<code> mysong.mp3, myicon.gif </code>
+  and <code> web\.</code></p>
+<p>The default action is <code>-l</code>, meaning that <code>xzip my.zip</code> is equivalent to <code>
+xzip -l  my.zip</code>. You should print an informative usage message if the 
+program is activated with no or illegal command-line arguments. You should print 
+a detailed error messages and exit gracefully when a critical error occurs (the 
+given zip file does not exist, the given zip file is corrupted and so on).</p>
+<h4>Design</h4>
+While this exercise can be  programmed within a single class, this won't work since this
+<code>xzip</code> is only a first version, so it is crucial to maintain an open mind with
+respect to possible future requirements. Consider the following:<ol>
+<li>It may be required to be able to read input format other than ZIP, such 
+as TAR, ARJ, CAB and other archive file formats. The input does not even have to 
+be a file: It can be the set of files of a given directory, a given FTP server 
+address and so forth.</li>
+<li>It may be required to support other file types that the long print action provides 
+additional details about. For example, printing the image size for image files 
+such as <code>myicon.gif</code>, or printing the song duration for music files 
+such as <code>mysong.mp3</code>.</li>
+<li dir="ltr">
+<p dir="ltr">It may be required to produce the output in formats other than 
+plain text - HTML, PDF, Word or
+    others. It may also be required to write output in several formats at once, for example:<br>
+    <code>xzip  -pdf myzipfiles.pdf -html myzipcontents.html my.zip</code>.</li>
+<li>It may be required to modify the input zip file instead of just printing or 
+extracting it. For example, new actions may enable adding files and directories to the zip 
+file,  changing the date and time signature of zipped files, and so on.</li>
+<li>It may be required to support recursion into zip files, and not only into 
+directories. For example, if a zip file contains another zip file, then its 
+contents would have to be printed (recursively) like a directory's contents are 
+printed, and when a file is extracted any zip files it contains would be 
+extracted as well.</li>
+<li>It may be required to activate all of the program's features not only from 
+the command-line, but also from a graphical user interface, or perhaps even two 
+user interfaces (for example, one that is a custom UI for handling zip files, 
+and another which is fully integrated with the Windows Explorer).</li>
+</ol>
+You must design your program so that it is easy to add code that implements the above requirements.
+Assume that you are the one who will actually have to code it - that's how it usually is in "real life".
+For each of the above requirements write an explanation in your README file, not more than three
+sentences long, which explains how it should be coded. For example:
+
+<blockquote>
+<p dir="ltr"><b>Requirement:</b> It may be required to define filters on which files  get
+printed or extracted, in addition to the <code>-nr</code> switch. For example, new 
+command-line arguments can dictate that only text files should be acted on, only 
+files that match a given pattern (such as <code>*.cpp</code>), and so on.</p>
+<p><b>Solution:</b> Write an Iterator for each kind of filter, whose next() method will move to the
+next element for which the filter is true. Such iterators are implemented as Decorators of other
+iterators, which easily enables to dynamically combine different filters and does not require
+changing or recompiling existing code.</p>
+</blockquote>
+It is important that each solution you present will be at most three sentences long. The intention is
+to enforce the use of design patterns vocabulary rather than elaborating specific class and object
+relationships.<h4>Code & Unit Test</h4>
+
+<p dir="ltr">This exercise intends you to divide your time equally between actual coding and between design,
+writing UML diagrams, and answering the above six design questions.  With a proper design, this
+exercise is quick and simple to code. You are required to write in Java 5.0, and you 
+may use the standard libraries to
+their full extent - the standard streams, strings and data structures. In 
+particular, working with zip files is done using the <code>java.util.zip</code> 
+package, and working with image files is done using the<code>
+<a href="http://java.sun.com/j2se/1.5.0/docs/api/javax/swing/ImageIcon.html">javax.swing.ImageIcon</a></code> class (see references and code samples below).</p>
+
+<p dir="ltr">You are also required to use the Eclipse environment for this 
+exercise, and are encouraged to take advantage of its editing and debugging 
+features to their full extent. Submit the Eclipse project file together with 
+your exercise, so that it would be possible to open your project and read your 
+code, UML diagrams and Ant file within Eclipse. The UML diagrams should be done 
+using the Omondo UML plugin (see the <a href="../help.html">Technical Help</a> 
+page for details on installing it at home). You are required to provide class 
+diagrams that include all your classes; there may be more than one diagram, if 
+this is visually easier. You are also required to provide at least two sequence 
+diagrams, depicting two interactions in your design which you consider 
+important.</p>
+
+<p dir="ltr">It is also required that you submit unit tests to test your work, 
+and use the JUnit framework to do so. Organize your unit tests into classes by 
+subject, and write a method for each small test. Organize the code such that the 
+program source code is in one package (for example <code>xzip</code>), and the 
+tests are in a separate package (for example <code>xziptest</code>). Each test 
+should be self-validating - that is, know by itself whether it has passed or 
+failed. Writing unit tests should be an integral part of coding: This is 
+essential when code must be changed in newer versions. We recommend that you try 
+test-first programming - read the <a href="http://www.extremeprogramming.org/rules/unittests.html">following article</a> 
+as a starting point - and in any case you will lose time if you only write all unit tests 
+after you &quot;finish&quot; coding. You will have another chance to estimate the 
+convenience of unit tests in exercise 3.<p>One metric for measuring the usefulness of a set of unit tests is called coverage, which means
+the percentage of your code that the unit tests actually run. Coverage of 90% or above is
+considered good, and you should aim to that goal.</p>
+
+<p dir="ltr">The code you submit must be built with no compiler warnings, and pass all unit tests. 
+You must submit an Ant file (<code>build.xml</code>) with your exercise, whose 
+default target compiles the entire program, and runs all unit tests.</p>
+
+<p>This is an advanced course, so there is no intention to take points for coding style or
+naming conventions - the emphasis is on proper design. However, you are as always expected
+to write clear code with a consistent style.</p>
+
+</td>
+</tr>
+
+<tr valign="top">
+<td class="desc">Submission</td>
+<td>
+Submit a zip file which contains the following:<ul>
+  <li>All program source code.</li>
+  <li>All unit tests source code.</li>
+  <li>
+  <p dir="ltr">The Ant <code>build.xml</code> file.</li>
+  <li>
+  <p dir="ltr">The UML diagrams (class diagrams + at least two sequence 
+  diagrams).</li>
+  <li>
+  <p dir="ltr">A README file, with the usual contents (IDs, logins and full 
+  names, descriptive list of files and features) and answers to the six possible 
+  extensions in the design section above. The README file should also describe 
+  parts of the design or design choices that are not evident from reading the 
+  UML diagrams.</li>
+  <li>
+  <p dir="ltr">The Eclipse project file, to enable opening your project and 
+  reading all of the above files from within Eclipse.</li>
+</ul>
+<p dir="ltr">We use the <a href="../admin.html">course-admin system </a>for 
+exercise submission and grading; do not submit any printouts.</td>
+</tr>
+<tr valign="top">
+<td class="desc">Resources</td>
+<td>
+<ul>
+<li><a href="http://www.devx.com/getHelpOn/10MinuteSolution/20447">Source code 
+for extracting files and directories from a zip file</a></li>
+<li><a href="http://javaalmanac.com/egs/java.util.zip/pkg.html">More source code 
+example for working with zip files in Java</a></li>
+<li>
+<a href="http://java.sun.com/j2se/1.5.0/docs/api/java/util/zip/package-summary.html#package_description">
+java.util.zip</a></li>
+<li>
+<a href="http://java.sun.com/j2se/1.5.0/docs/api/javax/swing/ImageIcon.html">
+javax.swing.ImageIcon</a></li>
+<li><a href="../guidelines.html">Guidelines</a></li>
+
+</ul>
+</td>
+</tr>
+</table>
+
+<!--
+******************************************************************************
+End of details
+******************************************************************************
+-->
+</td>
+</tr>
+</table>
+
+<!-- large frame -->
+</td>
+</tr>
+</table>
+<!-- /large frame -->
+
+</body>
+</html>

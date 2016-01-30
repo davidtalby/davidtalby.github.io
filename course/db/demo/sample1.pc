@@ -1,0 +1,110 @@
+#ifdef RCSID
+static char *RCSid = 
+   "$Header: sample1.pc 1040800.1 92/03/04 14:22:08 sylee Generic<base> $ sample1.pc ";
+#endif /* RCSID */
+
+/* Copyright (c) 1990 by Oracle Corporation */
+ 
+/* NAME
+     sample1.pc
+   FUNCTION
+     Oracle C Precompiler sample program    
+   RETURNS
+ 
+   NOTES
+ 
+   MODIFIED
+    sfaris     12/06/91 - Touch Ups 
+    Osborne    12/21/90 - Replacing with new version
+*/
+/*******************************************************************
+Sample Program 1:  Simple Query
+
+This program logs on to ORACLE, prompts the user for an employee
+number, queries the database for the employee's name, salary, and
+commission, then displays the result.  It continues until the user
+enters a 0 for the employee number.
+*******************************************************************/
+
+#include <stdio.h>
+
+EXEC SQL BEGIN DECLARE SECTION;
+	VARCHAR 	username[20];
+	VARCHAR 	password[20];
+	int 		emp_number;
+	VARCHAR 	emp_name[15];
+	float 		salary;
+	float 		commission;
+EXEC SQL END DECLARE SECTION;
+
+	int		total_queried;
+
+EXEC SQL INCLUDE sqlca;
+
+void sqlerror();	/* handles unrecoverable errors */
+
+main()
+{
+	
+	/* Log onto ORACLE */
+
+	strcpy(username.arr, "SCOTT");    	/* copy the username */
+	username.len = strlen(username.arr);
+	strcpy(password.arr, "TIGER");		/* copy the password */
+	password.len = strlen(password.arr);
+
+	EXEC SQL WHENEVER SQLERROR DO sqlerror();
+
+	EXEC SQL CONNECT :username IDENTIFIED BY :password;
+	printf("\nConnected to ORACLE as user: %s\n", username.arr);
+
+	/* Loop, selecting individual employee's results */
+
+	total_queried = 0;
+
+	while (1) {
+
+	     emp_number = 0;
+	     printf("\nEnter employee number (0 to quit): ");
+	     scanf("%d", &emp_number);
+	     if (emp_number == 0) break;
+
+	     EXEC SQL WHENEVER NOT FOUND GOTO notfound;
+
+	     EXEC SQL SELECT ENAME, SAL, COMM
+		INTO :emp_name, :salary, :commission
+		FROM EMP
+		WHERE EMPNO = :emp_number;
+
+	     printf("\n\nEmployee\tSalary\tCommission\n");
+	     printf("--------\t------\t----------\n");
+	     emp_name.arr[emp_name.len] = '\0';
+	     printf("%-8s\t%6.2f\t%6.2f\n", emp_name.arr, salary, commission);
+
+	     total_queried = total_queried + 1;
+	     continue;
+
+	notfound:
+
+	     printf("\nNot a valid employee number - try again.\n");
+
+	} /* end loop */
+
+	printf("\n\nTotal number queried was %d.\n", total_queried); 
+	printf("\nHave a good day.\n");
+
+	EXEC SQL COMMIT WORK RELEASE;    /* logoff database */
+	exit(0);
+
+}
+
+void sqlerror()
+{
+	EXEC SQL WHENEVER SQLERROR CONTINUE;
+
+	printf("\nORACLE error detected:\n");
+	printf("\n% .70s \n", sqlca.sqlerrm.sqlerrmc);
+
+	EXEC SQL ROLLBACK RELEASE;
+	exit(1);
+}

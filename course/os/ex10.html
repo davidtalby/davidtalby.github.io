@@ -1,0 +1,196 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1255">
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+<!-- Appears in the title bar -->
+<title>Operating Systems - Exercise 10</title>
+</head>
+
+<body background="icons/blueback.gif">
+
+<h1 align="center"><font size="4" face="Times New Roman">The Operating Systems Course</font></h1>
+
+<h1 align="center"><font size="5" face="Times New Roman">Exercise 10: Processes</font></h1>
+
+<h2><font face="Times New Roman"><img src="accent.gif" width="32" height="31">Goals</font></h2>
+
+<ol>
+  <li><font face="Times New Roman">Use redirections and filters in the Unix shell.</font></li>
+  <li><font face="Times New Roman">Handle Unix processes - creation, execution and
+    termination.</font></li>
+  <li><font face="Times New Roman">Write a program that emulates a shell.</font></li>
+</ol>
+
+<h2><font face="Times New Roman"><img src="accent.gif" width="32" height="31">Shell
+Programs</font></h2>
+
+<p><font face="Times New Roman">This section describes some very basic features of the
+Unix shell. The actual exercise description starts in the next section.</font></p>
+
+<p><font face="Times New Roman">Read the man pages of the following utilities: <em>ls,
+cat, who, ps</em> and <em>echo</em>. All allow you to display some information on the
+screen. The output of these programs doesn't have to be sent to the screen right&nbsp;
+away: it can be filtered several times. The most common Unix filters are <em>head, tail,
+sort, wc, grep, tr, tee</em> and <em>uniq</em>. Take a quick look at their man pages as
+well. Filters work as follows: Given a file or a list of files as parameters, they will
+process these files; given no parameters, they will process the standard input. This
+convention gives great flexibility for combining filters through redirections and pipes: </font>
+
+<ul>
+  <li><font face="Times New Roman">Counting the number of files that start with the letter
+    'a':<br>
+    <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ls a* | wc -l</code></font></li>
+  <li><font face="Times New Roman">Print a sorted list of the users currently logged into the
+    system into the file 'users':<br>
+    <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; who | sort &gt; users</code></font></li>
+  <li><font face="Times New Roman">Check whether the user 'mary' is logged on:<br>
+    <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; who | grep mary</code></font></li>
+  <li><font face="Times New Roman">Print the ten most popular words in the file 'index.html':<br>
+    <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cat &lt; index.html | tr -sc A-Za-z
+    '\012' | sort | uniq -c | sort -n | tail</code></font></li>
+</ul>
+
+<p><font face="Times New Roman">Another nice things the shell gives us is wildcards: </font>
+
+<ul>
+  <li><font face="Times New Roman">The * character stands for 'any zero or more characters'.
+    To print all files in the current directory:<br>
+    <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; lpr *</code></font></li>
+  <li><font face="Times New Roman">The ? character stands for 'exactly one character'. The
+    following will print information about files named 'c1.doc' or 'cZ.doc' but not 'c10.doc'
+    or 'c.doc':<br>
+    <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ls c?.doc</code></font></li>
+  <li><font face="Times New Roman">The [] pattern stands for exactly one of the characters
+    inside the brackets. The following will display the contents of data1, data2 and data7:<br>
+    <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cat data[127]<br>
+    </code>A range of characters can also be specified. To delete all files that start with a
+    letter:<br>
+    <code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; rm [A-Za-z]*</code></font></li>
+</ul>
+
+<p><font face="Times New Roman">A third nice thing the shell gives us is variables. We
+define a variable in a command of the form &quot;var=value&quot;, and from then on the
+string $var in commands will be replaced by the string &quot;value&quot;. For example, the
+following series of commands will change the directory to /a/b/c/d:</font></p>
+
+<p><font face="Times New Roman"><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; base =
+/a/b<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; below = $base/c<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; chdir $below/d</code></font></p>
+
+<p><font face="Times New Roman">The shell parses every command it reads to identiry
+redirections, pipes, wildcards and variables. The whole process is transparent to the
+programs themselves - <em>sort</em>, for example, doesn't know whether its input really
+comes from the standard input or from a file, doesn't care whether its output really goes
+to the screen, and will never know if the list of input files we sent it originally
+contained a wildcard.</font></p>
+
+<h2><font face="Times New Roman"><img src="accent.gif" width="32" height="31">The Program</font></h2>
+
+<p><font face="Times New Roman">Write a program called 'hshell', that acts as a simple
+command line interpreter. The program should display a simple prompt in which users can
+enter commands, and then parse and execute these commands. The following command formats
+must be supported:</font> 
+
+<ol>
+  <li><font face="Times New Roman">Simple commands: <code>program [optional arguments]</code></font></li>
+  <li><font face="Times New Roman">Standard input redirection: <code>program [optionals] &lt;
+    in_file</code></font></li>
+  <li><font face="Times New Roman">Standard output redirection: <code>program [optionals] &gt;
+    out_file</code> (creates or truncates out_file) and <code>program [optionals] &gt;&gt;
+    out_file</code> (creates or appends to out_file).</font></li>
+  <li><font face="Times New Roman">Pipelines: <code>program [optionals] | program [optionals]
+    | ... | program [optionals]</code></font></li>
+  <li><font face="Times New Roman">Combinations of the above, like: <code>cat &lt; in_file |
+    fgrep a | sort &gt; out_file</code>.</font></li>
+  <li><font face="Times New Roman">Execution of a command in the background: <code>program
+    [optionals] &amp;</code></font></li>
+</ol>
+
+<p><font face="Times New Roman">The hshell program reads commands from the standard input,
+just like your usual Unix shell does. For commands that run in the foreground, the shell
+waits for the command's completion before starting the next command. When running commands
+in the background (i.e. &quot;emacs &amp;&quot;), the shell does not wait for the command
+to finish but instead returns to read the next command right away. However, when a process
+that was running in the background terminates, the shell should print a line to the
+standard error containing the word &quot;Done&quot; and the terminated process id.</font></p>
+
+<p><font face="Times New Roman">Whenever an error is encountered, print a detailed error
+message to the standard error (not standard output!), and return to wait for the next
+command. The hshell process ends only when it encounters the end-of-file character (type
+Ctrl+D at the keyboard for it).</font></p>
+
+<p><font face="Times New Roman">Make sure that commands that change the shell process's
+state work as well. Specifically, make sure that the <code>chdir</code> and <code>umask</code>
+commands work as usual.</font></p>
+
+<p><font face="Times New Roman">Test your program with the redirection and piping examples
+from class and the previous section, and other commands as complex as you can think of.
+You are encouraged to share tests (only!!) with other students. Note, however, that some
+combinations of redirections and pipes are not legal, for example: &quot;<code>ls &gt;
+outfile | sort</code>&quot;&nbsp; or&nbsp; &quot;<code>ls | sort &lt; infile</code>&quot;.
+Testing gets easier if you remember that the input and output of the shell itself can be
+redirected: You can write a series of tests in a file called &quot;<code>my_tests</code>&quot;
+and then run &quot;<code>hshell &lt; my_tests</code>&quot;.</font></p>
+
+<p><font face="Times New Roman">Use any parsing method that you like in your program. Note
+that the use of white characters (spaces and tabs) is optional but not required around
+special characters, so &quot;ls &gt;a &amp;&quot; and &quot;ls &gt;&nbsp; a&amp; and
+&quot;ls &gt;a&amp;&quot; are identical.</font></p>
+
+<h2><font face="Times New Roman"><img src="accent.gif" width="32" height="31">Bonus</font></h2>
+
+<p><font face="Times New Roman">There is one ten points bonus offered for this exercise.
+You have to implement shell variables: These are created by typing commands like
+&quot;dir=/usr/include/sys&quot; and then using them in other commands like &quot;ls
+$dir/*.h&quot;. The dollar sign is a special character that signifies the beginning of a
+variable name. You should look for such variables in commands, and replace them with the
+values the variables hold.</font></p>
+
+<p><font face="Times New Roman">Each process has a list of variables associated with it -
+its &quot;environment table&quot;. This table is a list of strings of the form
+&quot;Name=Value&quot;, where 'Name' is the name of the variable. This list is inherited
+from parent to child processes, therefore you can't implement it as an internal linked
+list in your program. You must use the system's list of variables instead. In order to do
+so, you'll have to learn the following functions: <em>putenv, getenv, setenv</em> and <em>unsetenv</em>.
+See the man pages for all of them.</font></p>
+
+<p><font face="Times New Roman">Having implemented shell variables in this way, your shell
+program will already have several variables defined every time it starts running. These
+will be variables it inherits from its own parent process, such as PATH, HOME and others.
+Commands like &quot;<code>echo $HOME</code>&quot; and &quot;<code>PATH=$PATH:/usr/include</code>&quot;
+are examples of simple tests. Also, make sure that your shell can inherit new variables it
+defines to its own child processes.</font></p>
+
+<p><font face="Times New Roman">This bonus requires you to learn a few functions on your
+own, but if done smartly is quite easy.</font></p>
+
+<h2><font face="Times New Roman"><img src="accent.gif" width="32" height="31">Miscellaneous</font></h2>
+
+<p><font face="Times New Roman">Your submission must include a README, a Makefile, and the
+source code of the programs. The Makefile should create eaxctly one executable called
+'hshell'. You may include as many source files as you wish. To submit, <u>send an email</u>
+to the bodek, containing the full names, id numbers and logins of the submitting pair, and
+attach <u>all</u> the relevant files. This time, in contrast to previous exercises, the
+files you send will be checked (not the ones in your account), and the time of submittion
+(for late submission penalties) will be the time of sending the mail.</font></p>
+
+<p><font face="Times New Roman">Your README file should include a vivid description of how
+your program does what it's supposed to. If you choose to implement the bonus, include an
+exact description of how you did so in the README. You might lose some of the bonus points
+for not being able to describe your accomplishment well.</font></p>
+
+<p><font face="Times New Roman">VERY IMPORTANT: You <u>cannot</u> use any of the following
+functions: system(), popen(), pclose() or exececuting the Unix shell as in
+execve(&quot;/bin/sh&quot;, ...). Using any of these functions or similar tricks will
+result in an automatic grade of zero. You are expected to create child processes using
+fork(), manage redirection using open() and dup2(), and handle child termination signals
+using signal() and either wait() or waitpid().</font></p>
+
+<p><font face="Times New Roman">Good luck!</font></p>
+
+<p align="center"><font face="Times New Roman"><img src="line_colorbar.gif" width="585"
+height="1"></font></p>
+</body>
+</html>

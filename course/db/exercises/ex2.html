@@ -1,0 +1,240 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=windows-1255">
+<meta name="Template"
+content="C:\PROGRAM FILES\MICROSOFT OFFICE\OFFICE\html.dot">
+<meta name="GENERATOR" content="Microsoft FrontPage Express 2.0">
+<title>The DataBase Course - Exercise No. 2</title>
+</head>
+
+<body link="#0000FF" vlink="#800080">
+
+<p align="center"><font size="4"><strong>The Databases Course</strong></font></p>
+
+<p align="center"><font size="5"><strong>Exercise No. 2</strong></font></p>
+
+<p align="center"><font size="4">Relational Algebra</font></p>
+
+<p align="center">Due on December 29th by midnight</p>
+
+<blockquote>
+    <p>&nbsp;</p>
+</blockquote>
+
+<blockquote>
+    <p><i>Note: This is the HTML format of the exercise, so some
+    special symbols cannot be viewed or printed well. There's
+    also a </i><a href="ex2_95.doc"><i>Word '95</i></a><i>
+    version and </i><a href="ex2_97.doc"><i>Word '97</i></a><i>
+    version, which do not have this problem.</i></p>
+</blockquote>
+
+<blockquote>
+    <p>&nbsp;</p>
+</blockquote>
+
+<ol>
+    <li>(Thanks to Yael Arad) The following relations are given:</li>
+</ol>
+
+<blockquote>
+    <p>Chessman(cid, type, color)<br>
+    Chessboard(x, y, cid)</p>
+</blockquote>
+
+<blockquote>
+    <p>The Chessman relation includes data on all the pieces
+    participating in the game: Each piece has a unique identifier
+    cid, a type (king, queen, rock, bishop, knight or pawn) and a
+    color (black or white). The Chessboard relation describes the
+    game board at the given instance during a game: A tuple (x,y,cid)
+    means that the piece cid is at coordinates (x,y) on the board.
+    Express the following queries in relational algebra:</p>
+</blockquote>
+
+<ul>
+    <li><blockquote>
+        </blockquote>
+    </li>
+    <li>Which type of pieces does black currently have on the
+        board? </li>
+    <li><blockquote>
+        </blockquote>
+    </li>
+    <li>Find all the pieces that are in the moving axis of the
+        rock whose cid is c5. A rock may move along the row or
+        column it is at, in any direction. </li>
+    <li><blockquote>
+        </blockquote>
+    </li>
+    <li>Normally, each player may have at most two knights. Under
+        this assumption, find the color that currently has more
+        knights on the board.</li>
+    <li><blockquote>
+        </blockquote>
+    </li>
+    <li>Find types of which there are at least two pieces, of any
+        color, on the board.</li>
+    <li><blockquote>
+        </blockquote>
+    </li>
+    <li>Which players (colors) still have all their pawns on the
+        board? </li>
+    <li><blockquote>
+        </blockquote>
+    </li>
+    <li>Which players have at least all the types of pieces the
+        opposite player has?</li>
+    <li><blockquote>
+        </blockquote>
+    </li>
+    <li>Given are two relations board1 and board2 whose schema is
+        identical to that of chessboard, that represent two
+        consecutive states of a game, before and after a move.
+        Which piece was moved? </li>
+    <li><blockquote>
+        </blockquote>
+    </li>
+    <li>Continuing the last question, where was the piece moved
+        from? </li>
+    <li><blockquote>
+        </blockquote>
+    </li>
+    <li>Moving to a square that contains a piece of the opposite
+        color involves taking that piece off the board. Was a
+        piece removed in the last move, and if so, which one was
+        it? </li>
+</ul>
+
+<blockquote>
+    <p>The queries should be clearly explained! Also, your
+    queries should be as efficient as possible: For example, try
+    to use selection and projection as early as possible, and
+    avoid redundant cartesian products.</p>
+</blockquote>
+
+<blockquote>
+    <p>&nbsp;</p>
+</blockquote>
+
+<ol start="2">
+    <li>Given is a relation R(id, age) that describes a team's
+        members (by unique id's) and their ages. Consider the
+        following query:</li>
+</ol>
+
+<blockquote>
+    <blockquote>
+        <p align="left"><font size="4" face="Symbol">Õ</font><font
+        size="4"> <sub>id</sub> ( R – </font><font size="4"
+        face="Symbol">Õ</font><font size="4"> <sub>R1.id, R1.age</sub>
+        (</font><font size="4" face="Symbol">s</font><font
+        size="4"> <sub>R1.age &lt; R2.age</sub> ( R<sub>1</sub> </font><font
+        size="4" face="Symbol">´</font><font size="4"> R<sub>2</sub>
+        ) ) )</font></p>
+    </blockquote>
+</blockquote>
+
+<ul>
+    <li><blockquote>
+        </blockquote>
+    </li>
+    <li>What does the query compute?</li>
+    <li><blockquote>
+        </blockquote>
+    </li>
+    <li>What is computed if the '&lt;' is replaced by '&gt;'?</li>
+    <li><blockquote>
+        </blockquote>
+    </li>
+    <li>What goes wrong if the '&lt;' is replaced by '&lt;='?</li>
+</ul>
+
+<blockquote>
+    <p>&nbsp;</p>
+</blockquote>
+
+<ol>
+    <li value="3"><font face="Arial">F</font>or the following
+        pairs of queries, prove whether they are equal, one of
+        them is contained in the other, or neither of these is
+        always true. R<sub>1</sub> and R<sub>2</sub> are two
+        different relations with the same schema S<sub>R</sub>,
+        and T is a relation whose schema is S<sub>T</sub> <font
+        face="Symbol">Í</font><font face="Miriam"> </font>S<sub>R</sub>.</li>
+</ol>
+
+<ul>
+    <li><blockquote>
+        </blockquote>
+    </li>
+    <li><font face="Symbol">P</font> <sub>A</sub>(R<sub>1</sub>
+        – R<sub>2</sub>) versus <font face="Symbol">P</font> <sub>A</sub>(R<sub>1</sub>)
+        – <font face="Symbol">P</font> <sub>A</sub>(R<sub>2</sub>)</li>
+    <li><blockquote>
+        </blockquote>
+    </li>
+    <li><font face="Symbol">P</font> <sub>A</sub>(R<sub>1</sub> <font
+        face="Symbol">È</font><font face="Miriam"> </font>R<sub>2</sub>)
+        versus <font face="Symbol">P</font> <sub>A</sub>(R<sub>1</sub>)
+        <font face="Symbol">È</font><font face="Miriam"> </font><font
+        face="Symbol">P</font> <sub>A</sub>(R<sub>2</sub>)</li>
+    <li><blockquote>
+        </blockquote>
+    </li>
+    <li><font face="Symbol">P</font> <sub>A</sub>(R<sub>1</sub> <font
+        face="Symbol">Ç</font><font face="Miriam"> </font>R<sub>2</sub>)
+        versus <font face="Symbol">P</font> <sub>A</sub>(R<sub>1</sub>)
+        <font face="Symbol">Ç</font><font face="Miriam"> </font><font
+        face="Symbol">P</font> <sub>A</sub>(R<sub>2</sub>)</li>
+    <li><blockquote>
+        </blockquote>
+    </li>
+    <li><font face="Symbol">s</font> <sub>F1 </sub>(R<sub>1</sub>)
+        <font face="MT Extra">&gt;</font> <font face="MT Extra">&lt;</font>
+        <font face="Symbol">s</font> <sub>F2 </sub>(R<sub>2</sub>)
+        versus <font face="Symbol">s</font> <sub>F1 </sub><font
+        face="Symbol"><sub>Ú</sub></font><sub> F2 </sub>(R<sub>1</sub>
+        <font face="MT Extra">&gt;</font> <font face="MT Extra">&lt;</font>
+        R<sub>2</sub>)</li>
+    <li><blockquote>
+        </blockquote>
+    </li>
+    <li><font face="Symbol">s</font> <sub>F1 </sub>(R<sub>1</sub>)
+        <font face="MT Extra">&gt;</font> <font face="MT Extra">&lt;</font>
+        <font face="Symbol">s</font> <sub>F2 </sub>(R<sub>2</sub>)
+        versus <font face="Symbol">s</font> <sub>F1 </sub><font
+        face="Symbol"><sub>Ù</sub></font><sub> F2 </sub>(R<sub>1</sub>
+        <font face="MT Extra">&gt;</font> <font face="MT Extra">&lt;</font>
+        R<sub>2</sub>)</li>
+    <li><blockquote>
+        </blockquote>
+    </li>
+    <li>( R <font face="Symbol">¸</font> T) <font face="Symbol">´</font>
+        T versus R</li>
+</ul>
+
+<p align="left">&nbsp;</p>
+
+<ol>
+    <li value="4">Assume that R and S have one similar field, and
+        their natural join needs to be computed. Explain how this
+        can be done in <i>O((m+n) * log(m+n))</i> time, where <i>m</i>
+        and <i>n</i> are the number of tuples in R and S,
+        respectively.</li>
+</ol>
+
+<p align="left">&nbsp;</p>
+
+<blockquote>
+    <p align="left">Look at last year's exercise 2 as well. Study
+    <i>Question 2</i> and its answer in particular.</p>
+</blockquote>
+
+<blockquote>
+    <p>&nbsp;</p>
+</blockquote>
+</body>
+</html>

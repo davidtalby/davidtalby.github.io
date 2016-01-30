@@ -1,0 +1,10 @@
+audio/*;                /usr/demo/SOUND/play %s
+image/*; 		xv %s
+application/compressed;	gzip -d %s
+application/postscript; ghostview %s
+video/mpeg;             mpeg_play %s
+video/quicktime;        xanim %s
+application/oraclebd;   /usr/local/oracle/bin/b10runm %s
+application/oraclemx;   /usr/local/oracle/bin/f40runm %s
+application/oraclemb;   /usr/local/oracle/bin/f40desm %s
+

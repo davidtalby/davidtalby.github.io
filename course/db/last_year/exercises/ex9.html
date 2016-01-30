@@ -1,0 +1,112 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage Express 2.0">
+<title>The DataBase Course - Exercise No. 7</title>
+</head>
+
+<body>
+
+<p align="center"><font size="4"><strong>The Databases Course</strong></font></p>
+
+<p align="center"><font size="5"><strong>Exercise No. 9</strong></font></p>
+
+<p align="center"><font size="4">Transitive Closure - Practical</font></p>
+
+<blockquote>
+    <blockquote>
+        <p align="center">Due on January 25th by midnight</p>
+    </blockquote>
+    <p><strong>The Example Database Schema:</strong> A
+    manufacturing firm buys basic parts and builds composite
+    parts out of them. There is a cost to every basic part, and a
+    cost to assembling a composite part out of all its basic
+    parts (which doesn't include the cost of the basic
+    components). Composite parts may be composed from other
+    composite parts as well. The information about parts is
+    stored in the Base_Parts and Composite_Parts tables, and the
+    Made_From relation specifies which and how many basic parts
+    each composite part needs. Made_from(car, wheel, 4) indicates
+    that a car is made using four wheels.</p>
+    <p>Base_Parts (pno, cost)<br>
+    Composite_Parts (pno, assembly_cost)<br>
+    Made_From (pno1, pno2, qty)</p>
+    <p>Standard assumptions can be made about the database:</p>
+    <ul>
+        <li>No part number appears both in Base_Parts and
+            Composite_Parts.</li>
+        <li>'pno' is a key for Base_Parts and for
+            Composite_Parts.</li>
+        <li>'pno1' and 'pno2' together form a key for Made_From.</li>
+        <li>All part numbers in Made_From appear in either
+            Base_Parts or Composite_Parts.</li>
+        <li>The graph corresponding to Made_From is acyclic, but
+            it is <u>not</u> necessarily a tree. This means that
+            we might have, for example:<br>
+            Made_From(car, wheel, 4), Made_From(bike, wheel, 2),
+            Made_From(wheel, tire, 1), ...</li>
+        <li>All basic parts have no children in the graph.</li>
+        <li>All composite parts have at least one child in the
+            graph.</li>
+        <li>Some of the new parts (both base and composite) have
+            been inserted into the database without a cost,
+            because it is still under negotiation. Therefore,
+            there may be null values in the cost field of these
+            tables.</li>
+        <li>No composite part is composed of basic or composite
+            parts with null values.</li>
+    </ul>
+    <p><strong>Write a C program with embedded SQL statements to
+    do the following:</strong></p>
+    <p>You should compute the relation <u>Costs(pno, total_cost)</u>,
+    where total_cost is the total cost for making part pno -
+    including the costs of all the base parts and the costs of
+    assembling the composite parts. This relation should contain
+    a record for every part (both basic and composite). The Costs
+    table should be created as a new table - pno is of type
+    varchar(15) and total_cost is of type number(10). These are
+    also the types that are used by the existing tables. Your
+    program should create and fill the Costs table, print it to
+    the screen, and destroy it.</p>
+    <p>Your should use a reasonable amount of main memory space,
+    since the above relations can be very large. You may use
+    tables to store intermediate results. Tuples containing null
+    values should be ignored - such parts needn't be used in your
+    computations, and shouldn't appear in the final Costs table.</p>
+    <p>The input size of this problem is the total number of
+    parts n. Your algorithm should use at most O(log n) queries.
+    Every SELECT statement counts as one query; when using
+    cursors, every time you OPEN the cursor it counts as one
+    query.</p>
+    <p>When encountering any type of error you should print a
+    detailed message to the standard error stream, and terminate
+    the program emmidiately with an error code 1. If the program
+    ends without an error, it should return an error code 0.</p>
+    <p>Your program should be <em>superbly</em> documented. Your
+    README file, along with the usual information, must also
+    include the pseudo-code for the algorithm you use, and an
+    analysis of the number of queries it performs.</p>
+    <p><strong>You should submit:</strong></p>
+    <ul>
+        <li>Submit electronically (run ~db/bin/submit to submit <u>ex4.tar</u>)
+            the following files:<br>
+            <u>README</u> - containing only your login on the
+            first line, and your full name and relevant exercise
+            documentation afterwards. Specifically, this include
+            the pseudo-code and run-time analysis of the
+            algorithm you use.<br>
+            <u>Makefile</u> - When running 'gmake', exactly one
+            executable named 'ex4' should be created.<br>
+            <u>ex4.out</u> - An example output of your program,
+            on the example Oracle database.<br>
+            <u>ex4.pc</u> - The program's source code.<br>
+            If you have more source files, specify their names in
+            the README file.</li>
+        <li>Submit printouts of everything, except the Makefile,
+            to the course's submission box.</li>
+    </ul>
+</blockquote>
+</body>
+</html>

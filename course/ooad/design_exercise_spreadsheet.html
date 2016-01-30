@@ -1,0 +1,125 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>Design Exercise - Spreadsheet</title>
+<meta name="Microsoft Theme" content="neon 011">
+</head>
+
+<body background="neobkgnd.jpg" bgcolor="#000000" text="#FFFFFF" link="#CCFF66" vlink="#00FFFF" alink="#FFCC33">
+
+
+<h2 align="center">Spreadsheet</h2>
+
+<h3>Overview</h3>
+
+<p>This application is a spreadsheet: Each file is a matrix of cells, and each
+cell can contain either data in some format, or a formula which relies on the
+values of other cells. To analyze data, the program supports different kinds of
+graphs, goal-finding algorithms and scripting.</p>
+
+<h3>Requirements</h3>
+
+<!--msthemelist--><table border="0" cellpadding="0" cellspacing="0" width="100%">
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">The
+      system shall support editing multiple spreadsheets in a multiple window
+      user interface. A spreadsheet document is a matrix of cells, identified by
+      a letter (column number) and number (row number).<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">The
+      system shall support these data types in cells: Integers, real numbers,
+      strings, dates and formulas. A formula is a computed expression whose
+      value depends on other cells, either in the current or other spreadsheet
+      files. Defining a circle of dependencies is illegal, and should be caught
+      and reported to the user.<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">Formulas
+      can include arithmetic operators, functions on numbers, strings and dates,
+      and calling scripts that return values (see below). Errors in formulas
+      (division by zero, illegal cell reference, unknown function, etc.) are
+      caught while typing the formula, and the user will not be allowed to
+      finish editing the cell before correcting the error.&nbsp;&nbsp;<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">The
+      system shall support immediate refresh of computed cells. When the user
+      edits a cell, all cells whose value depend on it automatically update. If
+      an error occurred during the computation (for example, a division by
+      zero), all dependent cells must be marked with a special error display as
+      well. The refresh must be efficient: only computation required to display
+      the cells on the screen is allowed.&nbsp;<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">The
+      system shall support each cell having a font, color, size and display
+      format. The display format of a cell determines whether it is shown as a
+      formula or the value of the formula, a fixed real number or a currency,
+      and so forth.<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">The
+      system shall support the copy, paste, find, and conditional fill/format
+      (changing all cells that satisfy some value) operations, on any or all of
+      the formula, value or the display settings of a dynamically defined set of
+      cells. For example, a user can request to add 5% to all selected cells
+      that contain a non-negative value and are displayed in bold.<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">The
+      system shall include a goal-finding feature. Such an algorithm tries to
+      find what should the value of a given input cell be so that the value of
+      another given cell will reach a desired value. For example, a user can
+      compute what should the interest rate be so that s/he will have an annual
+      profit of 1$ million. The goal finding feature need only work on numbers,
+      but it should be easy to change its algorithm or extend it in the
+      future.&nbsp;<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">That
+      system shall enable writing scripts, either ones that return a value (and
+      can be used as functions in formulas), or ones that perform an action (and
+      can be used in the program's menus). A script is a list of actions that
+      may define variables, call API functions or other scripts, and support
+      &quot;if&quot;, &quot;for&quot; and &quot;while&quot; constructs.<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">The
+      system shall support plotting a dynamically selected set of cells as a
+      chart (that opens as a new screen on the window). If a chart is on the
+      screen, then it must immediately update when the data it depends on
+      updates. Many types of charts are supported; the user can also program new
+      chart types by writing a script that calls the &quot;Chart API&quot;.<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">The
+      system shall support fast and efficient undo and redo of any command, at a
+      depth limited only by the computer's memory.<!--msthemelist--></td>
+  </tr>
+<!--msthemelist--></table>
+
+<p>Each of these ten requirements are worth 10% of the grade on the exercise.
+Note that the grade of a single requirement is composed of how you dealt with it
+everywhere - in requirements, design, strong and weak spots, and the oral
+questions.</p>
+<p>Good luck!</p>
+
+
+</body>
+
+</html>

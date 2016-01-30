@@ -1,0 +1,147 @@
+/* Database Course, 1997/8
+   Exercise 7 - SQL embedded in C
+
+   This program inputs the user for a number n, then finds the most popular
+   cities (if there is more than one most popular city) for the first n 
+   suppliers (ordered by names, ascending) to live in, and then prints these 
+   cities' names and the number of suppliers living in each.
+
+   Statistics: Total 147 lines. 36 comments lines, 31 blank lines, and 80 code lines.
+
+   by David Talby
+*/
+
+#include <stdio.h>
+#include <string.h>
+
+/* Define constants and error handling macro */
+#define BUFSIZE 1000
+#define SUCCESS 0
+#define FAILURE (-1)
+#define ERROR(msg) { fprintf(stder, "Error: %s\n", msg); exit(1); }
+
+/* Declare variables used by SQL, and include sqlca for error handling */
+EXEC SQL BEGIN DECLARE SECTION;
+    char oracle_id = '/';
+    int  max_population = 0;
+    VARCHAR last_sup[20];
+    VARCHAR last_num[20];
+    VARCHAR max_city[20];
+EXEC SQL END DECLARE SECTION;
+
+EXEC SQL INCLUDE sqlca;
+
+/* Forward function declarations */
+int  find_last_relevant_supplier();
+void find_most_popular_cities();
+int  get_input();
+void sql_error();
+
+/* main() - Establish connection with the oracle server, get user input, 
+   call functions to find max city and print suppliers, and close database. */
+int main()
+{
+  int n;
+
+  /* Connect to database */
+  EXEC SQL WHENEVER SQLERROR DO sql_error();
+  EXEC SQL CONNECT :oracle_id;
+
+  /* Get input and call the three executing functions */
+  if ((n = get_input()) == ERROR)
+    ERROR("Illegal input, enter a number between 1 and table size")
+  else
+  {
+    if (find_last_relevant_supplier(n) == ERROR)
+      ERROR("The given number is greater than table size");
+    else
+      find_most_popular_cities();
+  }
+
+  /* Disconnect from database */
+  EXEC SQL COMMIT RELEASE;
+  exit(0);
+}
+
+/* Find the name and number of the (n)th supplier. This is necessary for 
+   relating only to the ones before him in further cursors.
+   Do so by declaring a cursor of suppliers, sorted by supplier names, and
+   reading the first first_n names & numbers into a variable.
+   Return ERROR if first_n is greater than the entire table size. */
+int find_last_relevant_supplier(int first_n)
+{
+  int i, result = SUCCESS;
+  
+  EXEC SQL DECLARE lastsup_cursor CURSOR FOR
+    SELECT sname, s# FROM suppliers
+      WHERE (sname IS NOT NULL) AND (s# IS NOT NULL)
+      ORDER BY sname asc, s# asc;
+  EXEC SQL OPEN lastsup_cursor;
+  for (i=0; i < first_n; i++)
+  {
+    EXEC SQL WHENEVER NOT FOUND goto lastsup_notfound;
+    EXEC SQL FETCH lastsup_cursor INTO :last_sup, :last_num;
+    continue;
+   lastsup_notfound:
+    result = ERROR;
+    break;
+  }
+  EXEC SQL CLOSE lastsup_cursor;
+  EXEC SQL WHENEVER NOT FOUND CONTINUE;
+  return result;
+}
+
+/* Find the most popular cities of the first first_n suppliers in the suppliers
+   table. Do so by first getting the maximum population of relevant suppliers
+   in one city into the variable max_population, and then printing (using a 
+   cursor) all the cities with this relevant suppliers population.
+   For each city the number of relevant suppliers living there (max_population
+   always by definition) is printed too. */
+void find_most_popular_cities()
+{
+  /* Print the names of all cities whose relevant population is max_population
+     by declaring a cursor to go over them, and then a for loop to print them. */
+  EXEC SQL DECLARE maxcity_cursor CURSOR FOR
+    SELECT city, count(s#)
+      INTO :max_population
+      FROM suppliers
+      WHERE (sname IS NOT NULL) AND (s# IS NOT NULL) AND
+            ((sname < :last_sup) OR ((sname = :last_sup) AND (s# = :last_num)))
+      GROUP BY city
+      HAVING count(s#) = max(count(s#));
+  EXEC SQL OPEN maxcity_cursor;
+  printf("Most popular city(ies):\n");
+  for (;;)
+  {
+    EXEC SQL WHENEVER NOT FOUND DO break;
+    EXEC SQL FETCH maxcity_cursor INTO :max_city, max_population;
+    max_city.arr[max_city.len]='\0';
+    printf("%s  (%d suppliers)\n",max_city.arr,max_population);
+  }
+  EXEC SQL CLOSE maxcity_cursor;
+  EXEC SQL WHENEVER NOT FOUND CONTINUE;
+}
+
+/* Get the input number n from the user. Return ERROR if a negative or illegal
+   number (letter, etc.) was entered. */
+int get_input()
+{
+  char line[BUFSIZE];
+  int count = ERROR, result = ERROR;
+
+  printf("Enter number of suppliers to check: ");
+  fgets(line, MAXLINE, stdin);
+  count = sscanf(line, "%d", &result);
+  if (count <= 0) return ERROR;
+  return result;
+}
+
+/* Handle SQL errors - print an error message, close database and exit with
+   exit code 1. */
+void sql_error()
+{
+  EXEC SQL WHENEVER SQLERROR CONTINUE;
+  fprintf(stderr, "Oracle error detected: \n% .70s\n", sqlca.sqlerrm.sqlerrmc);
+  EXEC SQL ROLLBACK RELEASE;
+  exit(1);
+}

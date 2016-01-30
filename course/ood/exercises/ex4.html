@@ -1,0 +1,167 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>Object Oriented Design Course : Exercise 4</title>
+	<link href="../style.css" type="text/css" rel="stylesheet">
+	<meta name="author" value="David Rabinowitz">
+</head>
+
+<body>
+<!-- large frame -->
+<table cellpadding="0" cellspacing="0" width="100%" border="0"><tr><td style="padding-right:20px;">
+<!-- /large frame -->
+<table id="headerTable" cellpadding="0" cellspacing="0">
+
+<tr>
+<td valign="middle" id="header" nowrap>Object Oriented Design Course</td>
+</tr>
+</table>
+
+<!-- large frame -->
+</td></tr><tr><td style="padding-right:20px;">
+<!-- /large frame -->
+
+<table class="borderedtable" cellpadding="0" cellspacing="0" width="100%" style="margin : 5px;">
+<tr>
+<td class="pagetitle">
+<!--
+******************************************************************************
+Page title
+******************************************************************************
+-->
+Exercise 4 - Theoretical Issues
+<!--
+******************************************************************************
+End of page title
+******************************************************************************
+-->
+</td>
+</tr>
+<tr>
+<td class="maindata">
+<!--
+******************************************************************************
+Details
+******************************************************************************
+-->
+<table cellsacing="2" cellpadding="2" border="0" bgcolor="white">
+
+<tr valign="bottom">
+<td class="desc">Deadline</td>
+<td>June 11<sup>th</sup>, 2006 at Ross closing time</td>
+</tr>
+
+<tr valign="top">
+<td class="desc">Description</td>
+<td>
+
+<h4>C# Overview</h4>
+Read <a href="http://genamics.com/developer/csharp_comparative.htm">this
+paper first</a>, and answer the following questions:<ol>
+<li>Explain features which make C# a better solution than Java for writing performance-intensive software. Explain the work-arounds in Java for those features.</li>
+<li>For each of the following sections in the paper: polymorphism, interfaces, versioning, enums - give an example of a possible mistake a programmer can make in Java, but can’t make in C# thanks to the way that feature was designed there.</li>
+<li>Some of the features that C# has and Java 1.4 didn't have been added to Java in JDK 
+5.0. Some other features that Java has and C# didn’t have been added to C# in Visual Studio.NET 2005. What are these features for each language? See:
+<a href="http://java.sun.com/developer/technicalArticles/releases/j2se15/">http://java.sun.com/developer/technicalArticles/releases/j2se15/</a> and
+<a href="http://msdn.microsoft.com/vcsharp/default.aspx?pull=/msdnmag/issues/04/05/c20/default.aspx">http://msdn.microsoft.com/vcsharp/default.aspx?pull=/msdnmag/issues/04/05/c20/default.aspx</a></li>
+</ol>
+
+<h4>Serialization</h4>
+
+
+<p>Read <a href="http://developer.java.sun.com/developer/technicalArticles/Programming/serialization/">this
+paper</a> and <a href="http://www.ondotnet.com/pub/a/dotnet/2004/01/26/serializationpt1.html">this one</a>,
+and answer the following questions: </p>
+
+<ol start="4">
+<li>What are the design considerations for declaring a class as
+implementing <code>Serializable</code>,
+<code>Externalizable</code>, or none of them? Give an example
+for each case.</li>
+<li>Is object serialization "shallow" - copies only the value fields
+of a given object - or "deep" - copies references objects recursively as
+well? How would you write a class that serializes and de-serializes itself
+using the behavior that is not the default one?</li>
+<li>Compare the Java object serialization and with the C# one, as described in these articles.
+In your answer address the issues of ease of use, efficiency (or overhead)  and customization of the
+serialization.</li>
+</ol>
+
+<p>The
+<a href="http://java.sun.com/j2se/1.5.0/docs/guide/serialization/spec/serialTOC.html">
+Java Serialization Specification</a> is also recommended reading, although not
+required for this exercise. In particular, it covers the subjects of versioning,
+the stream protocol and security in more detail. It's shorter and easier to read
+than most formal specifications, so give it a try :-)</p>
+
+<h4>Annotations and Custom Attributes</h4>
+
+
+<p>Read <a href="http://www.devx.com/dotnet/Article/11579/0/page/1">this paper
+</a>about custom attributes in C# and
+<a href="http://java.sun.com/j2se/1.5.0/docs/guide/language/annotations.html">
+this summary</a> about Java Annotations , and answer the following questions:</p>
+<ol start="7">
+<li>For each of the four presented uses of custom attributes in C# - user 
+attributes, runtime attributes, compile-time attributes and Extensible C# - 
+explain how the same problem would be solved if the language didn't support 
+annotations, and what is the advantage of using annotations to solve the 
+problem.</li>
+<li>Write a Java annotation class to define the attribute @Transient, which can 
+be applied to a data field in a class, similar to the Java keyword <i>transient</i> 
+(<a href="http://www.devx.com/tips/Tip/13726">here's an explanation about it</a>). 
+Write a method which receives any Java <i>Object</i>, and using Reflection sets 
+all its @Transient fields to their default values (null for references, false 
+for booleans and zero for all numeric types).</li>
+</ol>
+
+<p>&nbsp;<!-- ----------------------- End of description --------------------- --></td>
+</tr>
+
+<tr valign="top">
+<td class="desc">Submission</td>
+<td>
+Submit a zip file contains the document with your answers. The document should be called <code>ex4.&lt;txt|html|ps|pdf&gt;</code> only.
+</td>
+</tr>
+<tr valign="top">
+<td class="desc">Resources</td>
+<td>
+<ul>
+<li><a href="http://genamics.com/developer/csharp_comparative.htm">A Comparative Overview of C#</a></li>
+<li><a href="http://java.sun.com/developer/technicalArticles/releases/j2se15/">J2SE 1.5 in a Nutshell</a></li>
+<li><a href="http://msdn.microsoft.com/vcsharp/default.aspx?pull=/msdnmag/issues/04/05/c20/default.aspx">Create Elegant Code with Anonymous Methods, Iterators, and Partial Classes</a></li>
+<li><a href="http://developer.java.sun.com/developer/technicalArticles/Programming/serialization/">Discover the secrets of the Java Serialization API</a></li>
+<li><a href="http://www.ondotnet.com/pub/a/dotnet/2004/01/26/serializationpt1.html">Serialization in .NET, Part 1</a></li>
+<li><a href="http://www.devx.com/dotnet/Article/11579/0/page/1">Get Personal 
+with C# Custom Attributes</a></li>
+<li>
+<a href="http://java.sun.com/j2se/1.5.0/docs/guide/language/annotations.html">
+Annotations in Java</a></li>
+<li><a href="http://www.devx.com/tips/Tip/13726">Java Serialization - Be Careful 
+With Transient Data</a></li>
+<li><a href="../guidelines.html">Guidelines</a></li>
+
+</ul>
+</td>
+</tr>
+</table>
+
+<!--
+******************************************************************************
+End of details
+******************************************************************************
+-->
+</td>
+</tr>
+</table>
+
+<!-- large frame -->
+</td>
+</tr>
+</table>
+<!-- /large frame -->
+
+</body>
+</html>

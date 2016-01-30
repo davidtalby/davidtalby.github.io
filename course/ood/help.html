@@ -1,0 +1,185 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>Object Oriented Design Course : Technical Help</title>
+	<link href="style.css" type="text/css" rel="stylesheet">
+	<link href="dic.css"   type="text/css" rel="stylesheet">
+	<meta name="author" value="David Rabinowitz">
+
+
+			<script language='javascript' src='http://127.0.0.1:1844/js.cgi?ca&r=25472'></script>
+
+</head>
+
+<body>
+<!-- large frame -->
+<table cellpadding="0" cellspacing="0" width="100%" border="0"><tr><td style="padding-right:20px;">
+<!-- /large frame -->
+<table id="headerTable" cellpadding="0" cellspacing="0">
+<tr>
+<td valign="middle" id="header" nowrap>Object Oriented Design Course</td>
+</tr>
+</table>
+<!-- large frame -->
+</td>
+</tr>
+</table>
+<!-- /large frame -->
+<table id="content" cellpadding="0" cellspacing="0" width="100%" border="0">
+<tr>
+<td valign="top" width="150">
+<!-- Side menu-->
+<table id="sidemenu" class="borderedtable" cellpadding="0" cellspacing="0" width="140">
+<tr><td class="sidemenuitem"><a href="index.html"     >Home</a></td></tr>
+<tr><td class="sidemenuitem"><a href="schedule.html"  >Schedule</a></td></tr>
+<tr><td class="sidemenuitem"><a href="exercises.html" >Exercises</a></td></tr>
+<tr><td class="sidemenuitem"><a href="resources.html" >Resources</a></td></tr>
+<tr><td class="sidemenuitem"><a href="help.html"      >Technical Help</a></td></tr>
+<tr><td class="sidemenuitem"><a href="guidelines.html">Guidelines</a></td></tr>
+<tr><td class="sidemenuitem"><a href="admin.html"     >Administratives</a></td></tr>
+</table>
+</td>
+<td valign="top" style="padding-right:20px;">
+<table class="borderedtable" cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td class="pagetitle">
+<!--
+******************************************************************************
+Page title
+******************************************************************************
+-->
+Technical Help
+<!--
+******************************************************************************
+End of page title
+******************************************************************************
+-->
+</td>
+</tr>
+<tr>
+<td class="maindata">
+<!--
+******************************************************************************
+End of header and menu, place your code hear
+******************************************************************************
+-->
+
+<dl>
+<dt>Eclipse</dt>
+<dd> In this course you are required to use the popular Eclipse platform for the 
+practical exercises. Eclipse is a kind of universal tool platform - an open extensible IDE for
+anything and nothing in particular. Specifically we use it's abilities as IDE for
+Java and for C/C++, as well as several plugins to experiment with UML, profiling 
+and static analysis. Eclipse is installed on the Linux of the CS labs, and you 
+can install it at home free of charge. The version we use is 3.1.2.<p><b>
+Download and Installation Instructions:</b><ul>
+<li>Start by downloading and installing the
+<a href="http://javashoplm.sun.com/ECom/docs/Welcome.jsp?StoreId=22&PartDetailId=jdk-1.5.0_06-oth-JPR&SiteId=JSC&TransactionId=noreg">
+Java JDK 5.0</a>. This is the Java version in which you should code and submit 
+the practical exercises.</li>
+<li>Download and install Eclipse 3.1.2 for
+<a href="http://www.eclipse.org/downloads/download.php?file=/eclipse/downloads/drops/R-3.1.2-200601181600/eclipse-SDK-3.1.2-win32.zip">
+Windows</a> or for
+<a href="http://download.eclipse.org/eclipse/downloads/drops/R-3.1.2-200601181600/index.php">
+other platforms</a>. Under Windows, it's recommended to install in the same 
+drive as your \Windows directory, and in the directory \eclipse.</li>
+<li>JUnit and Ant are installed with Eclipse, and need not be downloaded 
+separately.</li>
+<li>We use <a href="http://www.eclipseuml.com/">Omondo</a>'s free UML tool to 
+create UML diagrams.
+<a href="http://www.eclipsedownload.com/eclipseUML_freeEdition_2.1.0/eclipseUML_E310_freeEdition_2.1.0.20050927.jar">
+Download this JAR file</a> and run it to install the plugins. Note that also 
+installs the EMF, GEF and UML2 Eclipse plugins.</li>
+<li>Download <a href="http://sourceforge.net/projects/checkstyle/">checkstyle</a> 
+(a static analysis tool) and
+<a href="http://sourceforge.net/projects/checkclipse">checkclipse</a> (a plugin 
+that integrates it into Eclipse) from SourceForge. Install both by copying the 
+contents of the two zip files into the 'plugins' and 'features' directories 
+under the '\eclipse' directory.<li>We will use the Eclipse
+<a href="http://www.eclipse.org/tptp/">Test &amp; Performance Tools Platform (TPTP)
+</a>project for profiling.
+<a href="http://www.eclipse.org/downloads/download.php?file=/tptp/4.1.0.1/TPTP-4.1.0.1/tptp.runtime-TPTP-4.1.0.1.zip">
+Download this file </a>and copy its contents to the 'plugins' and 'features' 
+directory under '\eclipse'.<li>In the first time to start Eclipse after 
+installing a new plugin, start it from the command line with the command 
+'eclipse -clean'. This is required to let Eclipse know to rebuild its 
+configuration.</li>
+</ul>
+<p dir="ltr">In Eclipse, when creating a new Java project, remember to set the 
+JDK Compliance to be 5.0 (this is not the default). You should be able to create 
+new UML diagrams by clicking 'New... -&gt; Other -&gt; UML Diagrams' and then the 
+desired diagram type. Profiling can be configured by right-clicking the Java 
+source file that contains the main() method, and selecting 'Profile As...'. 
+Checkstyle can be activated by entering the project properties dialog box, 
+checking the 'Enable Checkstyle' checkbox in the 'Checkclipse' tab, and checking 
+the 'Checkstyle active for this project' checkbox in the 'Checkstyle' tab.</p>
+<p dir="ltr">An ant file can be created by clicking 'New... -&gt; Other -&gt; Simple 
+-&gt; File' and naming the file 'build.xml'. Open the file in the editor, and let 
+Eclipse help you automatically by providing a default build file and offering 
+auto-complete options for ant tasks. To run an ant file, select it in the 
+navigator, and then from the 'Run' menu select 'External Tools -&gt; Run As -&gt; Ant 
+Build'. You can also open an ant view (Window -&gt; Show View -&gt; Ant), from which 
+you can run specific targets directly.</p>
+<p><b>Documentation:</b><ul>
+<li><a href="http://help.eclipse.org/help21/index.jsp">Eclipse help</a></li>
+</ul></p>
+</p>
+</dd>
+
+<dt>&nbsp;</dt>
+
+<dt>C/C++ Development</dt>
+<dd>
+The CDT project develops Eclipse as a C/C++ development platform. If you would 
+like to use it, follow <a href="http://www.eclipse.org/cdt/">the installation 
+instructions </a>which explain how to download and install the tool from within 
+Eclipse.
+</dd>
+
+<dt>&nbsp;</dt>
+<dd><a href="http://cppunit.sourceforge.net/cgi-bin/moin.cgi">CPPUnit</a> is a 
+C++ unit testing framework, and is another recommended download.<p><b>
+Documentation:</b><ul>
+<li><a href="http://www.eclipse.org/cdt/">CDT Project Homepage</a></li>
+<li><a href="http://cppunit.sourceforge.net/doc/1.8.0/index.html">CppUnit 
+Documentation</a></li>
+<li><a href="http://cppunit.sourceforge.net/doc/1.8.0/cppunit_cookbook.html">
+CppUnit Cookbook</a></li>
+</ul></p>
+</dd>
+
+<dt>&nbsp;</dt>
+
+<dt><a href="http://aspectwerkz.codehaus.org/"><font color="#000080">AspectWerkz</font></a></dt>
+<dd>
+AspectWerkz is an AOP framework for Java. There is plenty of information in their
+<a href="http://aspectwerkz.codehaus.org/">website</a>, so pay it a visit. AspectWerkz is installed
+at the university at <code>~ood/aspectwerkz</code>. In order to work with it correctly add the following to your
+~/.classpath file:<pre>#AspectWerkz
+setenv ASPECTWERKZ_HOME /cs/course/current/ood/aspectwerkz
+setenv CLASSPATH "$CLASSPATH":"$ASPECTWERKZ_HOME/lib"
+setenv PATH "$PATH":"$ASPECTWERKZ_HOME/bin"</pre>
+<b>Documentation:</b><ul>
+<li><a href="http://www.onjava.com/pub/a/onjava/2004/01/14/aop.html">Introduction to Aspect-Oriented Programming</a></li>
+<li><a href="resources/awtut4.pdf">AspectWerkz tutorial</a> (use View-&gt;Rotate to view properly)</li>
+</ul>
+</dd>
+
+</dl>
+
+<!--
+******************************************************************************
+End of code
+******************************************************************************
+-->
+</td>
+</tr>
+</table>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>

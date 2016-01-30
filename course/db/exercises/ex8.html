@@ -1,0 +1,76 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage Express 2.0">
+<title>The DataBase Course - Exercise No. 7</title>
+</head>
+
+<body>
+
+<p align="center"><font size="4"><strong>The Databases Course</strong></font></p>
+
+<p align="center"><font size="5"><strong>Exercise No. 8</strong></font></p>
+
+<p align="center"><font size="4">Transitive Closure - Practical</font></p>
+
+<blockquote>
+    <blockquote>
+        <p align="center">Due on February 18th by midnight</p>
+    </blockquote>
+    <p><strong>The Example Database Schema:</strong> Animals
+    participate in research projects, that may span several years
+    and sites in many countries. The children table keeps
+    parenthood relations between animals, by keeping the animal
+    id of each parent and child.</p>
+    <p>Animal(aid, species, weight, birthyear)<br>
+    Children(parent, child)</p>
+    <p>The aid attribute is a key to the animals table. You may
+    assume that if an animal id appears in the children table, it
+    appears in the animals table as well, and that there are no
+    circles in the children relation. There are no null values in
+    the children table or in the aid and species fields of the
+    animals table, but the weight and birth years of some animals
+    may be missing.</p>
+    <p><strong>Write a C program with embedded SQL statements to
+    do the following:</strong></p>
+    <p>Compute the relation Dynasty(aid, avg_weight, avg_age).
+    For every animal in the animals table, this relation should
+    include its id, the average weight of all its ancestors
+    including itself, and the average age in which its ancestors
+    became parents. Ancestors include parents, parents of the
+    parents, and so forth recursively. Create the new relation as
+    a table, whose aid field is of type varchar(5) and whose two
+    other fields are of type number(10). Your program should
+    create the Dynasty table, print it to the screen, and destroy
+    it.</p>
+    <p>Your should use a reasonable amount of main memory space,
+    since the above relations can be very large. You may use
+    tables to store intermediate results. Tuples containing null
+    values should still appear in the output table, but the
+    missing fields should be ignored when computing averages.</p>
+    <p>The input size of this problem is the total number of
+    animals n. Your algorithm should use at most O(log n) queries.
+    Every SELECT statement counts as one query; when using
+    cursors, every time you OPEN the cursor it counts as one
+    query.</p>
+    <p>When encountering any type of error you should print a
+    detailed message to the standard error stream, and terminate
+    the program immediately with an error code 1. If the program
+    ends without an error, it should return an error code 0.</p>
+    <p>Your program should be <em>superbly</em> documented. Your
+    README file, along with the usual information, must also
+    include the pseudo-code for the algorithm you use, and an
+    analysis of the number of queries it performs.</p>
+    <p><strong>You should submit:</strong></p>
+    <ul>
+        <li>Submit electronically (run ~db/bin/submit to submit <u>ex4.tar</u>)
+            the following files: README, Makefile, ex4.pc (source
+            code), and other source files if any.</li>
+        <li>Submit printouts of everything, except the Makefile,
+            to the course's submission box.</li>
+    </ul>
+</blockquote>
+</body>
+</html>

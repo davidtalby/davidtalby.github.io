@@ -1,0 +1,84 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage Express 2.0">
+<title>The DataBase Course - Exercise No. 3</title>
+</head>
+
+<body>
+
+<p align="center"><font size="4"><strong>The DataBase Course</strong></font></p>
+
+<p align="center"><font size="5"><strong>Exercise No. 3</strong></font></p>
+
+<p align="center"><font size="4">SQL and Relational Calculus -
+Practical</font></p>
+
+<blockquote>
+    <blockquote>
+        <p align="center">Due on January 12th by midnight</p>
+    </blockquote>
+    <blockquote>
+        <p><strong>The Example Database Schema:</strong> Animals
+        participate in research projects, that may span several
+        years and sites in many countries. Animals may
+        participate in many projects, and may also be moved
+        between sites during the same project. The children table
+        keeps parenthood relations between animals, by keeping
+        the animal id of each parent and child.</p>
+        <p>Animal(aid, species, weight, birthyear)<br>
+        Children(parent, child)<br>
+        Sites(sid, name, country, size, climate)<br>
+        Research(rid, name, subject)<br>
+        Events(aid, sid, rid, year)</p>
+        <p>The aid, sid, rid attributes are key attributes. The
+        tables are available to query using Oracle, after you
+        have executed the file ~db/animals.sql (see the &quot;SQL
+        Basics&quot; page in the homepage).</p>
+        <p><strong>Express the following queries in safe tuple
+        relational calculus and SQL:</strong></p>
+        <ol>
+            <li>Which animals are younger than a12?</li>
+            <li>Which projects whose subject is medicine are
+                performed entirely in China?</li>
+            <li>Which animals were born in a year during which no
+                project was using Canada's eastern coral reef?</li>
+            <li>Get all pairs of animal ids of animals that
+                participate in the same project. Include only one
+                of every (a,b) and (b,a) pair.</li>
+            <li>For which species of animals there are animals
+                that have joint children with more than one other
+                animal?</li>
+            <li>Name species in which animals never become
+                parents before they are 20 years old.</li>
+            <li>Name projects that moved an animal between
+                different climates in consecutive years.</li>
+            <li>Get project numbers of projects that use the same
+                animal in all the sites.</li>
+            <li>When (in which year) did the Rainforest Insects
+                project start?</li>
+            <li>What is the average age of the animals in the
+                Golden Bear project? Only an SQL query is
+                required for this query.</li>
+        </ol>
+        <p><strong>You should submit:</strong></p>
+        <ul>
+            <li>The first nine queries in calculus, on paper.</li>
+            <li>Printouts of the ten SQL queries and outputs, <u>together</u>
+                with the calculus queries.</li>
+            <li>Submit electronically (run ~db/bin/submit to
+                submit <u>ex1.tar</u>) the following files:<br>
+                <u>README</u> - containing only your login in the
+                first line, and your full name and relevant
+                exercise documentation afterwards.<br>
+                <u>queries.sql</u> - containing the queries.<br>
+                <u>outputs.txt</u> - containing the outputs.</li>
+            <li>Keep a photocopy of the relational calculus
+                queries - you may need them for ex4.</li>
+        </ul>
+    </blockquote>
+</blockquote>
+</body>
+</html>

@@ -1,0 +1,253 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=iso-8859-1">
+<meta name="Template"
+content="C:\PROGRAM FILES\MICROSOFT OFFICE\OFFICE\html.dot">
+<meta name="GENERATOR" content="Microsoft FrontPage Express 2.0">
+<title>SQL Setup and Basics</title>
+</head>
+
+<body bgcolor="#FFFFFF" link="#0000FF" vlink="#800080">
+
+<p align="center"><font size="4"><strong>The Databases Course</strong></font></p>
+
+<p align="center"><font size="5"><strong>SQL Basics</strong></font></p>
+
+<blockquote>
+    <p><strong><u>Setting Up Your Account</u></strong></p>
+</blockquote>
+
+<blockquote>
+    <p>First, edit your <font size="4" face="Times New Roman"><code>.cshrc</code></font>
+    file, by appending the file <font size="4"
+    face="Times New Roman"><code>~db/oracle-cshrc</code></font>
+    to the end of it. Then, copy the Oracle default configuration
+    file from db's home directory to your home directory:</p>
+</blockquote>
+
+<blockquote>
+    <p><code>cp ~db/prefs.ora ~</code></p>
+</blockquote>
+
+<blockquote>
+    <p>Afterwards, logout and log back in. If you are registered
+    to the course, you should now be able to enter SQL
+    interactive mode. To do this, type:</p>
+</blockquote>
+
+<blockquote>
+    <p><code>sqlplus /</code></p>
+</blockquote>
+
+<blockquote>
+    <p>Once inside, you can type SQL queries and see their answer
+    at once. You can also type <em>exit</em> to leave SQL
+    interactive, or <em>help</em> to get help on the language and
+    environment.</p>
+</blockquote>
+
+<blockquote>
+    <p>The first thing you should do is run the example database
+    creation file of exercise 3:</p>
+</blockquote>
+
+<blockquote>
+    <p><code>sqlplus / &lt; ~db/animals.sql</code></p>
+</blockquote>
+
+<blockquote>
+    <p>This will read and run the file ~db/animals.sql - you'll
+    see the output of the SQL commands in the file on your screen.
+    The file creates the five tables used in the exercise, and
+    also inserts demo values into these tables. Feel free to
+    change these tables (read animals.sql to see how simply this
+    can be done), so that you can test your queries on cases that
+    the demo tables don't cover.</p>
+</blockquote>
+
+<blockquote>
+    <p>The easiest way to write and test complex SQL queries is
+    not the interactive way; instead, write a text file and give
+    it as input to Oracle. This will make SQL run the commands/queries
+    in the file input.sql, and write the output to the file
+    output.sql:</p>
+</blockquote>
+
+<blockquote>
+    <p><code>sqlplus / &lt; input.sql &gt; output.sql</code></p>
+</blockquote>
+
+<blockquote>
+    <p>You are expected to submit printed input and output files
+    with every exercise. Document your queries well - lines
+    starting with '--' and /* */ blocks are treated as comments
+    in an SQL file.</p>
+</blockquote>
+
+<blockquote>
+    <p><br>
+    <strong><u>Basic SQL </u></strong><b><u>Queries</u></b></p>
+</blockquote>
+
+<blockquote>
+    <p>All queries are expressed with the <em>select </em>keyword.
+    The basic form is select-from-where which translates to
+    &quot;do a cartesian product of what the <em>from </em>says,
+    the do a selection according to the what the <em>where </em>says,
+    then do a projection to what the <em>select </em>says&quot;.
+    All SQL commands are case insensitive (that is, SELECT and
+    select are the same word), and are terminated by a semicolon.</p>
+</blockquote>
+
+<blockquote>
+    <p>Print the names and subjects of research projects:<br>
+    <code>select name, subject from research;<br>
+    </code>Print all fields of the animals table: <br>
+    <code>select * from animals;<br>
+    </code>Print all the species of animals we have, but only
+    print each species once:<br>
+    <code>select distinct species from animals;<br>
+    </code>Print countries which offer sites with a humid climate:<br>
+    <code>select distinct country from sites where climate = 'humid';<br>
+    </code>Print the cartesian product of sites and events:<br>
+    <code>select * from sites, events;<br>
+    </code>Print the natural join (except that <code>pid</code>
+    is printed twice) of projects and events:<br>
+    <code>select * from research, events where research.pid =
+    events.pid;<br>
+    </code>Print pairs of projects that have the same subject:<br>
+    <code>select p1.pid, p2.pid from research r1, research r2
+    where r1.subject = r2.subject;<br>
+    </code>Print animals and their age:<br>
+    <code>select aid, 1999 - birthyear from animals;<br>
+    </code>Print animals and their age. Only print animals older
+    than ten years:<br>
+    <code>select aid, 1999 - birthyear age from animals where age
+    &gt; 10;</code></p>
+</blockquote>
+
+<blockquote>
+    <p><br>
+    <strong><u>Aggregate </u></strong><b><u>Queries</u></b></p>
+</blockquote>
+
+<blockquote>
+    <p>The following queries calculate the average, minimum and
+    maxium sizes of sites:</p>
+</blockquote>
+
+<blockquote>
+    <p><code>select avg(size), min(size), max(size) from sites;</code></p>
+</blockquote>
+
+<blockquote>
+    <p>These calculate the number of lines in the animals table,
+    the number of lines with non-null species field, and the
+    number of distinct species in the table:</p>
+</blockquote>
+
+<blockquote>
+    <p><code>select count(*), count(species), count(distinct
+    species) from animals;</code></p>
+</blockquote>
+
+<blockquote>
+    <p>These are called aggregate queries, because they take many
+    values (all sizes) and aggregate (summarize) it to one value
+    (for example, the average).</p>
+</blockquote>
+
+<blockquote>
+    <p><br>
+    <strong><u>Not So Basic </u></strong><b><u>Predicates</u></b></p>
+</blockquote>
+
+<blockquote>
+    <p>This section discusses things you can do in a <em>where </em>clause.
+    The most basic things are testing for equality using =
+    &lt;&gt; or for ordering using &gt; &lt; &gt;= &lt;= and <em>between</em>.
+    You can also use <em>not</em>, <em>and</em>, <em>or</em> to
+    create complex conditions. Here is a simple example (note
+    that no parentheses are needed):</p>
+</blockquote>
+
+<blockquote>
+    <p><code>select * from animals where size &gt;= 100 and not
+    species = 'Whale';<br>
+    select * from sites where size between 10 and 20 and climate
+    &lt;&gt; 'desert';</code></p>
+</blockquote>
+
+<blockquote>
+    <p>The <em>in</em> and <em>not in</em> predicate returns true
+    if a value is in a given set. You can specify the set
+    directly or using a sub-select like here:</p>
+</blockquote>
+
+<blockquote>
+    <p><code>select * from sites where country not in ('Japan', 'China',
+    'Taiwan');<br>
+    select * from animals where aid in (select parent from
+    children);</code></p>
+</blockquote>
+
+<blockquote>
+    <p>The <i>exists</i> and <i>not exists</i> predicates get a
+    table, and return true if and only if the table isn't empty:</p>
+</blockquote>
+
+<blockquote>
+    <p><code>select * from sites<br>
+    where exists (select * from events where sid = sites.sid);</code></p>
+</blockquote>
+
+<blockquote>
+    <p>There's no 'forall' predicate, so such queries have to be
+    translated from 'for all x, P(x)' to 'not exists x such that
+    not P(x)'. For example:</p>
+</blockquote>
+
+<blockquote>
+    <p><code>select * from animals a1<br>
+    where not exists (select * from animals a2 where a1.size &gt;
+    a2.size);</code></p>
+</blockquote>
+
+<blockquote>
+    <p>Besides <em>in</em> and <em>exists</em> there are also
+    operators that can compare values to a group of other values.
+    These operators are composed of a comparison operator and
+    either the <em>all </em>or <em>any </em>keywords:</p>
+</blockquote>
+
+<blockquote>
+    <p><code>select * from animals where size &lt;=all (select
+    size from animals);<br>
+    select * from animals where size &gt;any (select size from
+    animals);<br>
+    select sid, name from sites<br>
+    where climate &lt;&gt;all (select climate from site where
+    county = 'USA');</code></p>
+</blockquote>
+
+<blockquote>
+    <p>Another useful keyword is contains, which tests for
+    exactly what its name suggests:</p>
+</blockquote>
+
+<blockquote>
+    <p><code>select * from animals a where<br>
+    (select sid from events where aid = a.aid and pid = 'p1')
+    contains<br>
+    (select sid from events where aid = a.aid and pid = 'p2');</code></p>
+</blockquote>
+
+<blockquote>
+    <p>Sub-selects can be nested as much as you want them to.
+    Most queries can be expressed in more than one way, and the
+    most efficient and readable way should be chosen.</p>
+</blockquote>
+</body>
+</html>

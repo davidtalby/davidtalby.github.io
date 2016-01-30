@@ -1,0 +1,47 @@
+Subject: .cshrc
+# This is a setup file for oracle to be used by students of the Masadei Netunim
+# course. The contents of this file should be added to the end of your 
+# .cshrc file  
+
+set path = ($path /usr/local/oracle/bin)
+
+setenv ORACLE_SID tpsv7
+setenv ORACLE_HOME /usr/local/oracle
+setenv ORACLE_TERM xsun
+setenv TWO_TASK t:grotto:tpsv7
+setenv XLIBI18N_PATH /usr/local/X11R5/lib
+if (  $?LD_LIBRARY_PATH ) then
+        setenv LD_LIBRARY_PATH "$LD_LIBRARY_PATH":"$ORACLE_HOME/lib"
+else
+        setenv LD_LIBRARY_PATH $ORACLE_HOME/lib
+endif
+
+# Some useful aliases : 
+
+# runs oracle book
+alias orabook b10runm
+
+# runs oracle book with a page containing all manuals (except oracle book 
+# manuals
+alias oradoc b10runm /cs/oracle/doc/cddir.obd
+
+# runs oracle book with the book designer reference manual
+alias man-book-des b10runm /cs/oracle/book/doc/bookdes.obd
+
+# runs oracle book with the book designer tutorial manual
+alias man-book-destut b10runm /cs/oracle/book/doc/destut.obd
+
+# runs oracle book with the book users guide and reference manual
+alias man-book-ug b10runm /cs/oracle/book/doc/book.obd
+
+# runs oracle forms designer
+alias forms-design f40desm
+
+# runs oracle forms generator
+alias forms-generate f40genm
+
+# runs oracle forms generator
+alias forms-generate f40genm
+
+# runs oracle forms
+alias forms-run f40runm

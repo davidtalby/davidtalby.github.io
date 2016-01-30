@@ -1,0 +1,171 @@
+<HTML>
+<HEAD>
+<META NAME="Generator" CONTENT="Microsoft Word 97">
+<TITLE>The DataBase Course</TITLE>
+</HEAD>
+<BODY>
+
+<FONT SIZE=4><P ALIGN="CENTER">The Databases Course</P>
+</FONT><FONT SIZE=5><P ALIGN="CENTER">Solution of Exercise No. 2</P>
+</FONT><P ALIGN="CENTER">Relational Algebra</P>
+<FONT SIZE=2><P ALIGN="LEFT"></P>
+</FONT><B><U><P ALIGN="LEFT">&nbsp;</P>
+<P ALIGN="LEFT">Question 1</P>
+</B></U><P ALIGN="LEFT"></P>
+<P ALIGN="LEFT">Shortcuts: suppliers = s, shipments = h, parts = p, projects = j.</P>
+<OL>
+
+<FONT SIZE=5><P ALIGN="LEFT"><LI>&#928; <SUB>h1.p#, h2.p#</SUB> ( &#963; <SUB>h1.s# = h2.s# <B>^</B> h1.p# &gt; h2.p#</SUB> ( h1 <FONT FACE="Symbol">&#180;</FONT>
+ h2 ) )<BR>
+</FONT>The h1.p# &gt; h2.p# ensures that we only get (a,b) and not (b,a). However, if we wanted both pairs we would still need a condition h1.p# &lt;&gt; h2.p# to void getting pairs of the same part. Note that h1,h2 are necessary here: It is impossible to use h<FONT FACE="MT Extra">&#62;</FONT>
+<FONT FACE="MT Extra">&#60;</FONT>
+<FONT SIZE=2> </FONT> h  because h<FONT FACE="MT Extra">&#62;</FONT>
+<FONT FACE="MT Extra">&#60;</FONT>
+<FONT SIZE=2> </FONT> h  = h  !</LI></P>
+<FONT SIZE=5><P ALIGN="LEFT"><LI>&#928; <SUB>p1.p#</SUB> ( &#963; <SUB>p2.p# = ‘p4’ ^ p1.weight &gt; p2. weight </SUB>( p1 <FONT FACE="Symbol">&#180;</FONT>
+ p2 ) )</LI></P>
+<P ALIGN="LEFT"><LI>&#928; <SUB>j#</SUB> ( h ) – &#928; <SUB>j#</SUB> ( &#963; <SUB>p.color &lt;&gt; ‘red’</SUB> ( p <FONT FACE="MT Extra">&#62;</FONT>
+<FONT FACE="MT Extra">&#60;</FONT>
+ h )<BR>
+</FONT>There is another option, that also includes projects with no parts at all:<BR>
+<FONT SIZE=5>&#928; <SUB>j#</SUB> ( j ) – &#928; <SUB>j#</SUB> ( &#963; <SUB>p.color &lt;&gt; ‘red’</SUB> ( p <FONT FACE="MT Extra">&#62;</FONT>
+<FONT FACE="MT Extra">&#60;</FONT>
+ h )<BR>
+</FONT>Both solutions were accepted as correct.</LI></P>
+<FONT SIZE=5><P ALIGN="LEFT"><LI>&#928; <SUB>color</SUB> ( h <FONT FACE="MT Extra">&#62;</FONT>
+<FONT FACE="MT Extra">&#60;</FONT>
+ p ) – &#928; <SUB>color</SUB> ( &#963; <SUB>s# &#8800; ‘s5’</SUB> ( h <FONT FACE="MT Extra">&#62;</FONT>
+<FONT FACE="MT Extra">&#60;</FONT>
+ p ) )<BR>
+</FONT>A common error is to write the above query with &#928;<SUB>color</SUB>(p) as the first part. This would include parts that no one (including ‘s5’) supplies in the result relation.</LI></P>
+<FONT SIZE=5><P ALIGN="LEFT"><LI>&#928; <SUB>jname</SUB> ( j ) – &#928; <SUB>jname</SUB> ( s <FONT FACE="MT Extra">&#62;</FONT>
+<FONT FACE="MT Extra">&#60;</FONT>
+ j )</LI></P>
+<P ALIGN="LEFT"><LI>&#928; <SUB>s#</SUB> ( h º &#928; <SUB>j#</SUB> ( j ) )<BR>
+</FONT>Last year this question was given before the division operator was taught. The teacher’s solution required ten algebra operators to express the same query. So keep division in mind in the future.</LI></P></OL>
+
+<P ALIGN="LEFT"></P>
+<P ALIGN="LEFT">&nbsp;</P>
+<B><U><P ALIGN="LEFT">Question 2</P>
+</B></U><P ALIGN="LEFT"></P>
+<OL>
+
+<FONT SIZE=4><P ALIGN="LEFT"><LI>&#963;<SUB>not c</SUB>(R)</FONT> can be expressed by:<FONT SIZE=4>  R – &#963;<SUB>c</SUB>(R)</LI></P>
+<P ALIGN="LEFT"><LI>&#963;<SUB>c1 <FONT FACE="Symbol">&#217;</FONT>
+ c2</SUB>(R)</FONT> can be expressed by:  <FONT SIZE=4>&#963;<SUB>c1</SUB>(R) <FONT FACE="Symbol">&#199;</FONT>
+ &#963;<SUB>c2</SUB>(R)<BR>
+</FONT>where the intersection of two relations is defined as: R1 <FONT FACE="Symbol">&#199;</FONT>
+ R2 = R1 – (R1 – R2)</LI></P>
+<FONT SIZE=4><P ALIGN="LEFT"><LI>&#963;<SUB>c1 <FONT FACE="Symbol">&#218;</FONT>
+ c2</SUB>(R)</FONT> can be expressed by: <FONT SIZE=4>&#963;<SUB>c1</SUB>(R) <FONT FACE="Symbol">&#200;</FONT>
+ &#963;<SUB>c2</SUB>(R)</LI></P>
+</FONT><P ALIGN="LEFT"><LI>a1 &#8804; a2 is logically equivalent to:  not (a1 &gt; a2)</LI></P>
+<P ALIGN="LEFT"><LI>a1 &lt; a2 is logically equivalent to:  (not (a1 &gt; a2)) and (not (a1 &#8805; a2))</LI></P>
+<P ALIGN="LEFT"><LI>a1 &#8805; a2 is logically equivalent to:  not (a1 &lt; a2)</LI></P></OL>
+
+<P ALIGN="LEFT"></P>
+<P ALIGN="LEFT">&nbsp;</P>
+<P ALIGN="LEFT">&nbsp;</P>
+<B><U><P ALIGN="LEFT">Question 3</P>
+</B></U><FONT SIZE=2><P ALIGN="LEFT"></P>
+</FONT><P ALIGN="LEFT">&nbsp;</P>
+<TABLE BORDER CELLSPACING=1 CELLPADDING=7 WIDTH=604>
+<TR><TD WIDTH="23%" VALIGN="TOP" HEIGHT=18><P></P></TD>
+<TD WIDTH="19%" VALIGN="TOP" HEIGHT=18>
+<B><P ALIGN="CENTER">Commutative</B></TD>
+<TD WIDTH="17%" VALIGN="TOP" HEIGHT=18>
+<B><P ALIGN="CENTER">Associative</B></TD>
+<TD WIDTH="22%" VALIGN="TOP" HEIGHT=18>
+<B><P ALIGN="CENTER">Neutral Relation</B></TD>
+<TD WIDTH="19%" VALIGN="TOP" HEIGHT=18>
+<B><P ALIGN="CENTER">Neutral F(R)</B></TD>
+</TR>
+<TR><TD WIDTH="23%" VALIGN="TOP" HEIGHT=18>
+<B><P ALIGN="LEFT">Union</B></TD>
+<TD WIDTH="19%" VALIGN="TOP" HEIGHT=18>
+<P ALIGN="CENTER">Yes</TD>
+<TD WIDTH="17%" VALIGN="TOP" HEIGHT=18>
+<P ALIGN="CENTER">Yes</TD>
+<TD WIDTH="22%" VALIGN="TOP" HEIGHT=18>
+<P ALIGN="CENTER">No</TD>
+<TD WIDTH="19%" VALIGN="TOP" HEIGHT=18>
+<P ALIGN="CENTER">Yes</TD>
+</TR>
+<TR><TD WIDTH="23%" VALIGN="TOP" HEIGHT=18>
+<B><P ALIGN="LEFT">Cartesian Product</B></TD>
+<TD WIDTH="19%" VALIGN="TOP" HEIGHT=18>
+<P ALIGN="CENTER">No</TD>
+<TD WIDTH="17%" VALIGN="TOP" HEIGHT=18>
+<P ALIGN="CENTER">Yes</TD>
+<TD WIDTH="22%" VALIGN="TOP" HEIGHT=18>
+<P ALIGN="CENTER">Yes</TD>
+<TD WIDTH="19%" VALIGN="TOP" HEIGHT=18>
+<P ALIGN="CENTER">Yes</TD>
+</TR>
+<TR><TD WIDTH="23%" VALIGN="TOP" HEIGHT=18>
+<B><P ALIGN="LEFT">Subtraction</B></TD>
+<TD WIDTH="19%" VALIGN="TOP" HEIGHT=18>
+<P ALIGN="CENTER">No</TD>
+<TD WIDTH="17%" VALIGN="TOP" HEIGHT=18>
+<P ALIGN="CENTER">No</TD>
+<TD WIDTH="22%" VALIGN="TOP" HEIGHT=18>
+<P ALIGN="CENTER">No</TD>
+<TD WIDTH="19%" VALIGN="TOP" HEIGHT=18>
+<P ALIGN="CENTER">Yes</TD>
+</TR>
+<TR><TD WIDTH="23%" VALIGN="TOP" HEIGHT=18>
+<B><P ALIGN="LEFT">Natural Join</B></TD>
+<TD WIDTH="19%" VALIGN="TOP" HEIGHT=18>
+<P ALIGN="CENTER">Yes</TD>
+<TD WIDTH="17%" VALIGN="TOP" HEIGHT=18>
+<P ALIGN="CENTER">Yes</TD>
+<TD WIDTH="22%" VALIGN="TOP" HEIGHT=18>
+<P ALIGN="CENTER">Yes</TD>
+<TD WIDTH="19%" VALIGN="TOP" HEIGHT=18>
+<P ALIGN="CENTER">Yes</TD>
+</TR>
+<TR><TD WIDTH="23%" VALIGN="TOP" HEIGHT=18>
+<B><P ALIGN="LEFT">Semi join</B></TD>
+<TD WIDTH="19%" VALIGN="TOP" HEIGHT=18>
+<P ALIGN="CENTER">No</TD>
+<TD WIDTH="17%" VALIGN="TOP" HEIGHT=18>
+<P ALIGN="CENTER">No</TD>
+<TD WIDTH="22%" VALIGN="TOP" HEIGHT=18>
+<P ALIGN="CENTER">Yes</TD>
+<TD WIDTH="19%" VALIGN="TOP" HEIGHT=18>
+<P ALIGN="CENTER">Yes</TD>
+</TR>
+<TR><TD WIDTH="23%" VALIGN="TOP" HEIGHT=18>
+<B><P ALIGN="LEFT">Division</B></TD>
+<TD WIDTH="19%" VALIGN="TOP" HEIGHT=18>
+<P ALIGN="CENTER">No</TD>
+<TD WIDTH="17%" VALIGN="TOP" HEIGHT=18>
+<P ALIGN="CENTER">No</TD>
+<TD WIDTH="22%" VALIGN="TOP" HEIGHT=18>
+<P ALIGN="CENTER">Yes</TD>
+<TD WIDTH="19%" VALIGN="TOP" HEIGHT=18>
+<P ALIGN="CENTER">Yes</TD>
+</TR>
+</TABLE>
+
+<P ALIGN="LEFT"></P>
+<P ALIGN="LEFT">Remarks:</P>
+<P ALIGN="LEFT"></P>
+<OL>
+
+<P ALIGN="LEFT"><LI>Union and subtraction don’t have a neutral relation, because these operators can only be used on two relations of equal schema. There is no relation whose schema is equal to any other schema.</LI></P>
+<P ALIGN="LEFT"><LI>The neutral relation of all operators that have a neutral relation is the relation with the empty schema and no tuples. If we call this relation Ro, then all these operators obviously have a neutral F(R) function: F(R) = Ro for all R.</LI></P>
+<P ALIGN="LEFT"><LI>Cartesian product is not commutative because if the schemas are R<SUB>1</SUB>(a<SUB>1</SUB>,a<SUB>2</SUB>) and R<SUB>2</SUB>(b<SUB>1</SUB>,b<SUB>2</SUB>) then R<SUB>1 <FONT FACE="Symbol">&#180;</FONT>
+</SUB> R<SUB>2</SUB> has the schema (a<SUB>1</SUB>,a<SUB>2</SUB>,b<SUB>1</SUB>,b<SUB>2</SUB>) and R<SUB>2 <FONT FACE="Symbol">&#180;</FONT>
+</SUB> R<SUB>1</SUB> has the schema (b<SUB>1</SUB>,b<SUB>2</SUB>,a<SUB>1</SUB>,a<SUB>2</SUB>), and these are different schemas. However, you can say that these schemas are equal because each attribute has a unique name – and the ordering of the attributes is irrelevant – so <I>no points were taken off</I> here.</LI></P>
+<P ALIGN="LEFT"><LI>Division is not associative because of the way it changes the schema of the operators on which it operates. For example:<BR>
+R<SUB>1</SUB>(a,b,c,d) <FONT FACE="Symbol">&#184;</FONT>
+ R<SUB>2</SUB>(a,b) <FONT FACE="Symbol">&#184;</FONT>
+ R<SUB>3</SUB>(b)<BR>
+if R<SUB>1</SUB> <FONT FACE="Symbol">&#184;</FONT>
+ R<SUB>2</SUB> if computed first then the resulting relation (of the entire expression) will be R’(c,d), but if R<SUB>2</SUB> <FONT FACE="Symbol">&#184;</FONT>
+ R<SUB>3</SUB> is computed first the resulting relation will be R’(a,c,d). Two relations with a different schema are different by definition.</LI></P>
+<P ALIGN="LEFT"><LI>Semi join and subtraction are not associative as well, but not because of changing the input schema. Find examples!</LI></P></OL>
+
+<P ALIGN="LEFT"></P></BODY>
+</HTML>

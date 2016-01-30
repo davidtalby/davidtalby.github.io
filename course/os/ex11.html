@@ -1,0 +1,136 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1255">
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+<!-- Appears in the title bar -->
+<title>Operating Systems - Exercise 11</title>
+</head>
+
+<body background="icons/blueback.gif">
+
+<h1 align="center"><font size="4" face="Times New Roman">The Operating Systems Course</font></h1>
+
+<h1 align="center"><font size="5" face="Times New Roman">Exercise 11: Sockets</font></h1>
+
+<h2><font face="Times New Roman"><img src="accent.gif" width="32" height="31">Goals</font></h2>
+
+<ol>
+  <li><font face="Times New Roman">Learn client-server programming using TCP sockets.</font></li>
+  <li><font face="Times New Roman">Write a stateless FTP server for regular files.</font></li>
+</ol>
+
+<h2><font face="Times New Roman"><img src="accent.gif" width="32" height="31">The Program</font></h2>
+
+<p><font face="Times New Roman">Write a program called 'hftp', implementing a stateless
+file server. The command-line usage for running the server is:</font></p>
+
+<p><font face="Courier">&nbsp;&nbsp;&nbsp; hftp &lt;port-number&gt;</font></p>
+
+<p><font face="Times New Roman">Do not write a client program that interacts with the
+server; instead, you should write a library that lets others write a client program that
+suites them best. The library should implement the header file <a href="hftp.h">hftp.h</a>,
+and be called 'libhftp.a' when compiled. You should also submit a Makefile, which, when
+executed, creates exactly two files named 'hftp' and 'libhftp.a' from the source files in
+the current directory.</font></p>
+
+<p><font face="Times New Roman">As the client header file suggests, a client starts by
+calling hftp_open() and should end its connection with the server by calling hftp_close().
+Over an open connection, it is possible to send and receive files, rename a remote file or
+move it between directories, change the remote directory we are in and get a short or long
+listing of the files in the current remote directory. A client process can only have one
+open connection to the server at any time, but it can close an open connection and reopen
+a different one if necessary. The connection between the client and the server should be
+implemented using TCP/IP sockets.</font></p>
+
+<p><font face="Times New Roman">The server must be able to handle multiple clients at
+once; this should be done by forking a new process to handle every new connection.
+However, in order to avoid an overload, the server should never agree to have more than 10
+open clients at once. Since the server is multi-process, calls to wait() and handle of
+SIGCHLD must be taken care of. This has at least two consequences on the program. First,
+the accept() and other system calls can be interrupted by a signal, in which case the
+system call will return -1 and set errno to EINTR. Remember that this case is not an
+error. Second, you might need to block signals (SIGCHLD and SIGPIPE) in some parts of the
+program, in order to avoid critical sections. This is not required in all implementations,
+but make sure if and where your code needs it.</font></p>
+
+<p><font face="Times New Roman">When a client connects, it connects to a default directory
+on the server - the directory the server was started from. This is considered the current
+remote working directory for this connection, which means the file names the client refers
+to will be relative to that directory. The client can also change this directory using the
+hftp_cwd() function. Note that the server can have different &quot;current
+directories&quot; for the different connections it currently holds open.</font></p>
+
+<p><font face="Times New Roman">In case of errors, the server program should print
+detailed error messages to the standard error, and return to accepting new connections.
+The server should never terminate due to an error; it can only be terminated by explicitly
+killing it from the shell that started it (see the man pages of the &quot;jobs&quot;,
+&quot;ps&quot; and &quot;kill&quot; shell commands).</font></p>
+
+<p><font face="Times New Roman">The client library must <u>never</u> write anything to the
+screen, including error messages. All the library functions return an integer, which
+should be zero on success and -1 on error. The specific error code of the last library
+function call is saved in the variable hftp_errno. This variable must be updated after
+every library function call, whether it was successful or not. The code 0 (zero) is saved
+for success, and you may define other error codes as you wish. The function hftp_error()
+works just like perror(), but for library errors; it also resets the hftp_errno variable
+to zero. Remember to write to the standard error and not the standard output.</font></p>
+
+<p><font face="Times New Roman">Some of the errors will be caused by improper use of the
+library - getting or putting a file on a closed connection, giving NULL as a file name
+parameter, refusal of the server to open a connection due to overload, and so forth. But
+many errors will be file errors - file not found, access denied, file of unsupported type
+and others you recall from ex9. For this kind of errors, the easiest implementation of
+hftp_error() will be to call perror(). For the previous kind of errors, you need to write
+your own detailed error messages.</font></p>
+
+<h2><font face="Times New Roman"><img src="accent.gif" width="32" height="31">Bonus</font></h2>
+
+<p><font face="Times New Roman">There is one ten points bonus for this exercise: Extend
+the server to support the transfer of entire directories as well. If the file type of the
+arguments passed to hftp_putfile() or hftp_getfile() is a directory, then the entire
+directory and everything inside it - recursively, as in ex9 - is transferred. Symbolic
+links are still handled differently that in ex9 - we don't send or receive the links
+themselves, but the files the link point to.</font></p>
+
+<p><font face="Times New Roman">The bonus is not hard to write - when having to transfer a
+directory tree, pack it using your ex9 code on one side, send it as one regular file, and
+unpack it again on the other side. Assuming your packing and unpacking code works
+correctly, all you need to do is change the treatment of symbolic links and then
+cut&amp;paste.</font></p>
+
+<p><font face="Times New Roman">A wise way to do that will be to insert your ex9 code into
+a library as well - a library that can pack a file, a symbolic link or a directory tree
+into a new regular file, and then unpack it. It's the right thing to do from a software
+engineering point of view, and it will make the code easier to reuse if you will need it
+for next year's project.</font></p>
+
+<h2><font face="Times New Roman"><img src="accent.gif" width="32" height="31">Miscellaneous</font></h2>
+
+<p><font face="Times New Roman">Your submission must include a README, a Makefile, and the
+source code of the programs. The Makefile should create exactly one executable called 'hftp'
+and one library called 'libhftp.a'. You may include as many source files as you wish. To
+submit, <u>send an email</u> to the bodek, containing the full names, id numbers and
+logins of the submitting pair, and attach <u>all</u> the relevant files. Do not attach
+'hftp.h' - we will check the exercise using the published version, not any modification
+you wrote. Remember that the files you send will be checked (not the ones in your
+account), and the time of submission (for late submission penalties) will be the time of
+sending the mail.</font></p>
+
+<p><font face="Times New Roman">Your README file should include a vivid description of how
+your program does what it's supposed to. If you choose to implement the bonus, include an
+exact description of how you did so in the README. You might lose some of the bonus points
+for not being able to describe your accomplishment well.</font></p>
+
+<p><font face="Times New Roman">Start working from the example <a href="client.c">client.c</a>
+and <a href="server.c">server.c</a> files from class. Use your code from ex9 for reading
+and writing files (although you'll need to change it since this time we treat symbolic
+links differently). A simple way to write the hftp_ls() and hftp_dir() functions is to
+call the real &quot;ls&quot; program using fork, exec and wait.</font></p>
+
+<p><font face="Times New Roman">Good luck!</font></p>
+
+<p align="center"><font face="Times New Roman"><img src="line_colorbar.gif" width="585"
+height="1"></font></p>
+</body>
+</html>

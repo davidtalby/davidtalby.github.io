@@ -1,0 +1,120 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage Express 2.0">
+<title>The Databases Course - Exercise No. 5</title>
+</head>
+
+<body>
+
+<p align="center"><font size="4"><strong>The Databases Course</strong></font></p>
+
+<p align="center"><font size="5"><strong>Exercise No. 5</strong></font></p>
+
+<p align="center"><font size="4">More SQL and Design Theory -
+Theoretical</font></p>
+
+<blockquote>
+    <blockquote>
+        <p align="center"><font size="3">Due on January 26th by
+        midnight<br>
+        </font></p>
+    </blockquote>
+</blockquote>
+
+<ol>
+    <li><font size="3">Express the following queries in SQL:</font></li>
+</ol>
+
+<blockquote>
+    <ol type="a" start="1">
+        <li><font size="3">Which research project(s) uses the
+            largest number of sites?</font></li>
+        <li><font size="3">For each whale and each site such that
+            the whale was used in that site more than twice, what
+            is the number of different projects that were
+            involved?</font></li>
+        <li><font size="3">What is the average age of animals
+            participating in projects? If an animal participates
+            in two projects, or twice in the same project, count
+            it twice for the average.</font></li>
+        <li><font size="3">Same as (c), but if an animal
+            participates in the same project more than once,
+            count it only once for the average.</font></li>
+        <li><font size="3">Which animals were used in all the
+            projects that were somehow active in 1994? Hint: This
+            is a division question. Remember how we defined
+            division using the other algebra operators - the 'minus'
+            keyword is probably is quickest solution here as well.</font></li>
+    </ol>
+</blockquote>
+
+<ol type="1" start="2">
+    <li><font size="3">Like most programming languages, SQL
+        contains some redundancy to make programmers' life easier.</font></li>
+</ol>
+
+<blockquote>
+    <ol type="a" start="1">
+        <li><font size="3">Show that any query using the 'in'
+            predicate can be rewritten to use 'exists' instead.</font></li>
+        <li><font size="3">Show that any query using '&gt;=all',
+            '&gt;any', '&lt;&gt;all' and others from this family
+            of operators can be rewritten using the 'exists'
+            predicate as well.</font></li>
+    </ol>
+</blockquote>
+
+<ol type="1" start="3">
+    <li>You are given a relation scheme S = { A<sub>1</sub>, ...,
+        A<sub>n</sub> } and a set of functional dependencies F.
+        Write an efficient algorithm to compute a simple key of R
+        = &lt;S,F&gt;. What is the<sub> </sub>running time of
+        your algorithm?</li>
+</ol>
+
+<ol type="1" start="3">
+    <li value="4">Prove the following lemmas for functional
+        dependencies inference, in two ways: Once using Armstrong's
+        axioms, and once directly using the definition of
+        functional dependencies.</li>
+</ol>
+
+<blockquote>
+    <ol type="a" start="1">
+        <li><font size="3">X </font><font face="Symbol">® A<sub>1</sub>,A<sub>2</sub>,...,A</font><sub>n</sub>
+            if and only if for all i=1..n, X <font face="Symbol">®
+            A</font><sub>i</sub>.</li>
+        <li><font size="3">X<sub>1</sub> </font><font
+            face="Symbol">®</font><font size="3"> X<sub>2</sub>,
+            X<sub>2</sub> </font><font face="Symbol">®</font><font
+            size="3"> X<sub>3</sub>, ..., X<sub>n</sub> </font><font
+            face="Symbol">®</font><font size="3"> X<sub>1</sub>
+            if and only if for all i,j=1..n, X<sub>i</sub> </font><font
+            face="Symbol">®</font><font size="3"> X<sub>j</sub>.</font></li>
+    </ol>
+</blockquote>
+
+<ol type="1" start="5">
+    <li>Let R be a relation with S = { A, B, C, D, E, F } and F =
+        { A <font face="Symbol">®</font> F, AC <font
+        face="Symbol">®</font> D, AF <font face="Symbol">®</font>
+        B, E <font face="Symbol">®</font> AF, EC <font
+        face="Symbol">®</font> F, EFB <font face="Symbol">®</font>
+        D}.</li>
+</ol>
+
+<blockquote>
+    <ol>
+        <li type="a">Find a non-redundant (= minimal) cover for F.
+            Show, step by step, how the algorithm taught in class
+            finds this minimal cover. </li>
+        <li type="a">Let X = { A , C }. Use the table algorithm
+            to find X<sup>+</sup><sub>F,AA</sub>.</li>
+        <li type="a">Find all the simple keys of R.</li>
+    </ol>
+</blockquote>
+</body>
+</html>

@@ -1,0 +1,141 @@
+/* Database Course, 1997/8
+   Exercise 9 - Transitive Closure
+
+   This program demonstrates the computation of transitive closure in O(lgn)
+   queries. It does so by computing the total cost of constructing complex
+   parts, out of a table of simple parts and their costs, a table of complex
+   parts and their assemby costs, and a table that lists the simple
+   parts that compose complex parts.
+
+   by David Talby
+*/
+
+#include <stdio.h>
+
+/* Declare variables used by SQL, and include sqlca for error handling */
+EXEC SQL BEGIN DECLARE SECTION;
+  char oracleid = '/';
+  int quantity, input_size, longest_path, total_cost;
+  int max__length;
+  VARCHAR pno[16], pno1[16], pno2[16];
+EXEC SQL END DECLARE SECTION;
+
+EXEC SQL INCLUDE sqlca;
+
+/* Error handler */
+void sql_error()
+{
+  EXEC SQL WHENEVER SQLERROR CONTINUE;
+  fprintf(stderr, "Oracle error detected: \n% .70s\n", sqlca.sqlerrm.sqlerrmc);
+  EXEC SQL ROLLBACK RELEASE;
+  exit(1);
+}
+
+/* Main */
+int main()
+{
+  /* Initialize error handler and connect to Oracle */
+  EXEC SQL WHENEVER SQLERROR DO sql_error();
+  EXEC SQL CONNECT :oracleid;
+
+  /* Create initial TC table. A tuple in this table will mean that pno1 is made
+     from quantity times the part pno2, and that the shortest route on the
+     problem's graph that shows this connection is min_route vertices long. */
+  EXEC SQL CREATE TABLE TC 
+    (PNO1      VARCHAR(15),
+     PNO2      VARCHAR(15),
+     QUANTITY  NUMBER(10) ,
+     MIN_ROUTE NUMBER(10) );
+  EXEC SQL INSERT INTO TC
+    SELECT PNO1, PNO2, QTY, 1 MIN_ROUTE
+      FROM  MADE_FROM
+      WHERE (PNO1 IS NOT NULL)
+        AND (PNO2 IS NOT NULL)
+        AND (QTY  IS NOT NULL);
+
+  /* Determine the input size, in order to know the longest possible path in TC */
+  EXEC SQL SELECT COUNT(*)
+    INTO :input_size
+    FROM  MADE_FROM
+    WHERE (PNO1 IS NOT NULL)
+      AND (PNO2 IS NOT NULL)
+      AND (QTY IS NOT NULL);
+
+  /* The calculation of TC as defined above. Note that log2(n) queries are used. */
+  for (longest_path = 1; longest_path < input_size; longest_path *= 2)
+    EXEC SQL INSERT INTO TC
+      SELECT A.PNO1, B.PNO2,
+             (A.QUANTITY * B.QUANTITY) QUANTITY,
+             (A.MIN_ROUTE + B.MIN_ROUTE) MIN_ROUTE
+        FROM  TC A, TC B
+        WHERE (A.PNO2 = B.PNO1)
+        AND (A.MIN_ROUTE = :longest_path);
+
+  /* Insert the composite parts as loops (paths of length zero).
+     This is necessary for knowing the basic assembly costs later. */
+  EXEC SQL INSERT INTO TC
+    SELECT PNO, PNO, 1, 0
+      FROM COMPOSITE_PARTS
+      WHERE (PNO IS NOT NULL)
+        AND (ASSEMBLY_COST IS NOT NULL);
+
+  /* Now we are ready to fill the costs table as desired for the output.
+     First we create it, and an auxilary table of all parts. */
+  EXEC SQL CREATE TABLE COSTS 
+    (pno        varchar(15),
+     total_cost number(10) );
+
+  EXEC SQL CREATE TABLE ALL_PARTS AS
+    SELECT * 
+       FROM BASE_PARTS
+       WHERE (PNO IS NOT NULL)
+         AND (COST IS NOT NULL)
+    UNION
+    SELECT * 
+       FROM COMPOSITE_PARTS
+       WHERE (PNO IS NOT NULL)
+         AND (ASSEMBLY_COST IS NOT NULL);
+
+  /* To compute the total cost of each complex part, do the following:
+     For every part in TC we sum the (cost of its basic part * their cost) for
+     all the basic parts that it's composed of, plus (cost of assembly for the
+     complex parts it's made of * 1) because each complex part was inserted into
+     TC with a quantity of 1.
+     We unify the above result with the basic parts table, whose costs we know. */
+  EXEC SQL INSERT INTO COSTS
+    SELECT PNO1, SUM(QUANTITY*COST)
+       FROM ALL_PARTS, TC
+       WHERE (TC.PNO2 = ALL_PARTS.PNO)
+       GROUP BY PNO1
+    UNION
+    SELECT *
+       FROM BASE_PARTS
+       WHERE COST IS NOT NULL;
+
+  /* The TC and ALL_PARTS tables are no longer needed, so they are dropped. */
+  EXEC SQL DROP TABLE TC;
+  EXEC SQL DROP TABLE ALL_PARTS;
+
+  /* We now declare a cursor and use it to print COSTS one by line. */
+  EXEC SQL DECLARE costs_cursor CURSOR FOR
+    SELECT *
+       FROM COSTS;
+  EXEC SQL OPEN costs_cursor;
+  EXEC SQL WHENEVER NOT FOUND GOTO notfound;
+  printf("Part No.       \tCost           \n");
+  printf("--------------------------------------\n");
+  for (;;)
+  {
+    EXEC SQL FETCH costs_cursor
+      INTO :pno, :total_cost;
+    pno.arr[pno.len] = '\0';
+    printf("%-15s |\t%-15d\n", pno.arr, total_cost);
+  }
+ notfound:
+  EXEC SQL CLOSE costs_cursor;
+
+  /* Clean up and disconnect from Oracle */
+  EXEC SQL DROP TABLE COSTS;
+  EXEC SQL COMMIT WORK RELEASE;
+  return 0;
+}

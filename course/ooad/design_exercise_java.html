@@ -1,0 +1,128 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>Design Exercise - Java API Design</title>
+<meta name="Microsoft Theme" content="neon 011">
+</head>
+
+<body background="neobkgnd.jpg" bgcolor="#000000" text="#FFFFFF" link="#CCFF66" vlink="#00FFFF" alink="#FFCC33">
+
+
+<h2 align="center">Java
+API Design</h2>
+
+<h3>Overview</h3>
+
+<p>This project requires you to investigate some of the designs of the standard
+API of the Java programming language. Some of the libraries are of well known
+features, such as the collection framework, while others are for new language
+features that are unique to Java. Part of the project is understanding what
+these features do, when are they useful and when they are not, and how they can
+be implemented.&nbsp;</p>
+<p>Your best source of information is the Internet. See <a href="http://java.sun.com/j2se/1.3/docs/">The
+      Java J2SE Documentation</a>, which has several tutorials and the <a href="http://java.sun.com/j2se/1.3/docs/api/index.html">Java
+API
+      documentation</a> which describes in detail all the classes you must
+learn.</p>
+
+<h3>Requirements</h3>
+
+<p>The <a href="http://java.sun.com/j2se/1.3/docs/guide/collections/index.html">Java collection framework</a> is in package <code>java.util</code>.
+Learn its classes, interfaces and exceptions, and answer the following
+questions. Note that you don't need all of <code>java.util</code> - the the
+collection framework.</p>
+
+<!--msthemelist--><table border="0" cellpadding="0" cellspacing="0" width="100%">
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">Build
+      class diagrams describing the framework.<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">How
+      would you extend the framework, to add new data structures or better
+      implementations of existing ones?<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">Which
+      design patterns are used in the framework?<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">Templates
+      are considered to be added to the Java language in its next version.
+      Describe the effects of this change on the framework: How will the
+      interface change, what new compiler checks it will enable, how it can
+      affect performance and so forth.<!--msthemelist--></td>
+  </tr>
+<!--msthemelist--></table>
+
+<p>The collection framework is worth 30% of the exercise's grade. The rest of
+the grade is 10% for each of these seven language features:</p>
+<ol>
+  <li><a href="http://java.sun.com/j2se/1.3/docs/guide/reflection/index.html">Reflection</a>: The classes <code>Class</code> and <code>Package</code> in package <code>java.lang</code>,
+    and all of the <code>java.lang.reflect</code>  package (don't forget class <code>Proxy</code>
+    there and the subject of <a href="http://java.sun.com/j2se/1.3/docs/guide/reflection/proxy.html">Dynamic
+    Proxy classes</a>).</li>
+  <li>Serialization:&nbsp;</li>
+  <li><a href="http://java.sun.com/j2se/1.3/docs/api/java/lang/ClassLoader.html">Dynamic class loading</a>: The classes <code>Class</code>, <code>ClassLoader</code>
+    and <code>Compiler</code> in package <code>java.lang</code>.</li>
+  <li><a href="http://java.sun.com/docs/books/jls/second_edition/html/memory.doc.html#30206">Multi Threading</a>: The classes
+    <code>Runtime</code>, <code>Thread</code>, <code>Process</code>,
+    <code>ThreadGroup</code>, <code>ThreadLocal</code> and <code>InheritableThreadLocal</code>
+    in package <code>java.lang</code>.</li>
+  <li><a href="http://java.sun.com/j2se/1.3/docs/guide/refobs/index.html">Weak References</a>: All
+    of package <code>java.lang.ref</code>.</li>
+  <li><a href="http://java.sun.com/j2se/1.3/docs/guide/security/index.html">Security</a>:
+    The classes <code>SecurityManager</code> and <code>RuntimePermission</code>
+    in package <code>java.lang</code>, and all of the <code>java.security</code>
+    package.</li>
+  <li><a href="http://java.sun.com/j2se/1.3/docs/guide/beans/index.html">Beans</a>: All
+    of packages <code>java.beans</code> and <code>java.beancontext</code>.</li>
+</ol>
+<p>For each of these seven features, you must learn the set of classes,
+interfaces and exceptions that
+provide access to it, and then answer these questions:</p>
+
+<!--msthemelist--><table border="0" cellpadding="0" cellspacing="0" width="100%">
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">What
+      does this language feature do? What is it good for?<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">What
+      support from Java compilers and the Java Virtual Machine is required to
+      implement this feature? How expensive is the feature in terms of
+      performance?<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">Is
+      this feature easy to extend by a programmer? Does it use any design
+      patterns?<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">For
+      each class and interface you learned, <u> shortly</u> explain what it
+      does. Give code
+      samples for using the classes and interfaces, both by inheriting them (if possible), and by creating an
+      object of existing classes. (This part requires most of the work on a language
+      feature).<!--msthemelist--></td>
+  </tr>
+<!--msthemelist--></table>
+
+<p>Good luck!</p>
+
+
+</body>
+
+</html>

@@ -1,0 +1,237 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=windows-1255">
+<meta name="GENERATOR" content="Microsoft FrontPage Express 2.0">
+<title>Operating Systems - Exercise 9</title>
+<!-- Appears in the title bar -->
+</head>
+
+<body background="icons/blueback.gif">
+
+<h1 align="center"><font size="4" face="Times New Roman">The
+Operating Systems Course</font></h1>
+
+<h1 align="center"><font size="5" face="Times New Roman">Exercise
+9: The File System</font></h1>
+
+<h2><font face="Times New Roman"><img src="accent.gif" width="32"
+height="31">Goals</font></h2>
+
+<ol>
+    <li><font face="Times New Roman">Learn the system calls for
+        handling regular files, symbolic links and directories in
+        the Unix file system.</font></li>
+    <li><font face="Times New Roman">Write a program that can
+        back up and restore an entire directory tree.</font></li>
+</ol>
+
+<h2><font face="Times New Roman"><img src="accent.gif" width="32"
+height="31">The Program</font></h2>
+
+<p><font face="Times New Roman">Compiling your exercise using a
+Makefile (that you write) should create two executables named
+hbackup and hrestore. The two programs require the following
+command arguments:</font></p>
+
+<p><font face="Times New Roman"><code>hbackup &lt;archive_file&gt;
+&lt;files_for_backup_list&gt;</code></font></p>
+
+<p><font face="Times New Roman"><code>hrestore &lt;archive_file&gt;
+&lt;restore_location_base&gt;</code></font></p>
+
+<p><font face="Times New Roman">The hbackup utility saves into
+the archive_file all the files in the files_for_backup_list - a
+white-space separated list of files. The archive_file is a
+regular file that will contain the backed-up files on success.
+The archive file should be created when the program runs; if a
+file with the same name already exists, it should not be
+overwritten - instead, an error message should be printed and the
+program should exit.</font></p>
+
+<p><font face="Times New Roman">Backing up a regular file simply
+copies the file data, along with its name and permissions.
+Backing up a symbolic link means that we only save the link - not
+the file the link points to. Therefore, use <em>readlink(2)</em>
+and not <em>read(</em></font><em>2</em><font
+face="Times New Roman"><em>)</em> to backup symbolic links, and
+use <em>lstat(</em></font><em>2</em><font face="Times New Roman"><em>)</em>
+to determine file types. Backing up a directory means backing up
+the directory itself (name and permissions), including <strong>all</strong>
+the files in it <strong>recursively</strong>. If you encounter a
+file of another type (such as a socket, pipe or device) print an
+error message saying that it can't be backed up, and continue to
+the next file (this is a non-fatal error, see below).</font></p>
+
+<p><font face="Times New Roman">The hrestore utility is used to
+restore files from an archive. To make life simpler, you only
+have to implement restoring an entire archive, and not parts of
+it. The program takes exactly two arguments: The name of an
+archive file in which there are backed up files, and the name of
+a directory. All files in the archive file should be recreated on
+this directory. If a directory was backed up, it should be
+recreated as a sub-directory of the restore_location_base. Files
+should be restored with their original names and access
+permissions.</font></p>
+
+<p><font face="Times New Roman">Both hbackup and hrestore should
+give an indication of progress: On completing a file read or
+write, both programs should print a line to the standard output
+containing the full name of the file and its size. See the output
+example in the next section. </font></p>
+
+<h2><font face="Times New Roman"><img src="accent.gif" width="32"
+height="31">Error Handling</font></h2>
+
+<p><font face="Times New Roman">Error handling should be done as
+follows. You must check all system call return values and every
+other possibility of failure, and report each error by printing
+an informative message to the screen. Use the <em>perror(</em></font><em>3</em><font
+face="Times New Roman"><em>)</em> function for printing system
+error messages. An example of proper error handling and the use
+of <em>perror(</em></font><em>3</em><font face="Times New Roman"><em>)</em>
+is in both example files, in the 'Help' section.</font></p>
+
+<p><font face="Times New Roman">There are two types of errors in
+this exercise: Fatal and non-fatal ones. Fatal errors prevent you
+from continuing to backup or restore: Wrong arguments, inability
+to access the archive file, and so forth. Non-fatal errors are an
+inability to read or write one file on the way (because of
+permissions or a special file type, for example). On a <strong>fatal</strong>
+error, print an error message and <strong>terminate</strong> the
+program with an exit code of 1. On a <strong>non-fatal</strong>
+error while working on a file, print an error message starting
+with the file name (see 'access denied' example in the previous
+section), and <strong>continue</strong> working to the next file
+as if nothing happened. All error messages must be sent to
+standard error, and not standard output - the example programs
+demonstrate this.</font></p>
+
+<p><font face="Times New Roman">This is an example of running the
+programs. We create an archive file called 'backupex9' that
+should contain a regular file called 'reg_file' and the directory
+'ex9', all from the current directory:</font></p>
+
+<p><font face="Times New Roman">&gt; hbackup backupex9 reg_file
+ex9<br>
+ex9 4096<br>
+ex9/hbackup.c 7758<br>
+ex9/hrestore.c 6494<br>
+ex9/test.c: Access denied<br>
+ex9/README 1490<br>
+ex9/test 4096<br>
+ext/test/my_data 45912<br>
+&gt; hrestore backupex10 ~<br>
+open: No such file or directory<br>
+&gt;</font></p>
+
+<p><font face="Times New Roman">For each file that is
+successfully saved, its name and size and printed to the standard
+output. On error (such as with 'ex9/test.c'), the file name
+followed by a colon and the system's error message are printed to
+the standard error. However, this is a non-fatal error, so we
+move on to the next file. Note that we backup all of the ex9
+directory, and move recursively into the 'ex9/test' directory as
+well. The program exits with an exit code 0. On the other hand,
+hrestore is called with an archive file that doesn't exist, which
+is a fatal error. An error message is printed, and the program
+terminates with an exit code 1. Note that some of these
+instructions contrast those in the exercise guidelines - when in
+question, follow the instructions here.</font></p>
+
+<h2><font face="Times New Roman"><img src="accent.gif" width="32"
+height="31">Bonus</font></h2>
+
+<p><font face="Times New Roman">There are two bonuses offered for
+this exercise. Implementing both can give you a maximum grade of
+120.</font></p>
+
+<p><font face="Times New Roman">A ten points bonus will be given
+for including an integrity check in the archive file. The hbackup
+program should place some signature of each archived file along
+with its other data, and when the file is restored this signature
+will be checked. If the archive file has been damaged or changed,
+the program should report the error (as a non-fatal error). To
+get the bonus, invent a signature scheme and add it to both the
+backup and restore programs.</font></p>
+
+<p><font face="Times New Roman">Another ten points bonus will be
+given for correctly handling the issue multiple hard links to the
+same file. It is possible that two different regular files that
+you back up will be two hard links to the same i-node. In this
+case it is of course only necessary to save the file data once,
+and let both hard links point to it. In restoring, the data
+should be written to disk only once as well. You are allowed to
+ignore this issue and back up every file, but if you do handle it
+and get it right, the bonus is yours. The i-node number a file
+name refers to is returned by the </font><em>lstat(2)</em><font
+face="Times New Roman"> system call.</font></p>
+
+<h2><font face="Times New Roman"><img src="accent.gif" width="32"
+height="31">Miscellaneous</font></h2>
+
+<p><font face="Times New Roman">Your submission must include a
+README, a Makefile, and the source code of the programs. See the
+exercise guidelines about README and make files. You may include
+as many source files as you wish. To submit, place all files in a
+directory called &quot;~/os/ex9&quot;. Copying all these files to
+a new directory and running 'make' should create exactly two
+executables - hbackup and hrestore.</font></p>
+
+<p><font face="Times New Roman">You can save some coding if you
+place functions that both programs use in a common header/source
+file pair, and then #include the header file to use it. You are
+expected to do a smart job of design - duplicate code, unreadable
+C tricks and not using constants, for example, can hurt your
+grade just as badly as a runtime bug. Not to mention not checking
+return values or ignoring them.</font></p>
+
+<p><font face="Times New Roman">Since this is the first Makefile
+you submit, it will be checked as well. A good make file will
+cause 'make' to compile <strong>only</strong><em> </em>the
+necessary files when a file changes. In order to test your make
+file, you can use the 'touch' utility (see 'man touch'). Touching
+a file does not change it, but changes its last modification date
+so that it seems modified. The Makefile for this exercise is a
+simple variation of what we've done in class.</font></p>
+
+<p><font face="Times New Roman">If you choose to implement the
+bonus, include an exact description of the algorithm(s) you used
+in the README file. You might lose some of the bonus points for
+not being able to describe your accomplishment well.</font></p>
+
+<h2><font face="Times New Roman"><img src="accent.gif" width="32"
+height="31">Help</font></h2>
+
+<p><font face="Times New Roman">The following two programs
+demonstrate some of the systems calls you'll need. Most of their
+code has cut-and-paste value to you. They also demonstrate how to
+deal with both system and non-system error messages, and give a
+general idea of the style and amount of documentation required.
+Smaller issues such as reading command-line arguments and using <em>printf(</em></font><em>3</em><font
+face="Times New Roman"><em>)</em> and <em>fprintf(</em></font><em>3</em><font
+face="Times New Roman"><em>)</em> are also shown.</font></p>
+
+<p><a href="file_copy.c"><font face="Times New Roman">file_copy.c</font></a><font
+face="Times New Roman"> - This program copies a regular file to a
+new file name. Shows how to use <em>open</em>, <em>read</em>, <em>write</em>
+and <em>close</em>.</font></p>
+
+<p><a href="list_dir.c"><font face="Times New Roman">list_dir.c</font></a><font
+face="Times New Roman"> - This file prints the name, size and
+type for each file in a given directory. Shows how to use <em>opendir</em>,
+<em>readdir</em>, <em>closedir</em> and <em>lstat</em>.</font></p>
+
+<p><font face="Times New Roman">Before beginning to write
+anything, make sure to read the man page of every system call you
+use - we cannot and have not covered every tiny detail in class.
+Remember that system calls are in section 2 of the man pages, so
+you need to write 'man 2 open' or 'man 2 lstat' to read them.</font></p>
+
+<p>&nbsp;</p>
+
+<p align="center"><font face="Times New Roman"><img
+src="line_colorbar.gif" width="585" height="1"></font></p>
+</body>
+</html>

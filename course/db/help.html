@@ -1,0 +1,306 @@
+<HTML>
+
+
+<TITLE> Database Course Help Page </TITLE>
+
+
+<H1> <i> <center> <em>
+<IMG SRC = "http://www.cs.huji.ac.il/resources/gifs/face.worried.gif" ALIGN = MIDDLE>Database Course Help Page 
+</em> </center> </i> </H1>
+
+<A name=startup href=#index> </a>
+<H2>
+<IMG SRC = "http://www.cs.huji.ac.il/resources/gifs/icon.book.ques.gif" ALIGN = MIDDLE>CONTENTS:
+</H2>
+<STRONG>
+<UL>
+	<A HREF = "#oracle">
+	Using Oracle</A><BR><BR>
+	<A HREF = "#library">
+	Setting Up the Example Library Database</A><BR><BR>
+	<A HREF = "#proc">
+	Pro*C</A><BR><BR>
+	<A HREF = "proc/example.pc">
+	Pro*C - Class Example</A><BR><BR>
+	<A HREF = "#sqlplus">
+	SQL</A><BR><BR>
+	<A HREF = "#khoros">
+	Students who take the IP course</A><BR><BR>
+	<A HREF = "#mailcap">
+	Using Oracle Books,Forms thru netscape</A><BR><BR>
+	<A HREF = "./faq.html">
+	DB course Frequently Asked Questions ...</A><BR><BR>
+	<A HREF = "#error_report">
+	How to Report Oracle Errors </A><BR><BR>	
+</STRONG>
+</UL>
+
+<!--ROOT-->
+<!--HELP PAGE-->
+
+<p>
+<IMG SRC = "http://www.cs.huji.ac.il/resources/gifs/line.colorbar.gif">
+<!----------------------------------------------------------------------->
+<p>
+<A name=oracle href=#index> </a>
+<H3>
+<IMG SRC = "http://www.cs.huji.ac.il/resources/gifs/icon.note.gif" 
+     ALIGN = MIDDLE ALT = [Using Oracle]>Using Oracle
+</H3>
+<p>
+To use oracle do the following :
+<OL>
+	<LI>Append this <A HREF = "./cshrc-file">example .cshrc file</A> to your .cshrc file.<br>
+	It defines paths etc. and also gives some aliases to be used with oracle.
+	As mentioned in class, "oradoc" can be used to look at all manuals except
+	for the oracle book manuals - look at the aliases to see how to look at
+	the oracle book manuals.
+	<LI>Copy this <A HREF = "./prefs.ora-file">example prefs.ora file</A> to your home directory.
+	This file is needed in order for "oradoc" to work properly.
+	<LI>logout and login again
+</OL>
+	Now you can use "oradoc" to look at the manuals.
+	Type "sqlplus /" (as explained in class) to access the database.
+<p>
+
+<H4>
+<IMG SRC = "http://www.cs.huji.ac.il/resources/gifs/icon.excl2.gif"ALIGN = MIDDLE ALT = [Note:]>Note: <A HREF = "./database#books">You can also access the Oracle manuals from this page </A>
+</H4>
+
+	Try out the program called "oerr", to get explanations for Oracle error
+	messages 
+
+<IMG SRC = "http://www.cs.huji.ac.il/resources/gifs/line.colorbar.gif">
+<!----------------------------------------------------------------------->
+<p>
+<A name=library href=#index> </a>
+<H3>
+<IMG SRC = "http://www.cs.huji.ac.il/resources/gifs/icon.note.gif" 
+     ALIGN = MIDDLE ALT = [Setting up the example library database]>Setting up the example library database
+</H3>
+
+<UL>
+     <LI> <A HREF = "create_db/readme.html">readme file </A>
+</UL>
+
+
+<IMG SRC = "http://www.cs.huji.ac.il/resources/gifs/line.colorbar.gif">
+<!----------------------------------------------------------------------->
+<p>
+<A name=proc href=#index> </a>
+<H3>
+<IMG SRC = "http://www.cs.huji.ac.il/resources/gifs/icon.note.gif" 
+     ALIGN = MIDDLE ALT = [Pro*C]>Pro*C
+</H3>
+
+<UL>
+     <LI> How to use Pro*C </A>
+<p>
+	To compile the example program from class :<br>
+	Save it as filename.pc<br>
+	Run the command :<br>
+<center>   	make -f   <A HREF = "./proc.mk">~oracle/proc/demo/proc.mk</A> filename </center><br>
+	(proc.mk is the Makefile supplied with the demo programs)<br>
+	(note the pc suffix is not needed)<br>
+	This should create files  filename.c filename.lis and filename <br>
+	of which filename is the executable.<br>
+	To run the program type :<p>
+   	filename<br>
+<p>
+	You can use the supplied makefile to compile your homework assignment as well.<br>
+	Make sure to name your source code file as *.pc<br>
+<p>
+	Demo programs can be found in <A HREF = "./demo">/cs/oracle/proc/demo</A>.
+<p>
+	Related manuals :<br>
+	Programmers guide to the Oracle Precompilers<br>
+	Pro*C supplement to the Oracle Precompilers Guide<br>
+<p>
+     <LI> <A HREF = "proc/example.pc">example file from class</A>
+</UL>
+
+
+<p>
+<A HREF = "#startup"> 
+<IMG SRC = "http://www.cs.huji.ac.il/resources/hobbes/t/top1.gif" ALT = [Back]>Page Top
+</A>
+<IMG SRC = "http://www.cs.huji.ac.il/resources/gifs/line.colorbar.gif">
+<!----------------------------------------------------------------------->
+<p>
+<A name=sqlplus href=#index> </a>
+<H3>
+<IMG SRC = "http://www.cs.huji.ac.il/resources/gifs/icon.note.gif" 
+     ALIGN = MIDDLE ALT = [Sqlplus Mode for Emacs]>Sqlplus Mode for Emacs
+</H3>
+<p>
+
+	The documentation is in <A HREF = "./sql-mode.doc">/cs/course/db/mode/sql-mode.doc</A> 
+	If you want to use it, do this:
+<p>
+	1. add this line in your .emacs file:
+<p>
+<center>(setq load-path (append load-path (list "/cs/course/db/mode")))</center>
+<p>
+	2. run "emacs -l sql-mode.el -f sqlplus".
+
+<P>
+	If you load emacs using the sqlplus mode, you may send the buffer to SQL*PLUS by
+	enterring the command 'sql-send-buffer'. Or in more detail: type Alt-x, and then
+	"sql-send-buffer" (without the quotes). This loads SQL*PLUS into another buffer,
+	and runs there the current file.
+
+
+<H3>
+SQL*Plus Bug
+</H3>
+<p>
+	Writing comments such as :
+<p>
+	/*this is a bad comment */
+<p>
+	without a space after the "/*" may cause errors - 
+	it may cause SQL*Plus to repeat the execution of a previous command etc.
+<br>
+	Always include a space :
+<p>
+	/* this is a better comment */
+
+<H3>
+	Command Line Help from SQL*PLUS
+</H3>
+<p>
+	If you feel uncomfortable with 'oradoc' or just don't want to load it, there is a
+	simple and primitive way getting partial help from SQL*PLUS.
+<br>
+	Just type 'help <subject>', and, if you're lucky, you'll get the information.
+	Try: 
+<br>
+        help condition
+<br>
+        help constraint
+<br>
+        help create table
+
+
+<A name=sqlchapter href=#index> </a>
+<H3>
+SQL chapter is available in the library:
+</H3>
+<p>
+	There are copies of the SQL chapter of "Database, Principles Programming
+	Performance" by O'Neil in the library. Most of the copies are for reserve loan.
+	This is the recommended text for SQL - DML for the course.
+
+
+
+<p>
+<A HREF = "#startup"> 
+<IMG SRC = "http://www.cs.huji.ac.il/resources/hobbes/t/top1.gif" ALT = [Back]>Page Top
+</A>
+
+<IMG SRC = "http://www.cs.huji.ac.il/resources/gifs/line.colorbar.gif">
+<!----------------------------------------------------------------------->
+<p>
+<A name=mailcap href=#index> </a>
+<H3>
+<IMG SRC = "http://www.cs.huji.ac.il/resources/gifs/icon.note.gif" 
+     ALIGN = MIDDLE ALT = [Using Oracle Books,Forms thru netscape]>Using Oracle Books,Forms thru netscape
+</H3>
+<p>
+	To view oracle files on the web, add the following lines to the file
+	~/.mailcap (<A HREF = "./mailcap-file">An example .mailcap file can be found here</A>):<p>
+	application/oraclebd;   /usr/local/oracle/bin/b10runm %s<br>
+	application/oraclemx;   /usr/local/oracle/bin/f40runm %s<br>
+	application/oraclemb;   /usr/local/oracle/bin/f40desm %s<br>
+<p>
+	Run your netscapes from a machine that runs these viewers correctly (you must
+	restart netscape after changing the mailcap file).
+
+<br>
+
+<p>
+<A HREF = "#startup"> 
+<IMG SRC = "http://www.cs.huji.ac.il/resources/hobbes/t/top1.gif" ALT = [Back]>Page Top
+</A>
+<IMG SRC = "http://www.cs.huji.ac.il/resources/gifs/line.colorbar.gif">
+<!----------------------------------------------------------------------->
+<p>
+<A name=khoros href=#index> </a>
+<H3>
+<IMG SRC = "http://www.cs.huji.ac.il/resources/gifs/icon.note.gif" 
+     ALIGN = MIDDLE ALT = [Students who take the IP course]>Students who take the IP course
+</H3>
+<p>
+	Those of you who take (or took) the IP course probably have, defined in your 
+	environment (in file .khoros_env):
+<p>  
+<center>'setenv LD_LIBRARY_PATH          /usr/local/X11R5/lib' </center>
+<p>
+
+        This line can cause problems, especialy for those who take the db
+        course, because it redefines LD_LIBRARY_PATH and deletes its previous
+        definitions.
+<p>
+        The line should be replaced by:
+<p>
+	if (  $?LD_LIBRARY_PATH ) then
+<br>
+        setenv LD_LIBRARY_PATH "$LD_LIBRARY_PATH":"/usr/local/X11R5/lib"
+<br>
+	else
+<br>
+        setenv LD_LIBRARY_PATH          /usr/local/X11R5/lib
+<br>
+	endif
+<br>
+
+
+<p>
+<IMG SRC = "http://www.cs.huji.ac.il/resources/gifs/line.colorbar.gif">
+<!----------------------------------------------------------------------->
+<p>
+<A name=error_report href=#index> </a>
+<H3>
+<IMG SRC = "http://www.cs.huji.ac.il/resources/gifs/icon.note.gif" 
+     ALIGN = MIDDLE ALT = [How to Report Oracle Errors]>How to Report Oracle Errors
+</H3>
+<p>
+Whenever you encounter an oracle error, which you think is caused by some 
+problem with the database (and your sure there isn't a problem with your 
+program) ,please report the error (post it in <A HREF = "news:local.course.db">local.course.db</A>).<br>
+In your report include the oracle error code, an explanation of when the error
+occurs, and if relevant please include a small program isolating the error ...
+<br>
+By following the above description you will help us fix the problem as soon as
+possible.
+
+<br>
+
+
+
+<p>
+<A HREF = "#startup"> 
+<IMG SRC = "http://www.cs.huji.ac.il/resources/hobbes/t/top1.gif" ALT = [Back]>Page Top
+</A>
+<p>
+<IMG SRC = "http://www.cs.huji.ac.il/resources/gifs/line.colorbar.gif">
+<!----------------------------------------------------------------------->
+<P>
+<A HREF = "mailto:db@cs.huji.ac.il">
+<IMG SRC = "http://www.cs.huji.ac.il/resources/gifs/button.write.gif">db@cs.huji.ac.il
+</A>
+
+
+
+
+<P>
+<A HREF = "./database">
+<IMG SRC = "http://www.cs.huji.ac.il/resources/gifs/icon.home2.gif" 
+           ALT = [Back]>Back to Database course Home Page
+</A>
+
+
+
+</HTML>
+
+

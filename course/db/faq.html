@@ -1,0 +1,102 @@
+<HTML>
+
+
+<TITLE> Database Course FAQ </TITLE>
+
+
+<H1> <i> <center> <em>
+<IMG SRC = "http://www.cs.huji.ac.il/resources/gifs/face.worried.gif" ALIGN = MIDDLE>Database Course FAQ 
+</em> </center> </i> </H1>
+
+
+
+<p>
+<IMG SRC = "http://www.cs.huji.ac.il/resources/gifs/line.colorbar.gif">
+<!----------------------------------------------------------------------->
+<p>
+
+I get this error when trying to drop the table 'costs':<br>
+  resource busy and acquire with NOWAIT specified<br>
+I cannot execute the program now, since 'costs' already exists.
+how can i drop the table?
+
+<p>
+This is what can happen when you do not exit properly from Oracle
+e.g. if the xterminal is turned off while you're in a session, or if
+you have a process in the backgound in an infinite loop connected to the
+database.<br>
+Your sessions have to be killed to solve this ...
+<p>
+<IMG SRC = "http://www.cs.huji.ac.il/resources/gifs/line.colorbar.gif">
+<!----------------------------------------------------------------------->
+<p>
+When trying to run "sqlplus" on a unix shell, it responded:<br>
+"sqlplus: Command not found."<br>
+
+This was checked by me and another user. I checked it right after a new login.
+The time is now 15:40.
+
+<p>
+The reason is that grotto went down (the database server runs on grotto).<br>
+In to check if grotto is down or up type:<br><br>
+
+/usr/etc/ping<br><br>
+If grotto is ok you should get an answer that looks something like this:<br>
+grotto.cs.huji.ac.il is alive
+ 
+<p>
+<IMG SRC = "http://www.cs.huji.ac.il/resources/gifs/line.colorbar.gif">
+<!----------------------------------------------------------------------->
+<p>
+How can we connect a menu to a form, or a form to a menu?
+
+
+Open your form file with the Forms40. Choose in the menu the 'Form'
+item and in the sub-menu that will appear choose the 'Module' item.
+The proper sheet of the Forms module will appear. One of the properties
+that you have to specify is the 'Menu Module' property. Write the name of
+your menu's executable file (for example lib_menu.mmx).
+
+<p>
+<IMG SRC = "http://www.cs.huji.ac.il/resources/gifs/line.colorbar.gif">
+<!----------------------------------------------------------------------->
+<p>
+I tried to copy the demo named "chess.fmb" in "/CS/oracle/forms40/demo", and
+compile it. I've got an error message: cannot find library /chess.
+How can I run any example which combines a from with a menu, and have the code
+of it (*.fmb, *.mmb), to look at? 
+
+<p>
+
+The demo ttrig.fmb compiles with no problems.
+Another (fun) demo to look at is in
+  /cs/oracle/tools/demo
+It uses Oracle forms, reports, book and graphics and is quite involved.
+Read the README.txt for more info.
+The source and executables are both there (no need to compile).
+
+<p>
+Instructions on compiling and running the demos can be found in
+/cs/oracle/forms40/doc/relnotes.doc   chapter 5 <br>
+note : use your own database account and not scott/tiger<br>
+       use f40runm, f40genm ,... and not f40run,...<br>
+UNFORTUNATELY : the chess form can not be run (the instructions
+given do not work - a problem with attaching the library)
+However, the other demos seem to be fine (I tried out the cafe
+demo and it works).
+
+
+
+
+<p>
+<A HREF = "./database">
+<IMG SRC = "http://www.cs.huji.ac.il/resources/gifs/icon.home2.gif" 
+           ALT = [Back]>Back to Database course Home Page
+</A>
+
+
+
+</BODY>
+
+
+</HTML>

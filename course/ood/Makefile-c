@@ -1,0 +1,33 @@
+###############################################################################
+#
+# Makefile for C++ project
+#
+# Students:
+# Bart Simpson, ID 011111111, bart@cs.huji.ac.il
+# Lisa Simpson, ID 022222222, lisa@cs.huji.ac.il
+#
+###############################################################################
+
+CC=g++
+CCFLAGS=-Wall
+
+SOURCES=*.cpp
+HEADERS=*.h
+EXEC=exX
+
+ZIP=zip
+ZIPFLAGS=-9 -r
+ZIPNAME=exX.zip
+ZIPSRCS=$(SOURCES) $(HEADERS) README Makefile
+
+all: compile
+
+compile:
+	$(CC) $(CCFLAGS) $(SRCS) -o $(EXEC)
+
+zip:
+	$(ZIP) $(ZIPFLAGS) $(ZIPNAME) $(ZIPSRCS)
+
+clean:
+	rm -f *.class *~
+

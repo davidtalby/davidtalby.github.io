@@ -1,0 +1,122 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>Design Exercise - Database Server</title>
+<meta name="Microsoft Theme" content="neon 011">
+</head>
+
+<body background="neobkgnd.jpg" bgcolor="#000000" text="#FFFFFF" link="#CCFF66" vlink="#00FFFF" alink="#FFCC33">
+
+
+<h2 align="center">Database
+Server</h2>
+
+<h3>Overview</h3>
+
+<p>This application is a database server: It receives SQL-like commands over the
+network, executes them and sends a response. The server supports nested
+transactions. To be efficient, the server supports caching, threading, indices,
+automatic normalization and stored procedures. It must provide 24x7
+availability, therefore even adding support for new network protocols can be done
+dynamically.</p>
+
+<h3>Requirements</h3>
+
+<!--msthemelist--><table border="0" cellpadding="0" cellspacing="0" width="100%">
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">The
+      system shall support simple versions of the CREATE TABLE, ALTER TABLE and
+      DROP TABLE commands. A table contains several fields, each having a name,
+      a data types and a default value. A subset of the fields must be defined
+      as the primary key.<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">The
+      system shall support the CREATE/DROP CONSTRAINT commands, in a syntax
+      which only allows defining a functional dependency. Automatic
+      normalization of tables is activated whenever such a command is executed.
+      If a table is normalized into several ones, the user must not be aware of
+      this. Note that the primary key also defines a functional constraint.<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">The
+      system shall support the INSERT, UPDATE and DELETE commands to edit
+      records in a table or a view. Their syntax is similar to SQL. (Be careful
+      and explicit about how you handle views).<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">The
+      system shall support the BEGIN TRANSACTION, COMMIT and ROLLBACK commands.
+      Nested transactions are supported - that is, a BEGIN TRANSACTION inside an
+      already started transaction starts a sub-transaction, which can be
+      committed or aborted independently of its parent.<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">The
+      system shall support the SELECT statement, with the DISTINCT, FROM, WHERE,
+      GROUP BY, HAVING and ORDER BY options. Sub-selects and functions are not
+      supported at the moment, but will be in a future version. Provide a simple
+      algorithm that parses a SELECT statement and returns the result, and
+      prepare for a future smarter algorithm.<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">The
+      system shall support the CREATE/DROP INDEX commands. A created index of a
+      field in a table must always be kept updated. Provide a simple algorithm
+      that uses indexes to answer queries, and prepare for a future smarter
+      algorithm.<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">The
+      system shall support the CREATE/DROP PROCEDURE commands, which define
+      stored procedures. A stored procedure is a list of other commands,
+      possibly procedures, which optimize a set of database accesses into one to
+      optimize network usage. The CALL command activates a stored procedure.<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">The
+      system shall support receiving commands from the network in a variety of
+      protocols. The server receives only text commands, but may answer with
+      either a data table or a status of success or failure. The server can be
+      dynamically configured to support new network protocols.<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">The
+      system shall enable processing many transactions and queries in parallel.
+      Locks must be placed to protect tables that are written by two concurrent
+      transactions. Deadlocks must be detected and handled.<!--msthemelist--></td>
+  </tr>
+  <!--msthemelist--><tr>
+    <!--msthemelist--><td valign="baseline" width="42"><img src="neoabul1.gif" width="15" height="15" hspace="13"></td>
+    <td valign="top" width="100%">The
+      system shall include a cache of recently used tables, indices, procedures
+      and query results. The cache must be aware of the fact that it includes
+      data on which many different ongoing transactions work in parallel. It
+      should be easy to configure the cache by an administrator at runtime to
+      use different caching algorithms.<!--msthemelist--></td>
+  </tr>
+<!--msthemelist--></table>
+
+<p>Each of these ten requirements are worth 10% of the grade on the exercise.
+Note that the grade of a single requirement is composed of how you dealt with it
+everywhere - in requirements, design, strong and weak spots, and the oral
+questions.</p>
+<p>Good luck!</p>
+
+
+</body>
+
+</html>
