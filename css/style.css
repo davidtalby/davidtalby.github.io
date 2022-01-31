@@ -622,6 +622,7 @@
 		.fa-check-circle:before{content:"\f058"}
 		.fa-question-circle:before{content:"\f059"}
 		.fa-info-circle:before{content:"\f05a"}
+		.fa-user-friends:before{content:"\f0c0"}
 		.fa-crosshairs:before{content:"\f05b"}
 		.fa-times-circle-o:before{content:"\f05c"}
 		.fa-check-circle-o:before{content:"\f05d"}
@@ -1055,6 +1056,17 @@
 							{
 								color: #E27689;
 							}
+
+
+/*********************************************************************************/
+/* Custom                                                                        */
+/*********************************************************************************/
+
+.table1 td,
+.list1 li {
+	text-align: left;
+}
+
 
 /*********************************************************************************/
 /* Footer                                                                        */
