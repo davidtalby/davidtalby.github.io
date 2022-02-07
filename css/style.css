@@ -26,6 +26,14 @@
 		-webkit-text-stroke: 0.15px;
 	}
 
+	.over {
+		overflow: hidden;
+	}
+	.df {
+		display: flex;
+		align-items: center;
+	}
+
 	h1,h2,h3,h4,h5,h6
 	{
 		font-weight: 200;
@@ -213,9 +221,8 @@
 			.image.left
 			{
 				float: left;
-				margin: 0 2em 2em 0;
-			}
-			
+				margin: 19px 2em 2em 0;
+			}			
 			.image.centered
 			{
 				display: block;
@@ -623,6 +630,7 @@
 		.fa-question-circle:before{content:"\f059"}
 		.fa-info-circle:before{content:"\f05a"}
 		.fa-user-friends:before{content:"\f0c0"}
+		.fa-award:before{content:"\f091"}
 		.fa-crosshairs:before{content:"\f05b"}
 		.fa-times-circle-o:before{content:"\f05c"}
 		.fa-check-circle-o:before{content:"\f05d"}
@@ -1067,6 +1075,18 @@
 	text-align: left;
 }
 
+.awards_table .image {
+	margin-right: 2em;
+}
+
+.awards_table .df {
+	margin-top: 70px;
+}
+
+.awards_table tr:first-child .df {
+	margin-top: 0;
+}
+
 
 /*********************************************************************************/
 /* Footer                                                                        */
@@ -1155,6 +1175,11 @@
 		#main > section.seven
 		{
 			background-color: #e8edec;
+		}
+
+		#main > section.nine
+		{
+			background-color: #f5fafa;
 		}
 
 	
