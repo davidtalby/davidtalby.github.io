@@ -41,41 +41,37 @@
 		line-height: 1.5em;
 	}
 	
-		h1 a, h2 a, h3 a, h4 a, h5 a, h6 a
-		{
-			color: inherit;
-			text-decoration: none;
-		}
-
-		h1 strong, h2 strong, h3 strong, h4 strong, h5 strong, h6 strong
-		{
-			font-weight: 300;
-		}
-		
-		h2
-		{
-			font-size: 2em;
-			letter-spacing: -1px;
-		}
-		
-			h2.alt
-			{
-				color: #888;
-			}
-			
-			h2.alt strong
-			{
-				color: #666;
-			}
-
-		h3
-		{
-			font-size: 1.5em;
-		}
-
-	header
+	h1 a, h2 a, h3 a, h4 a, h5 a, h6 a
 	{
-		margin: 0 0 2em 0;
+		color: inherit;
+		text-decoration: none;
+	}
+
+	h1 strong, h2 strong, h3 strong, h4 strong, h5 strong, h6 strong
+	{
+		font-weight: 300;
+	}
+	
+	h2
+	{
+		font-size: 2em;
+		letter-spacing: -1px;
+		margin-bottom: 2em;
+	}
+	
+		h2.alt
+		{
+			color: #888;
+		}
+		
+		h2.alt strong
+		{
+			color: #666;
+		}
+
+	h3
+	{
+		font-size: 1.5em;
 	}
 
 	footer
@@ -473,7 +469,7 @@
 			margin-bottom: 40px;
 		}
 		
-			.item header
+			/* .item header
 			{
 				background: #fff;
 				margin: 0;
@@ -484,7 +480,7 @@
 				.item header h3
 				{
 					font-size: 1em;
-				}
+				} */
 
 /*********************************************************************************/
 /* Icons                                                                         */
@@ -1086,6 +1082,9 @@
 .awards_table tr:first-child .df {
 	margin-top: 0;
 }
+.tac {
+	text-align: center;
+}
 
 
 /*********************************************************************************/
@@ -1183,3 +1182,8 @@
 		}
 
 	
+		@media (max-width: 767px) {	
+			#social .\34 u {
+				width: 100%;
+			}
+		}
