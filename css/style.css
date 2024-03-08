@@ -213,11 +213,16 @@
 				width: 100%;
 				margin: 1em 0 2em 0;
 			}
-			
-			.image.left
-			{
+			.w_600 {
+				max-width: 600px;
+			}
+			.image img.w_600_f {
+				width: 600px;
+				height: auto;
+			}
+			.image.left {
 				float: left;
-				margin: 19px 2em 2em 0;
+				margin: 19px 0.8em 2em 0;
 			}			
 			.image.centered
 			{
@@ -463,9 +468,7 @@
 		
 	/* Item */
 	
-		.item
-		{
-			box-shadow: 0 0.05em 0.15em 0 rgba(0,0,0,0.05);
+		.item {
 			margin-bottom: 40px;
 		}
 		
