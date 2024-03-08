@@ -1183,7 +1183,20 @@
 		{
 			background-color: #f5fafa;
 		}
-
+		
+@media (max-width: 1000px) {	
+	.image img.w_600_f {
+		width: 100%;
+		height: auto;
+	}
+	.image.left {
+		width: 100%;
+		text-align: center;
+	}
+	.image.left figure {
+		display: inline-block;
+	}
+}
 	
 		@media (max-width: 767px) {	
 			#social .\34 u {
